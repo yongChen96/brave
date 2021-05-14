@@ -5,13 +5,11 @@
     <parent>
         <groupId>com.cloud</groupId>
         <artifactId>brave</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>brave-1.0-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.cloud</groupId>
     <artifactId>brave-auth</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>brave-auth</name>
     <description>Brave 授权认证模块</description>
 
@@ -29,6 +27,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
     </dependencies>
 

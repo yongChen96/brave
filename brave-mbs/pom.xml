@@ -5,14 +5,43 @@
     <parent>
         <groupId>com.cloud</groupId>
         <artifactId>brave</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>brave-1.0-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.cloud</groupId>
     <artifactId>brave-mbs</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>brave-mbs</name>
     <description>Brave 业务模块</description>
 
+    <modules>
+        <module>brave-mbs-api</module>
+        <module>brave-mbs-rest</module>
+        <module>brave-mbs-entity</module>
+        <module>brave-mbs-service</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.cloud</groupId>
+                <artifactId>brave-mbs-api</artifactId>
+                <version>brave-1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cloud</groupId>
+                <artifactId>brave-mbs-rest</artifactId>
+                <version>brave-1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cloud</groupId>
+                <artifactId>brave-mbs-entity</artifactId>
+                <version>brave-1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cloud</groupId>
+                <artifactId>brave-mbs-service</artifactId>
+                <version>brave-1.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

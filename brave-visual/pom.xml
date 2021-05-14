@@ -5,14 +5,17 @@
     <parent>
         <groupId>com.cloud</groupId>
         <artifactId>brave</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>brave-1.0-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.cloud</groupId>
     <artifactId>brave-visual</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>brave-visual</name>
     <description>Brave 可视化管理模块</description>
 
+    <modules>
+        <module>brave-visual-admin</module>
+        <module>brave-visual-sentinel</module>
+    </modules>
 </project>
