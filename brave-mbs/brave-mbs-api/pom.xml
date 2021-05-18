@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>brave-mbs-api</artifactId>
+    <packaging>jar</packaging>
     <name>brave-mbs-api</name>
     <description>Brave 远程调用接口</description>
 
@@ -30,22 +31,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

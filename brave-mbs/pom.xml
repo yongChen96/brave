@@ -11,6 +11,7 @@
 
     <artifactId>brave-mbs</artifactId>
     <name>brave-mbs</name>
+    <packaging>pom</packaging>
     <description>Brave 业务模块</description>
 
     <modules>
