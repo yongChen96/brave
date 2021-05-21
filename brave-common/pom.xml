@@ -13,4 +13,10 @@
     <name>brave-common</name>
     <packaging>pom</packaging>
     <description>Brave 公共汇聚模块</description>
+
+    <modules>
+        <module>brave-common-core</module>
+        <module>brave-common-log</module>
+        <module>brave-common-swagger</module>
+    </modules>
 </project>
