@@ -11,7 +11,6 @@
     <description>Brave</description>
 
     <modules>
-        <module>brave-admin</module>
         <module>brave-common</module>
         <module>brave-gateway</module>
         <module>brave-mbs</module>
