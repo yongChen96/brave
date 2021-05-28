@@ -7,4 +7,9 @@ package com.cloud.core.constant;
  * @Date: 2021/5/21 10:08
  **/
 public interface CacheConstants {
+
+    /**
+     * 用户信息缓存
+     **/
+    String USER_DETAILS_CACHE = "user_details";
 }

@@ -27,7 +27,7 @@ public class Result<T> implements Serializable {
     /**
      * 响应信息
      **/
-    private String msg;
+    private String message;
     /**
      * 响应数据
      **/
@@ -85,7 +85,7 @@ public class Result<T> implements Serializable {
      * @Param: msg   响应信息
      * @return: com.cloud.core.result.Result<T>
      **/
-    public static <T> Result<T> filed(String msg) {
+    public static <T> Result<T> failed(String msg) {
         return new Result<>(ResultCodeEnums.FAILED.getCode(), msg, null);
     }
 
@@ -96,7 +96,7 @@ public class Result<T> implements Serializable {
      * @Param: data   响应数据
      * @return: com.cloud.core.result.Result<T>
      **/
-    public static <T> Result<T> filed(T data) {
+    public static <T> Result<T> failed(T data) {
         return new Result<>(ResultCodeEnums.FAILED.getCode(), ResultCodeEnums.FAILED.getMsg(), data);
     }
 
@@ -108,7 +108,19 @@ public class Result<T> implements Serializable {
      * @Param: data   响应数据
      * @return: com.cloud.core.result.Result<T>
      **/
-    public static <T> Result<T> filed(String msg, T data) {
+    public static <T> Result<T> failed(String msg, T data) {
         return new Result<>(ResultCodeEnums.FAILED.getCode(), msg, data);
+    }
+
+    /**
+     * @Author: yongchen
+     * @Description: 自定义响应码及响应信息
+     * @Date: 11:31 2021/5/21
+     * @Param: msg    响应信息
+     * @Param: data   响应数据
+     * @return: com.cloud.core.result.Result<T>
+     **/
+    public static <T> Result<T> failed(Integer code, String msg) {
+        return new Result<>(code, msg, null);
     }
 }

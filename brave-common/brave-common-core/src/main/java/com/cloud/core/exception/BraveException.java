@@ -1,6 +1,7 @@
 package com.cloud.core.exception;
 
-import org.springframework.web.bind.annotation.ControllerAdvice;
+
+import lombok.Data;
 
 /**
  * @ClassName: BraveException
@@ -8,12 +9,29 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
  * @Author: yongchen
  * @Date: 2021/5/21 11:08
  **/
-@ControllerAdvice
-public class BraveException {
+@Data
+public class BraveException extends RuntimeException {
+    private static final long serialVersionUID = 4360304445378993573L;
 
+    /**
+     * 响应状态码
+     **/
+    private Integer code;
+    /**
+     * 响应信息
+     **/
+    private String message;
 
+    public BraveException(String message) {
+        super(message);
+        this.code = -99;
+        this.message = message;
+    }
 
-
-
+    public BraveException(Integer code, String message, Object... args) {
+        super(String.format(message, args));
+        this.code = code;
+        this.message = String.format(message, args);
+    }
 
 }
