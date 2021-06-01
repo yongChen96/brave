@@ -1,4 +1,4 @@
-package com.cloud.core.IdGenerate;
+package com.cloud.core.base.IdGenerate;
 
 /**
  * @ClassName: SnowflakeIDGenerate

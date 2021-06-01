@@ -1,7 +1,7 @@
 package com.cloud.core.db.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.cloud.core.IdGenerate.IdGenerate;
+import com.cloud.core.base.IdGenerate.IdGenerate;
 import com.cloud.core.db.entity.BaseEntity;
 import com.cloud.core.db.entity.BaseSuperEntuty;
 import lombok.extern.slf4j.Slf4j;

@@ -1,0 +1,28 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: @artifactId@
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 958118a9-b2a0-4d10-b84a-dc80b0ce6a76
+      config:
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yml
+  profiles:
+    active: @profiles.active@
+swagger:
+  base-package: com.cloud.auth.rest
+  title: brave-auth
+  description: 认证授权服务
+  version: v1.0
+  license:
+  licenseUrl:
+  termsOfServiceUrl:
+  contact:
+    name: yongchen
+    url:
+    email:

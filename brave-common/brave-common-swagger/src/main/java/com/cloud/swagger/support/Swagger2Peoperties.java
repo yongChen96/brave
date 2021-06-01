@@ -14,7 +14,6 @@ import java.util.List;
  * @Date: 2021/5/20 14:00
  **/
 @Data
-@ConfigurationProperties("swgger")
 public class Swagger2Peoperties {
 
     /**

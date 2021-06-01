@@ -1,6 +1,6 @@
 package com.cloud.core.config;
 
-import com.cloud.core.IdGenerate.SnowflakeIDGenerate;
+import com.cloud.core.base.IdGenerate.SnowflakeIDGenerate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 

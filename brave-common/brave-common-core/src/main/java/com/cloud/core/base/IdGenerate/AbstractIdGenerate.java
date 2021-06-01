@@ -1,4 +1,4 @@
-package com.cloud.core.IdGenerate;
+package com.cloud.core.base.IdGenerate;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;

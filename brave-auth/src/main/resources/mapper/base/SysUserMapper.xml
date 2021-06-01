@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cloud.auth.mapper.SysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cloud.auth.entity.SysUser">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_user" jdbcType="BIGINT" property="createUser"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_user" jdbcType="BIGINT" property="updateUser"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="nick_name" jdbcType="CHAR" property="nickName"/>
+        <result column="user_name" jdbcType="CHAR" property="userName"/>
+        <result column="pass_word" jdbcType="CHAR" property="passWord"/>
+        <result column="phone" jdbcType="CHAR" property="phone"/>
+        <result column="sex" jdbcType="CHAR" property="sex"/>
+        <result column="birthday" jdbcType="CHAR" property="birthday"/>
+        <result column="is_effective" jdbcType="CHAR" property="isEffective"/>
+        <result column="del_state" jdbcType="CHAR" property="delState"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, create_user, create_time, update_user, update_time, nick_name, user_name, pass_word, phone, sex, birthday, is_effective, del_state
+    </sql>
+
+</mapper>
