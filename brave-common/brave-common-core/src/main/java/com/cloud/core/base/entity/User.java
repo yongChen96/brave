@@ -1,4 +1,4 @@
-package com.cloud.core.entity;
+package com.cloud.core.base.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

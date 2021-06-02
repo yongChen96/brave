@@ -18,7 +18,7 @@
         <module>brave-mbs-api</module>
         <module>brave-mbs-rest</module>
         <module>brave-mbs-entity</module>
-        <module>brave-mbs-service</module>
+        <module>brave-mbs-biz</module>
     </modules>
 
     <dependencyManagement>

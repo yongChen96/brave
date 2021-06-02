@@ -1,4 +1,4 @@
-package com.cloud.rest;
+package com.cloud.brave;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
