@@ -1,4 +1,5 @@
-          _____                    _____                    _____                    _____                    _____          
+${AnsiColor.BRIGHT_YELLOW}
+          _____                    _____                    _____                    _____                    _____
          /\    \                  /\    \                  /\    \                  /\    \                  /\    \         
         /::\    \                /::\    \                /::\    \                /::\____\                /::\    \        
        /::::\    \              /::::\    \              /::::\    \              /:::/    /               /::::\    \       
@@ -18,4 +19,7 @@
       \::::::/    /             |::|   |                   /:::/    /                                     \:::\    \         
        \::::/    /              \::|   |                  /:::/    /                                       \:::\____\        
         \::/____/                \:|   |                  \::/    /                                         \::/    /        
-         ~~                       \|___|                   \/____/                                           \/____/         
+         ~~                       \|___|                   \/____/                                           \/____/
+${AnsiColor.BRIGHT_RED}
+Application Version: ${application.version}${application.formatted-version}
+Spring Boot Version: ${spring-boot.version}${spring-boot.formatted-version}

@@ -24,5 +24,5 @@ public interface SysUserFeignService {
      * @return: com.cloud.core.result.Result<com.cloud.brave.dto.UserInfoDTO>
      **/
     @GetMapping(value = "/sysUser/getUserInfo")
-    Result<UserInfoDTO> getUserInfo(@RequestParam("username") String username);
+    Result<UserInfoDTO> getUserInfo(@RequestParam(value = "username") String username);
 }
