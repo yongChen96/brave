@@ -1,6 +1,6 @@
 package com.cloud.core.config;
 
-import com.cloud.core.base.IdGenerate.SnowflakeIDGenerate;
+import com.cloud.core.SnowflakeId.SnowflakeIDGenerate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 public abstract class BaseConfig {
 
     @Bean
-    public SnowflakeIDGenerate setMachineCode(@Value("${brave.machine-code}") Long machineCode){
+    public SnowflakeIDGenerate setMachineCode(@Value("${brave.machine-code:1}") Long machineCode){
         return new SnowflakeIDGenerate(machineCode);
     }
 }

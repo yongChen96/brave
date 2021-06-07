@@ -1,6 +1,6 @@
 package com.cloud.log.event;
 
-import com.cloud.log.entity.SysLog;
+import com.cloud.brave.entity.SysLog;
 import org.springframework.context.ApplicationEvent;
 
 /**

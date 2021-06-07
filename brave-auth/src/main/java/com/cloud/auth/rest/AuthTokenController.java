@@ -1,6 +1,7 @@
 package com.cloud.auth.rest;
 
 import com.cloud.auth.entity.Oauth2AccessToken;
+import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.exception.BraveException;
 import com.cloud.core.result.Result;
 import io.swagger.annotations.Api;
@@ -56,7 +57,7 @@ public class AuthTokenController {
                     .token(oAuth2AccessToken.getValue())
                     .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
                     .expiresIn(oAuth2AccessToken.getExpiresIn())
-                    .tokenHead("Bearer ").build();
+                    .tokenHead(CommonConstants.token_head).build();
             return Result.success(accessToken);
         } catch (Exception e) {
             e.printStackTrace();

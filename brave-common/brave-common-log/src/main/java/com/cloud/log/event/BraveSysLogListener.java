@@ -1,14 +1,12 @@
 package com.cloud.log.event;
 
-import com.cloud.log.entity.SysLog;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.cloud.api.fegin.SysLogFeignService;
+import com.cloud.brave.entity.SysLog;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
-
-import java.util.function.Consumer;
 
 /**
  * @ClassName: BraveSysLogListener
@@ -17,12 +15,10 @@ import java.util.function.Consumer;
  * @Date: 2021/5/21 16:10
  **/
 @Slf4j
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BraveSysLogListener {
 
-    private Consumer<SysLog> consumer;
-
+    private final SysLogFeignService sysLogFeignService;
 
     @Async
     @Order
@@ -31,8 +27,7 @@ public class BraveSysLogListener {
         log.info("[{}], [{}]", event.getSource(), event.getTimestamp());
         SysLog sysLog = (SysLog) event.getSource();
         if (null != sysLog){
-            this.consumer.accept(sysLog);
+            sysLogFeignService.saveSysLog(sysLog);
         }
-
     }
 }

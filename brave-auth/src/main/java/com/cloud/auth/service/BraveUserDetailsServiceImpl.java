@@ -1,26 +1,23 @@
 package com.cloud.auth.service;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
+import com.cloud.api.fegin.SysUserFeignService;
 import com.cloud.auth.entity.BraveSysUser;
-import com.cloud.auth.entity.SysUser;
-import com.cloud.auth.mapper.SysUserMapper;
+import com.cloud.brave.dto.UserInfoDTO;
+import com.cloud.brave.entity.SysUser;
+import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.exception.BraveException;
-import jdk.internal.dynalink.support.NameCodec;
-import org.springframework.security.authentication.DisabledException;
+import com.cloud.core.result.Result;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ClassName: BraveUserDetailsServiceImpl
@@ -29,26 +26,36 @@ import java.util.List;
  * @Date: 2021/5/24 15:40
  **/
 @Service
+@RequiredArgsConstructor
 public class BraveUserDetailsServiceImpl implements UserDetailsService {
 
-    @Resource
-    private SysUserMapper sysUserMapper;
+    private final SysUserFeignService sysUserFeignService;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        List<String> strings = new ArrayList<>();
-        strings.add("ROLE_ADMIN");
-        strings.add("ROLE_USER");
-        SysUser sysUser = sysUserMapper.selectUserByPhone(s);
-        System.out.println(sysUser);
-        if (null == sysUser) {
-            throw new UsernameNotFoundException("用户不存在");
-        } else if (sysUser.getIsEffective() == "0") {
-            throw new DisabledException("该账户也失效");
+        Result<UserInfoDTO> result = sysUserFeignService.getUserInfo(s);
+        if (null == result || null == result.getData()) {
+            throw new BraveException("用户不存在");
         }
-        Collection<? extends GrantedAuthority> authorities = AuthorityUtils
-                .createAuthorityList(strings.toArray(new String[0]));
-        return new BraveSysUser(sysUser.getId(), sysUser.getNickName(), sysUser.getUserName(), sysUser.getPassWord(),
-                true, true, true, true, authorities);
+        UserInfoDTO userInfo = result.getData();
+        HashSet<String> hashSet = new HashSet<>();
+        if (ArrayUtil.isNotEmpty(userInfo.getRoles())) {
+            //获取用户角色信息
+            Arrays.stream(userInfo.getRoles()).forEach(role -> hashSet.add(role));
+            //获取资源信息
+            hashSet.addAll(Arrays.asList(userInfo.getPermissions()));
+        }
+        Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(hashSet.toArray(new String[0]));
+        SysUser sysUser = userInfo.getSysUser();
+        return new BraveSysUser(sysUser.getId(),
+                sysUser.getNickName(),
+                sysUser.getPhone(),
+                sysUser.getUserName(),
+                sysUser.getPassWord(),
+                StringUtils.equals(CommonConstants.IS_LOCK_NO, sysUser.getIsLock()),
+                true,
+                true,
+                true,
+                authorities);
     }
 }

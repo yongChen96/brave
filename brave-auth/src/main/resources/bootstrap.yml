@@ -16,8 +16,8 @@ spring:
     active: @profiles.active@
 swagger:
   base-package: com.cloud.auth.rest
-  title: brave-auth
-  description: 认证授权服务
+  title: @artifactId@
+  description: @description@
   version: v1.0
   license:
   licenseUrl:

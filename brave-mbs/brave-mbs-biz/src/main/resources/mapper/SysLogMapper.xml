@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cloud.brave.mapper.SysLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cloud.brave.entity.SysLog">
+        <result column="id" property="id" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="type" property="type" />
+        <result column="description" property="description" />
+        <result column="service_id" property="serviceId" />
+        <result column="request_ip" property="requestIp" />
+        <result column="request_uri" property="requestUri" />
+        <result column="http_method" property="httpMethod" />
+        <result column="params" property="params" />
+        <result column="result" property="result" />
+        <result column="error_desc" property="errorDesc" />
+        <result column="error_detail" property="errorDetail" />
+        <result column="start_time" property="startTime" />
+        <result column="finish_time" property="finishTime" />
+        <result column="browser" property="browser" />
+        <result column="create_name" property="createName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_user,
+        create_time,
+        type, description, service_id, request_ip, request_uri, http_method, params, result, error_desc, error_detail, start_time, finish_time, browser, create_name
+    </sql>
+
+</mapper>

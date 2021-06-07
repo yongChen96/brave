@@ -9,7 +9,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @Slf4j
 @EnableBraveSwagger2
-@MapperScan(basePackages = {"com.cloud.auth.mapper"})
 @EnableDiscoveryClient
 @SpringBootApplication
 public class BraveAuthApplication {
