@@ -32,4 +32,22 @@ public interface SysUserService extends IService<SysUser> {
      * @return: java.lang.Boolean
      **/
     Boolean saveNewUser(UserDTO userDTO);
+
+    /**
+     * @Author: yongchen
+     * @Description: 锁定用户
+     * @Date: 15:55 2021/6/8
+     * @Param: [id]
+     * @return: java.lang.Boolean
+     **/
+    Boolean locking(Long id);
+
+    /**
+     * @Author: yongchen
+     * @Description: 用户解锁
+     * @Date: 15:59 2021/6/8
+     * @Param: [id]
+     * @return: java.lang.Boolean
+     **/
+    Boolean unlock(Long id);
 }

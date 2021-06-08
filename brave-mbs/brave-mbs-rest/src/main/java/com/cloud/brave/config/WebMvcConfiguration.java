@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfiguration extends BaseConfig implements WebMvcConfigurer {
 
     @Bean
-    public InjectUserResolver injectUserResolver(){
+    public InjectUserResolver injectUserResolver() {
         return new InjectUserResolver();
     }
 }

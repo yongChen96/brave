@@ -4,8 +4,10 @@ package com.cloud.brave.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cloud.auth.entity.BraveSysUser;
 import com.cloud.auth.entity.BraveUser;
 import com.cloud.auth.inject.annotation.InjectUser;
+import com.cloud.auth.utils.SecurityUtils;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserInfoDTO;
 import com.cloud.brave.entity.SysUser;
@@ -110,5 +112,37 @@ public class SysUserController extends BaseController {
         return failed("添加新用户信息失败");
     }
 
+    /**
+     * @Author: yongchen
+     * @Description: 锁定用户
+     * @Date: 15:53 2021/6/8
+     * @Param: [id]
+     * @return: com.cloud.core.result.Result<java.lang.Boolean>
+     **/
+    @PostMapping("/locking")
+    @ApiOperation(value = "锁定用户", notes = "锁定用户")
+    public Result<Boolean> locking(@RequestParam Long id) {
+        Boolean locking = sysUserService.locking(id);
+        if (locking) {
+            return success(null);
+        }
+        return failed("锁定用户失败");
+    }
 
+    /**
+     * @Author: yongchen
+     * @Description: 用户解锁
+     * @Date: 15:58 2021/6/8
+     * @Param: [id]
+     * @return: com.cloud.core.result.Result<java.lang.Boolean>
+     **/
+    @PostMapping("/unlock")
+    @ApiOperation(value = "用户解锁", notes = "用户解锁")
+    public Result<Boolean> unlock(@RequestParam Long id) {
+        Boolean unlock = sysUserService.unlock(id);
+        if (unlock) {
+            return success(null);
+        }
+        return failed("用户解锁失败");
+    }
 }

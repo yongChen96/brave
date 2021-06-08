@@ -1,5 +1,6 @@
 package com.cloud.auth.config;
 
+import com.cloud.auth.service.BraveClientDetailsService;
 import com.cloud.auth.service.BraveUserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.security.KeyPair;
 import java.util.ArrayList;
 
@@ -34,6 +36,8 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Resource
     private PasswordEncoder passwordEncoder;
     @Resource
+    private DataSource dataSource;
+    @Resource
     private BraveUserDetailsServiceImpl userDetailsService;
     @Resource
     private AuthenticationManager authenticationManager;
@@ -42,6 +46,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        BraveClientDetailsService braveClientDetailsService = new BraveClientDetailsService(dataSource);
         clients.inMemory()
                 .withClient("brave-client")
                 .secret(passwordEncoder.encode("brave"))

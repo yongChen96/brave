@@ -1,6 +1,8 @@
 package com.cloud.brave.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserInfoDTO;
 import com.cloud.brave.entity.SysUser;
@@ -81,5 +83,35 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return sysUserRole;
         }).collect(Collectors.toList());
         return sysUserRoleService.saveBatch(sysUserRoles);
+    }
+
+    /**
+     * @Author: yongchen
+     * @Description: 锁定用户
+     * @Date: 15:55 2021/6/8
+     * @Param: [id]
+     * @return: java.lang.Boolean
+     **/
+    @Override
+    public Boolean locking(Long id) {
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, id)
+                        .eq(SysUser::getIsLock, CommonConstants.IS_LOCK_YES);
+        return this.update(updateWrapper);
+    }
+
+    /**
+     * @Author: yongchen
+     * @Description: 用户解锁
+     * @Date: 15:59 2021/6/8
+     * @Param: [id]
+     * @return: java.lang.Boolean
+     **/
+    @Override
+    public Boolean unlock(Long id) {
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, id)
+                .eq(SysUser::getIsLock, CommonConstants.IS_LOCK_NO);
+        return this.update(updateWrapper);
     }
 }
