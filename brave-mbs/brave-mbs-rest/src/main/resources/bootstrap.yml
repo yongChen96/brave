@@ -14,16 +14,16 @@ spring:
         file-extension: yml
   profiles:
     active: @profiles.active@
-#swagger:
-#  base-package: com.cloud.auth.rest
-#  title: @artifactId@
-#  description: @description@
-#  version: v1.0
-#  license:
-#  licenseUrl:
-#  termsOfServiceUrl:
-#  contact:
-#    name: yongchen
-#    url:
-#    email:
+swagger:
+  base-package: com.cloud.auth.rest
+  title: @artifactId@
+  description: @description@
+  version: v1.0
+  license:
+  licenseUrl:
+  termsOfServiceUrl:
+  contact:
+    name: yongchen
+    url:
+    email:
 

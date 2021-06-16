@@ -1,6 +1,10 @@
 server:
   port: 8081
 spring:
+  redis:
+    port: 16379
+    host: 127.0.0.1
+    password: root
   application:
     name: @artifactId@
   cloud:

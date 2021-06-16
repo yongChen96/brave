@@ -1,21 +1,26 @@
 package com.cloud.auth.rest;
 
 import com.cloud.auth.entity.Oauth2AccessToken;
+import com.cloud.core.constant.CacheConstants;
 import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.exception.BraveException;
 import com.cloud.core.result.Result;
+import com.cloud.core.utils.BraveCaptchaUtil;
+import com.wf.captcha.utils.CaptchaUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Map;
 
@@ -32,6 +37,8 @@ public class AuthTokenController {
 
     @Resource
     private TokenEndpoint tokenEndpoint;
+    @Resource
+    private RedisTemplate redisTemplate;
 
     /**
      * @Author: yongchen
@@ -50,8 +57,17 @@ public class AuthTokenController {
     })
     @PostMapping("/token")
     @ApiOperation(value = "OAuth2认证", notes = "login")
-    public Result<Oauth2AccessToken> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters){
+    public Result<Oauth2AccessToken> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters, @RequestParam("code") String code){
         try {
+            //验证码校验
+            String captchaText = (String) redisTemplate.opsForValue().get(CacheConstants.CAPTCHA_KEY);
+            if (StringUtils.isBlank(captchaText)){
+                return Result.failed("验证码错误，请输入正确验证码");
+            }
+            if (!StringUtils.equals(captchaText, code)){
+                return Result.failed("验证码错误，请输入正确验证码");
+            }
+            redisTemplate.delete(CacheConstants.CAPTCHA_KEY);
             OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
             Oauth2AccessToken accessToken = Oauth2AccessToken.builder()
                     .token(oAuth2AccessToken.getValue())
@@ -62,6 +78,35 @@ public class AuthTokenController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new BraveException(e.getMessage());
+        }
+    }
+
+    /**
+     * @Author: yongchen
+     * @Description: 获取验证码
+     * @Date: 11:09 2021/6/16
+     * @Param: [captchType, request, response]
+     * @return: void
+     **/
+    @GetMapping("/captch")
+    @ApiImplicitParams(@ApiImplicitParam(name = "captchType", defaultValue = "1", value = "验证码类型：1:png 2:gif 3:中文 4:算术"))
+    @ApiOperation(value = "获取验证码", notes = "获取验证码")
+    public void getCaptch(@RequestParam(value = "captchType") String captchType,HttpServletRequest request, HttpServletResponse response) throws IOException {
+        switch (captchType){
+            case CommonConstants.CAPTCH_PNG:
+                BraveCaptchaUtil.captchaForPng(response);
+                break;
+            case CommonConstants.CAPTCH_GIF:
+                BraveCaptchaUtil.captchaForGif(response);
+                break;
+            case CommonConstants.CAPTCH_CHINESE:
+                BraveCaptchaUtil.captchaForChinese(response);
+                break;
+            case CommonConstants.CAPTCH_ARITHMETIC:
+                BraveCaptchaUtil.captchaForArithmetic(response);
+                break;
+            default:
+                BraveCaptchaUtil.captchaForPng(response);
         }
     }
 }

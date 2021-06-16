@@ -2,11 +2,13 @@ package com.cloud.auth.config;
 
 import com.cloud.auth.service.BraveClientDetailsService;
 import com.cloud.auth.service.BraveUserDetailsServiceImpl;
+import com.cloud.core.constant.SecurityConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -34,8 +36,6 @@ import java.util.ArrayList;
 public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Resource
-    private PasswordEncoder passwordEncoder;
-    @Resource
     private DataSource dataSource;
     @Resource
     private BraveUserDetailsServiceImpl userDetailsService;
@@ -47,13 +47,9 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         BraveClientDetailsService braveClientDetailsService = new BraveClientDetailsService(dataSource);
-        clients.inMemory()
-                .withClient("brave-client")
-                .secret(passwordEncoder.encode("brave"))
-                .scopes("all")
-                .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(3600)
-                .refreshTokenValiditySeconds(4800);
+        braveClientDetailsService.setSelectClientDetailsSql(SecurityConstants.DEFAULT_SELECT_STATEMENT);
+        braveClientDetailsService.setFindClientDetailsSql(SecurityConstants.DEFAULT_FIND_STATEMENT);
+        clients.withClientDetails(braveClientDetailsService);
     }
 
     @Override
@@ -86,5 +82,10 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
         //从classpath下的证书中获取秘钥对
         KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "123456.".toCharArray());
         return keyStoreKeyFactory.getKeyPair("jwt", "123456.".toCharArray());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }

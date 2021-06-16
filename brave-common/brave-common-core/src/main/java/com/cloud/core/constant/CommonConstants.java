@@ -24,4 +24,12 @@ public interface CommonConstants {
      **/
     String NOT_DELETED = "0";
     String DELETED = "1";
+
+    /**
+     * 逻辑删除标识 0: 正常 1：已删除
+     **/
+    String CAPTCH_PNG = "1";
+    String CAPTCH_GIF = "2";
+    String CAPTCH_CHINESE = "3";
+    String CAPTCH_ARITHMETIC = "4";
 }

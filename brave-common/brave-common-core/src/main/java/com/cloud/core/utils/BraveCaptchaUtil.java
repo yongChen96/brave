@@ -1,21 +1,32 @@
 package com.cloud.core.utils;
 
+import com.cloud.core.constant.CacheConstants;
 import com.wf.captcha.ArithmeticCaptcha;
 import com.wf.captcha.ChineseCaptcha;
 import com.wf.captcha.GifCaptcha;
 import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
+import lombok.experimental.UtilityClass;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
- * @ClassName: CaptchaUtil
+ * @ClassName: BraveCaptchaUtil
  * @Description: 验证码工具类
  * @Author: yongchen
  * @Date: 2021/5/24 11:58
  **/
-public class CaptchaUtil {
+@UtilityClass
+public class BraveCaptchaUtil {
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     /**
      * 二维码宽度
      **/
@@ -23,7 +34,7 @@ public class CaptchaUtil {
     /**
      * 二维码高度
      **/
-    private static final Integer CAPTCHA_HEIGH =40;
+    private static final Integer CAPTCHA_HEIGH = 40;
     /**
      * 二维码位数
      **/
@@ -40,6 +51,8 @@ public class CaptchaUtil {
         SpecCaptcha captcha = new SpecCaptcha(CAPTCHA_WIDTH, CAPTCHA_HEIGH);
         //获取验证码字符
         String text = captcha.text();
+        // 验证码添加到缓存
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
         captcha.out(response.getOutputStream());
     }
@@ -58,6 +71,8 @@ public class CaptchaUtil {
         captcha.setCharType(Captcha.TYPE_DEFAULT);
         //获取验证码字符
         String text = captcha.text();
+        // 验证码添加到缓存
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
         captcha.out(response.getOutputStream());
     }
@@ -74,6 +89,8 @@ public class CaptchaUtil {
         ChineseCaptcha chineseCaptcha = new ChineseCaptcha(CAPTCHA_WIDTH, CAPTCHA_HEIGH);
         //获取验证码字符
         String text = chineseCaptcha.text();
+        // 验证码添加到缓存
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
         chineseCaptcha.out(response.getOutputStream());
     }
@@ -94,7 +111,21 @@ public class CaptchaUtil {
         String arithmeticString = arithmeticCaptcha.getArithmeticString();
         //获取运算结果
         String text = arithmeticCaptcha.text();
+        // 验证码添加到缓存
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
         arithmeticCaptcha.out(response.getOutputStream());
+    }
+
+    /**
+     * 设置相应头
+     *
+     * @param response HttpServletResponse
+     */
+    public static void setHeader(HttpServletResponse response) {
+        response.setContentType("image/gif");
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
     }
 }

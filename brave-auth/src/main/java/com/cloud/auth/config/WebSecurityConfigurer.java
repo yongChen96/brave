@@ -1,17 +1,12 @@
 package com.cloud.auth.config;
 
-import com.cloud.auth.handler.FormAuthenticationFailureHandler;
-import com.cloud.auth.handler.LogOutSuccessHandler;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @ClassName: WebSecurityConfigurer
@@ -25,19 +20,16 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin()
-                .loginPage("/token/login")
-                .loginProcessingUrl("/token/form")
-                .failureHandler(new FormAuthenticationFailureHandler())
-                .and()
-                .logout()
-                .logoutSuccessHandler(new LogOutSuccessHandler())
-                .deleteCookies("JSESSIONID")
-                .invalidateHttpSession(true)
+        http.authorizeRequests()
+                .requestMatchers(EndpointRequest.toAnyEndpoint())
+                .permitAll()
                 .and()
                 .authorizeRequests()
-                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                .antMatchers("/rsa/getPublicKey", "/doc.html", "/v2/api-docs")
+                .antMatchers("/rsa/getPublicKey", "/oauth/*")
+                .permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/webjars/**", "/doc.html", "/swagger-resources/**", "/v2/api-docs")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -47,13 +39,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @Override
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
