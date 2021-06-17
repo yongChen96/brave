@@ -60,7 +60,7 @@ public class SysUserController extends BaseController {
      * @Description: 获取用户信息
      * @Date: 14:08 2021/6/4
      * @Param: [username]
-     * @return: com.cloud.core.result.Result<?>
+     * @return: com.cloud.core.result.Result<UserInfoDTO>
      **/
     @PostMapping(value = "/getUserInfo")
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")

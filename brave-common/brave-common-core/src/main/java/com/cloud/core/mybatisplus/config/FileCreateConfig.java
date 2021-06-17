@@ -1,6 +1,8 @@
 package com.cloud.core.mybatisplus.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @ClassName: FileCreateConfig
@@ -9,6 +11,8 @@ import lombok.Data;
  * @Date: 2020/8/31 15:21
  **/
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FileCreateConfig {
     private Boolean generateController;
     private Boolean generateService;
@@ -17,12 +21,12 @@ public class FileCreateConfig {
     private Boolean generateMapper;
     private Boolean generateXml;
 
-    public FileCreateConfig(){
-        this.generateController = true;
-        this.generateService = true;
-        this.generateServiceImpl = true;
-        this.generateEntity = true;
-        this.generateMapper = true;
-        this.generateXml = true;
+    public FileCreateConfig(Boolean falg){
+        this.generateController = falg;
+        this.generateService = falg;
+        this.generateServiceImpl = falg;
+        this.generateEntity = falg;
+        this.generateMapper = falg;
+        this.generateXml = falg;
     }
 }

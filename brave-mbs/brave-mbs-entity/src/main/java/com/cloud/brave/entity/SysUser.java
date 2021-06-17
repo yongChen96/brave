@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yongchen
- * @since 2021-06-03
+ * @since 2021-06-17
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -50,6 +50,10 @@ public class SysUser extends BaseEntity {
     @ApiModelProperty(value = "用户生日")
     @TableField("birthday")
     private LocalDate birthday;
+
+    @ApiModelProperty(value = "用户头像")
+    @TableField("avatar_url")
+    private String avatarUrl;
 
     @ApiModelProperty(value = "账号是否锁定（0：正常；1：锁定）")
     @TableField("is_lock")
