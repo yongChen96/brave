@@ -29,7 +29,7 @@ import javax.annotation.Resource;
 @Configuration
 public class RedisTemplateConfiguration {
 
-    @Autowired
+    @Resource
     private RedisConnectionFactory redisConnectionFactory;
 
     @Bean

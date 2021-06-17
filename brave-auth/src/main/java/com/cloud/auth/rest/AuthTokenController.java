@@ -1,23 +1,22 @@
 package com.cloud.auth.rest;
 
 import com.cloud.auth.entity.Oauth2AccessToken;
+import com.cloud.auth.utils.BraveCaptchaUtil;
 import com.cloud.core.constant.CacheConstants;
 import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.exception.BraveException;
 import com.cloud.core.result.Result;
-import com.cloud.core.utils.BraveCaptchaUtil;
-import com.wf.captcha.utils.CaptchaUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,12 +32,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/oauth")
 @Api(tags = "登录认证中心")
+@RequiredArgsConstructor
 public class AuthTokenController {
 
-    @Resource
-    private TokenEndpoint tokenEndpoint;
-    @Resource
-    private RedisTemplate redisTemplate;
+    private final TokenEndpoint tokenEndpoint;
+    private final RedisTemplate redisTemplate;
+    private final BraveCaptchaUtil braveCaptchaUtil;
 
     /**
      * @Author: yongchen
@@ -57,14 +56,14 @@ public class AuthTokenController {
     })
     @PostMapping("/token")
     @ApiOperation(value = "OAuth2认证", notes = "login")
-    public Result<Oauth2AccessToken> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters, @RequestParam("code") String code){
+    public Result<Oauth2AccessToken> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters, @RequestParam("code") String code) {
         try {
             //验证码校验
             String captchaText = (String) redisTemplate.opsForValue().get(CacheConstants.CAPTCHA_KEY);
-            if (StringUtils.isBlank(captchaText)){
+            if (StringUtils.isBlank(captchaText)) {
                 return Result.failed("验证码错误，请输入正确验证码");
             }
-            if (!StringUtils.equals(captchaText, code)){
+            if (!StringUtils.equals(captchaText, code)) {
                 return Result.failed("验证码错误，请输入正确验证码");
             }
             redisTemplate.delete(CacheConstants.CAPTCHA_KEY);
@@ -89,24 +88,24 @@ public class AuthTokenController {
      * @return: void
      **/
     @GetMapping("/captch")
-    @ApiImplicitParams(@ApiImplicitParam(name = "captchType", defaultValue = "1", value = "验证码类型：1:png 2:gif 3:中文 4:算术"))
     @ApiOperation(value = "获取验证码", notes = "获取验证码")
-    public void getCaptch(@RequestParam(value = "captchType") String captchType,HttpServletRequest request, HttpServletResponse response) throws IOException {
-        switch (captchType){
+    @ApiImplicitParams(@ApiImplicitParam(name = "captchType", defaultValue = "1", value = "验证码类型：1:png 2:gif 3:中文 4:算术"))
+    public void getCaptch(@RequestParam(value = "captchType") String captchType, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        switch (captchType) {
             case CommonConstants.CAPTCH_PNG:
-                BraveCaptchaUtil.captchaForPng(response);
+                braveCaptchaUtil.captchaForPng(response);
                 break;
             case CommonConstants.CAPTCH_GIF:
-                BraveCaptchaUtil.captchaForGif(response);
+                braveCaptchaUtil.captchaForGif(response);
                 break;
             case CommonConstants.CAPTCH_CHINESE:
-                BraveCaptchaUtil.captchaForChinese(response);
+                braveCaptchaUtil.captchaForChinese(response);
                 break;
             case CommonConstants.CAPTCH_ARITHMETIC:
-                BraveCaptchaUtil.captchaForArithmetic(response);
+                braveCaptchaUtil.captchaForArithmetic(response);
                 break;
             default:
-                BraveCaptchaUtil.captchaForPng(response);
+                braveCaptchaUtil.captchaForPng(response);
         }
     }
 }

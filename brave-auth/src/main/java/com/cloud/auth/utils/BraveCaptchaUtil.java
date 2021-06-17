@@ -1,4 +1,4 @@
-package com.cloud.core.utils;
+package com.cloud.auth.utils;
 
 import com.cloud.core.constant.CacheConstants;
 import com.wf.captcha.ArithmeticCaptcha;
