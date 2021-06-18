@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,65 +45,71 @@ public class BraveCaptchaUtil {
      * @Author: yongchen
      * @Description: 生成png类型的验证码
      * @Date: 13:48 2021/5/24
-     * @Param: [response]
+     * @Param:
      * @return: void
      **/
-    public void captchaForPng(HttpServletResponse response) throws IOException {
+    public String captchaForPng() {
+        Map<String, String> map = new HashMap<>();
         SpecCaptcha captcha = new SpecCaptcha(CAPTCHA_WIDTH, CAPTCHA_HEIGH);
         //获取验证码字符
         String text = captcha.text();
+        //验证码转小写
+        String lowerCase = text.toLowerCase();
         // 验证码添加到缓存
-        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY + lowerCase, lowerCase, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
-        captcha.out(response.getOutputStream());
+        return captcha.toBase64("");
     }
+
 
     /**
      * @Author: yongchen
      * @Description: 生成GIF类型验证码
      * @Date: 14:03 2021/5/24
-     * @Param: [response]
+     * @Param:
      * @return: void
      **/
-    public void captchaForGif(HttpServletResponse response) throws IOException {
+    public String captchaForGif() {
         //GIF类型验证码，宽、高、验证码位数
         GifCaptcha captcha = new GifCaptcha(CAPTCHA_WIDTH, CAPTCHA_WIDTH, CAPTCHA_LEN);
         //设置验证码类型：字符数字混合
         captcha.setCharType(Captcha.TYPE_DEFAULT);
         //获取验证码字符
         String text = captcha.text();
+        //验证码转小写
+        String lowerCase = text.toLowerCase();
         // 验证码添加到缓存
-        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY + lowerCase, lowerCase, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
-        captcha.out(response.getOutputStream());
+        return captcha.toBase64("");
     }
 
     /**
      * @Author: yongchen
      * @Description: 中文类型验证码
      * @Date: 14:08 2021/5/24
-     * @Param: [response]
+     * @Param:
      * @return: void
      **/
-    public void captchaForChinese(HttpServletResponse response) throws IOException {
+    public String captchaForChinese() {
         //中文类型验证码，宽、高
         ChineseCaptcha chineseCaptcha = new ChineseCaptcha(CAPTCHA_WIDTH, CAPTCHA_HEIGH);
         //获取验证码字符
         String text = chineseCaptcha.text();
         // 验证码添加到缓存
-        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY + text, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
-        chineseCaptcha.out(response.getOutputStream());
+        return chineseCaptcha.toBase64("");
     }
 
     /**
      * @Author: yongchen
      * @Description: 算术类型验证码
      * @Date: 14:10 2021/5/24
-     * @Param: [response]
+     * @Param:
      * @return: void
      **/
-    public void captchaForArithmetic(HttpServletResponse response) throws IOException {
+    public String captchaForArithmetic() {
         //算术类型验证码：宽、高
         ArithmeticCaptcha arithmeticCaptcha = new ArithmeticCaptcha(CAPTCHA_WIDTH, CAPTCHA_HEIGH);
         //运算位数
@@ -111,20 +119,8 @@ public class BraveCaptchaUtil {
         //获取运算结果
         String text = arithmeticCaptcha.text();
         // 验证码添加到缓存
-        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY + text, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
-        arithmeticCaptcha.out(response.getOutputStream());
-    }
-
-    /**
-     * 设置相应头
-     *
-     * @param response HttpServletResponse
-     */
-    public static void setHeader(HttpServletResponse response) {
-        response.setContentType("image/gif");
-        response.setHeader("Pragma", "No-cache");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setDateHeader("Expires", 0);
+        return arithmeticCaptcha.toBase64("");
     }
 }

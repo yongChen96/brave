@@ -14,7 +14,3 @@ spring:
         file-extension: yml
   profiles:
     active: @profiles.active@
-secure:
-  urls: #配置白名单路径
-    - "/actuator/**"
-    - "/auth/oauth/*"

@@ -30,9 +30,9 @@ import java.util.Map;
  * @Date: 2021/5/28 15:29
  **/
 @RestController
-@RequestMapping("/oauth")
-@Api(tags = "登录认证中心")
 @RequiredArgsConstructor
+@RequestMapping("/oauth")
+@Api(value = "AuthTokenController", tags = "登录认证中心")
 public class AuthTokenController {
 
     private final TokenEndpoint tokenEndpoint;
@@ -53,17 +53,18 @@ public class AuthTokenController {
             @ApiImplicitParam(name = "refresh_token", value = "刷新token"),
             @ApiImplicitParam(name = "username", defaultValue = "admin", value = "登录用户名"),
             @ApiImplicitParam(name = "password", defaultValue = "123456", value = "登录密码"),
+            @ApiImplicitParam(name = "code", value = "验证码")
     })
     @PostMapping("/token")
     @ApiOperation(value = "OAuth2认证", notes = "login")
     public Result<Oauth2AccessToken> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters, @RequestParam("code") String code) {
         try {
             //验证码校验
-            String captchaText = (String) redisTemplate.opsForValue().get(CacheConstants.CAPTCHA_KEY);
+            String captchaText = (String) redisTemplate.opsForValue().get(CacheConstants.CAPTCHA_KEY + code.toLowerCase());
             if (StringUtils.isBlank(captchaText)) {
                 return Result.failed("验证码错误，请输入正确验证码");
             }
-            if (!StringUtils.equals(captchaText, code)) {
+            if (!StringUtils.equals(captchaText, code.toLowerCase())) {
                 return Result.failed("验证码错误，请输入正确验证码");
             }
             redisTemplate.delete(CacheConstants.CAPTCHA_KEY);
@@ -89,23 +90,26 @@ public class AuthTokenController {
      **/
     @GetMapping("/captch")
     @ApiOperation(value = "获取验证码", notes = "获取验证码")
-    @ApiImplicitParams(@ApiImplicitParam(name = "captchType", defaultValue = "1", value = "验证码类型：1:png 2:gif 3:中文 4:算术"))
-    public void getCaptch(@RequestParam(value = "captchType") String captchType, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "captchType", defaultValue = "1", value = "验证码类型：1:png 2:gif 3:中文 4:算术", required = true))
+    public Result getCaptch(@RequestParam(value = "captchType") String captchType) {
+        String captha = null;
         switch (captchType) {
             case CommonConstants.CAPTCH_PNG:
-                braveCaptchaUtil.captchaForPng(response);
+                captha = braveCaptchaUtil.captchaForPng();
                 break;
             case CommonConstants.CAPTCH_GIF:
-                braveCaptchaUtil.captchaForGif(response);
+                captha = braveCaptchaUtil.captchaForGif();
                 break;
             case CommonConstants.CAPTCH_CHINESE:
-                braveCaptchaUtil.captchaForChinese(response);
+                captha = braveCaptchaUtil.captchaForChinese();
                 break;
             case CommonConstants.CAPTCH_ARITHMETIC:
-                braveCaptchaUtil.captchaForArithmetic(response);
+                captha = braveCaptchaUtil.captchaForArithmetic();
                 break;
             default:
-                braveCaptchaUtil.captchaForPng(response);
+                captha = braveCaptchaUtil.captchaForPng();
         }
+        return Result.success(captha);
     }
 }

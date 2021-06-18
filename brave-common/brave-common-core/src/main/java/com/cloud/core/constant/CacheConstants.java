@@ -21,7 +21,7 @@ public interface CacheConstants {
     /**
      * 验证码缓存key
      **/
-    String CAPTCHA_KEY = "captcha";
+    String CAPTCHA_KEY = "captcha_";
     /**
      * 验证码有效期,默认 60秒
      */

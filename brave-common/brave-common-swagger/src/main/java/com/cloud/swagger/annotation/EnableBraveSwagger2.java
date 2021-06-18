@@ -1,7 +1,6 @@
 package com.cloud.swagger.annotation;
 
 import com.cloud.swagger.config.SwaggerAutoConfiguration;
-import com.cloud.swagger.support.Swagger2Peoperties;
 import com.cloud.swagger.support.SwaggerPeoperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
