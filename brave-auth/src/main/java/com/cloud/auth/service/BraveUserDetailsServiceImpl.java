@@ -41,7 +41,7 @@ public class BraveUserDetailsServiceImpl implements UserDetailsService {
         HashSet<String> hashSet = new HashSet<>();
         if (ArrayUtil.isNotEmpty(userInfo.getRoles())) {
             //获取用户角色信息
-            Arrays.stream(userInfo.getRoles()).forEach(role -> hashSet.add(role));
+            Arrays.stream(userInfo.getRoles()).forEach(role -> hashSet.add(role.toString()));
             //获取资源信息
             hashSet.addAll(Arrays.asList(userInfo.getPermissions()));
         }

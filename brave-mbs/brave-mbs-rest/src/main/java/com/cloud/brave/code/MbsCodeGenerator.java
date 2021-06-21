@@ -16,7 +16,7 @@ public class MbsCodeGenerator {
 
     public static void main(String[] args) {
         CodeGeneratorConfig generatorConfig = new CodeGeneratorConfig();
-        String[] tableName = {"sys_role"};
+        String[] tableName = {"sys_menu","sys_role_menu"};
         generatorConfig.setTableName(tableName);
         generatorConfig.setTablePrefix("");
         generatorConfig.setAuthor("yongchen");

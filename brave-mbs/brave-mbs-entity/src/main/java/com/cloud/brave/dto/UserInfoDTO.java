@@ -31,5 +31,5 @@ public class UserInfoDTO  implements Serializable {
     /**
      * 角色集合
      */
-    private String[] roles;
+    private Long[] roles;
 }

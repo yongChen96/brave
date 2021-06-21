@@ -4,8 +4,6 @@ package com.cloud.brave.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cloud.auth.entity.BraveUser;
-import com.cloud.auth.inject.annotation.InjectUser;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserInfoDTO;
 import com.cloud.brave.entity.SysUser;
@@ -62,7 +60,7 @@ public class SysUserController extends BaseController {
      * @Param: [username]
      * @return: com.cloud.core.result.Result<UserInfoDTO>
      **/
-    @PostMapping(value = "/getUserInfo")
+    @GetMapping(value = "/getUserInfo")
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
     public Result<UserInfoDTO> getUserInfo(@RequestParam(value = "username") String username) {
         UserInfoDTO userInfo = sysUserService.getUserInfo(username);
@@ -81,8 +79,8 @@ public class SysUserController extends BaseController {
      **/
     @GetMapping("/info")
     @ApiOperation(value = "获取当前登录用户信息", notes = "获取当前登录用户信息")
-    public Result<UserInfoDTO> info(@InjectUser BraveUser braveUser) {
-        String phone = braveUser.getPhone();
+    public Result<UserInfoDTO> info() {
+        String phone = "13312341234";
         if (StringUtils.isNotBlank(phone)) {
             UserInfoDTO userInfo = sysUserService.getUserInfo(phone);
             if (null == userInfo) {

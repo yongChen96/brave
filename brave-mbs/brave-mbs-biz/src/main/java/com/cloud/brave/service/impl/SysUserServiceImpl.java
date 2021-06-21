@@ -1,13 +1,18 @@
 package com.cloud.brave.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserInfoDTO;
+import com.cloud.brave.entity.SysMenu;
+import com.cloud.brave.entity.SysRole;
 import com.cloud.brave.entity.SysUser;
 import com.cloud.brave.entity.SysUserRole;
 import com.cloud.brave.mapper.SysUserMapper;
+import com.cloud.brave.service.SysMenuService;
+import com.cloud.brave.service.SysRoleService;
 import com.cloud.brave.service.SysUserRoleService;
 import com.cloud.brave.service.SysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,7 +24,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,7 +43,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final SysUserMapper sysUserMapper;
+    private final SysRoleService sysRoleService;
     private final SysUserRoleService sysUserRoleService;
+    private final SysMenuService sysMenuService;
     private final IdGenerate<Long> idGenerate;
 
 
@@ -54,7 +63,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                                     .eq(SysUser::getIsLock, CommonConstants.IS_LOCK_NO)
                                     .eq(SysUser::getDelState, CommonConstants.NOT_DELETED);
         SysUser sysUser = this.getOne(sysUserLambdaQueryWrapper);
-        return new UserInfoDTO(sysUser, null, null);
+        List<Long> roleIds = sysRoleService.findRolesByUserId(sysUser.getId()).stream().map(SysRole::getId)
+                .collect(Collectors.toList());
+        Set<String> permissions = new HashSet<>();
+        roleIds.forEach(roleId -> {
+            List<String> list = sysMenuService.findPermissionsByRoleId(roleId).stream()
+                    .filter(menu -> StrUtil.isNotEmpty(menu.getAuthority())).map(SysMenu::getAuthority)
+                    .collect(Collectors.toList());
+            permissions.addAll(list);
+        });
+        return new UserInfoDTO(sysUser, ArrayUtil.toArray(permissions, String.class), ArrayUtil.toArray(roleIds, Long.class));
     }
 
     /**

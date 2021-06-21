@@ -15,7 +15,7 @@ spring:
   profiles:
     active: @profiles.active@
 swagger:
-  base-package: com.cloud.auth.rest
+  base-package: com.cloud.auth.controller
   title: @artifactId@
   description: @description@
   version: v1.0
@@ -26,4 +26,10 @@ swagger:
     name: yongchen
     url:
     email:
+logging:
+  level:
+    com:
+      cloud:
+        brave:
+          mapper: trace
 

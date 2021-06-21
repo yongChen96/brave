@@ -25,4 +25,16 @@
         role_name, role_code, is_effective, del_state
     </sql>
 
+
+    <select id="findRolesByUserId" resultMap="BaseResultMap">
+        SELECT
+            role.*
+        FROM
+            sys_role role ,
+            sys_user_role ur
+        WHERE
+            ur.role_id = role.id
+            AND ur.user_id = #{userId}
+    </select>
+
 </mapper>

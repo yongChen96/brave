@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cloud.brave.mapper.SysMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cloud.brave.entity.SysMenu">
+        <result column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="name" property="name" />
+        <result column="code" property="code" />
+        <result column="desc" property="desc" />
+        <result column="type" property="type" />
+        <result column="path" property="path" />
+        <result column="authority" property="authority" />
+        <result column="style" property="style" />
+        <result column="icon" property="icon" />
+        <result column="is_enable" property="isEnable" />
+        <result column="sort" property="sort" />
+        <result column="del_state" property="delState" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        parent_id, name, code, desc, type, path, authority, style, icon, is_enable, sort, del_state
+    </sql>
+
+    <select id="findPermissionsByRoleId" resultMap="BaseResultMap">
+        SELECT
+            menu.*
+        FROM
+            sys_menu menu
+            LEFT JOIN sys_role_menu role ON menu.id = role.menu_id
+        WHERE
+            menu.del_state = 0
+            AND menu.is_enable = 0
+            AND role.role_id = #{roleId}
+    </select>
+</mapper>
