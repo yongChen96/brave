@@ -7,6 +7,8 @@
         <result column="id" property="id" />
         <result column="create_user" property="createUser" />
         <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_time" property="updateTime" />
         <result column="type" property="type" />
         <result column="description" property="description" />
         <result column="service_id" property="serviceId" />
@@ -28,6 +30,8 @@
         id,
         create_user,
         create_time,
+        update_user,
+        update_time,
         type, description, service_id, request_ip, request_uri, http_method, params, result, error_desc, error_detail, start_time, finish_time, browser, create_name
     </sql>
 

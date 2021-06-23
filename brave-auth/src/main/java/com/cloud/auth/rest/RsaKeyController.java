@@ -41,6 +41,4 @@ public class RsaKeyController {
         RSAKey rsaKey = new RSAKey.Builder(rsaPublicKey).build();
         return new JWKSet(rsaKey).toJSONObject();
     }
-
-
 }

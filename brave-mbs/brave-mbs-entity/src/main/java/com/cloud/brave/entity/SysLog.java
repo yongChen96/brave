@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.cloud.core.mybatisplus.entity.BaseEntity;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,18 +12,18 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 系统日志
+ * 
  * </p>
  *
  * @author yongchen
- * @since 2021-06-07
+ * @since 2021-06-23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("sys_log")
-@ApiModel(value="SysLog对象", description="系统日志")
-public class SysLog extends BaseSuperEntuty<Long> {
+@ApiModel(value="SysLog对象", description="")
+public class SysLog extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +37,7 @@ public class SysLog extends BaseSuperEntuty<Long> {
 
     @ApiModelProperty(value = "服务id")
     @TableField("service_id")
-    private String serviceId;
+    private Integer serviceId;
 
     @ApiModelProperty(value = "请求IP地址")
     @TableField("request_ip")
@@ -70,7 +69,7 @@ public class SysLog extends BaseSuperEntuty<Long> {
 
     @ApiModelProperty(value = "请求发起时间")
     @TableField("start_time")
-    private LocalDateTime startTime;
+    private String startTime;
 
     @ApiModelProperty(value = "请求完成时间")
     @TableField("finish_time")
@@ -83,4 +82,6 @@ public class SysLog extends BaseSuperEntuty<Long> {
     @ApiModelProperty(value = "操作人姓名")
     @TableField("create_name")
     private String createName;
+
+
 }

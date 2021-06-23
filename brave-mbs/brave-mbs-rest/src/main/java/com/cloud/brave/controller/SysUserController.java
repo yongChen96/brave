@@ -118,8 +118,7 @@ public class SysUserController extends BaseController {
     @PostMapping("/locking")
     @ApiOperation(value = "锁定用户", notes = "锁定用户")
     public Result<Boolean> locking(@RequestParam Long id) {
-        Boolean locking = sysUserService.locking(id);
-        if (locking) {
+        if (sysUserService.locking(id)) {
             return success(null);
         }
         return failed("锁定用户失败");
@@ -135,8 +134,7 @@ public class SysUserController extends BaseController {
     @PostMapping("/unlock")
     @ApiOperation(value = "用户解锁", notes = "用户解锁")
     public Result<Boolean> unlock(@RequestParam Long id) {
-        Boolean unlock = sysUserService.unlock(id);
-        if (unlock) {
+        if (sysUserService.unlock(id)) {
             return success(null);
         }
         return failed("用户解锁失败");

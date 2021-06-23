@@ -6,8 +6,8 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
-        namespace: 958118a9-b2a0-4d10-b84a-dc80b0ce6a76
+        server-addr: ${NACOS_IP:127.0.0.1}:${NACOS_PORT:8848}
+        namespace: ecfd1e10-0d45-4fb0-b4a8-74b77c4f7e65
       config:
         namespace: ${spring.cloud.nacos.discovery.namespace}
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
@@ -16,8 +16,8 @@ spring:
     active: @profiles.active@
 swagger:
   base-package: com.cloud.auth.rest
-  title: @artifactId@
-  description: @description@
+  title: ${spring.application.name}
+  description: Brave 认证授权服务
   version: v1.0
   license:
   licenseUrl:

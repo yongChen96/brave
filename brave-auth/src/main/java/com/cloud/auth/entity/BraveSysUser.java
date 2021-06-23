@@ -25,20 +25,15 @@ public class BraveSysUser extends User {
      **/
     private Long id;
     /**
-     * 用户呢称
-     **/
-    private String nickName;
-    /**
      * 用户电话
      **/
     private String phone;
 
-    public BraveSysUser(Long id, String nickName, String phone, String username, String password,
+    public BraveSysUser(Long id, String phone, String username, String password,
                         boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired,
                         boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.id = id;
-        this.nickName = nickName;
         this.phone = phone;
     }
 }

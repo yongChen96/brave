@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yongchen
- * @since 2021-06-17
+ * @since 2021-06-23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -34,11 +34,15 @@ public class SysRole extends BaseEntity {
     @TableField("role_code")
     private String roleCode;
 
-    @ApiModelProperty(value = "是否有效（0：无效 1：有效）")
-    @TableField("is_effective")
-    private String isEffective;
+    @ApiModelProperty(value = "显示顺序")
+    @TableField("role_sort")
+    private Integer roleSort;
 
-    @ApiModelProperty(value = "是否删除（0：否；1：是）")
+    @ApiModelProperty(value = "角色状态（0：正常，1：停用）")
+    @TableField("role_status")
+    private String roleStatus;
+
+    @ApiModelProperty(value = "是否删除（0：否，1：是）")
     @TableField("del_state")
     private String delState;
 

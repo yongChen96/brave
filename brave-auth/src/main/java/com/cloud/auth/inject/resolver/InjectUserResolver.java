@@ -32,7 +32,6 @@ public class InjectUserResolver implements HandlerMethodArgumentResolver {
         BraveSysUser braveSysUser = SecurityUtils.getUser();
         BraveUser braveUser = BraveUser.builder()
                 .id(braveSysUser.getId())
-                .nickName(braveSysUser.getNickName())
                 .userName(braveSysUser.getUsername())
                 .phone(braveSysUser.getPhone())
                 .sex(null)

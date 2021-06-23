@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yongchen
- * @since 2021-06-17
+ * @since 2021-06-23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -27,10 +27,6 @@ public class SysUser extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户呢称")
-    @TableField("nick_name")
-    private String nickName;
-
     @ApiModelProperty(value = "用户名")
     @TableField("user_name")
     private String userName;
@@ -39,27 +35,39 @@ public class SysUser extends BaseEntity {
     @TableField("pass_word")
     private String passWord;
 
-    @ApiModelProperty(value = "用户手机号码")
+    @ApiModelProperty(value = "联系方式")
     @TableField("phone")
     private String phone;
 
-    @ApiModelProperty(value = "用户性别")
+    @ApiModelProperty(value = "邮箱")
+    @TableField("e_mail")
+    private String eMail;
+
+    @ApiModelProperty(value = "性别（0：女，1：男）")
     @TableField("sex")
     private String sex;
 
-    @ApiModelProperty(value = "用户生日")
+    @ApiModelProperty(value = "生日")
     @TableField("birthday")
     private LocalDate birthday;
 
-    @ApiModelProperty(value = "用户头像")
+    @ApiModelProperty(value = "部门id")
+    @TableField("dept_id")
+    private Long deptId;
+
+    @ApiModelProperty(value = "头像url")
     @TableField("avatar_url")
     private String avatarUrl;
 
-    @ApiModelProperty(value = "账号是否锁定（0：正常；1：锁定）")
+    @ApiModelProperty(value = "个性签名")
+    @TableField("signature")
+    private String signature;
+
+    @ApiModelProperty(value = "是否锁定（0：否，1：是）")
     @TableField("is_lock")
     private String isLock;
 
-    @ApiModelProperty(value = "是否删除（0：否；1：是）")
+    @ApiModelProperty(value = "是否删除（0：否，1：是）")
     @TableField("del_state")
     private String delState;
 

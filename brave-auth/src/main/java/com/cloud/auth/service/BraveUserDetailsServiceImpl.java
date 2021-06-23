@@ -48,7 +48,6 @@ public class BraveUserDetailsServiceImpl implements UserDetailsService {
         Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(hashSet.toArray(new String[0]));
         SysUser sysUser = userInfo.getSysUser();
         return new BraveSysUser(sysUser.getId(),
-                sysUser.getNickName(),
                 sysUser.getPhone(),
                 sysUser.getUserName(),
                 sysUser.getPassWord(),

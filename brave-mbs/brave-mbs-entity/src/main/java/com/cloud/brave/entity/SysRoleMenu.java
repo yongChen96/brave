@@ -11,17 +11,17 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 角色资源关联信息表
+ * 角色菜单中间表
  * </p>
  *
  * @author yongchen
- * @since 2021-06-18
+ * @since 2021-06-23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("sys_role_menu")
-@ApiModel(value="SysRoleMenu对象", description="角色资源关联信息表")
+@ApiModel(value="SysRoleMenu对象", description="角色菜单中间表")
 public class SysRoleMenu extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class SysRoleMenu extends BaseEntity {
     @TableField("role_id")
     private Long roleId;
 
-    @ApiModelProperty(value = "资源id")
+    @ApiModelProperty(value = "菜单id")
     @TableField("menu_id")
     private Long menuId;
 

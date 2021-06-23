@@ -5,36 +5,25 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.cloud.brave.entity.SysRole">
         <result column="id" property="id" />
-        <result column="create_time" property="createTime" />
         <result column="create_user" property="createUser" />
-        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
         <result column="update_user" property="updateUser" />
+        <result column="update_time" property="updateTime" />
         <result column="role_name" property="roleName" />
         <result column="role_code" property="roleCode" />
-        <result column="is_effective" property="isEffective" />
+        <result column="role_sort" property="roleSort" />
+        <result column="role_status" property="roleStatus" />
         <result column="del_state" property="delState" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,
-        create_time,
         create_user,
-        update_time,
+        create_time,
         update_user,
-        role_name, role_code, is_effective, del_state
+        update_time,
+        role_name, role_code, role_sort, role_status, del_state
     </sql>
-
-
-    <select id="findRolesByUserId" resultMap="BaseResultMap">
-        SELECT
-            role.*
-        FROM
-            sys_role role ,
-            sys_user_role ur
-        WHERE
-            ur.role_id = role.id
-            AND ur.user_id = #{userId}
-    </select>
 
 </mapper>

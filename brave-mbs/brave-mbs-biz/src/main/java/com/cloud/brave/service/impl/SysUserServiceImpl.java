@@ -68,7 +68,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Set<String> permissions = new HashSet<>();
         roleIds.forEach(roleId -> {
             List<String> list = sysMenuService.findPermissionsByRoleId(roleId).stream()
-                    .filter(menu -> StrUtil.isNotEmpty(menu.getAuthority())).map(SysMenu::getAuthority)
+                    .filter(menu -> StrUtil.isNotEmpty(menu.getPermission())).map(SysMenu::getPermission)
                     .collect(Collectors.toList());
             permissions.addAll(list);
         });

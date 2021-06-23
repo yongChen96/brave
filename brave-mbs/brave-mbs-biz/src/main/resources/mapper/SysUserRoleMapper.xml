@@ -5,8 +5,6 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.cloud.brave.entity.SysUserRole">
         <result column="id" property="id" />
-        <result column="create_time" property="createTime" />
-        <result column="create_user" property="createUser" />
         <result column="user_id" property="userId" />
         <result column="role_id" property="roleId" />
     </resultMap>
@@ -14,8 +12,6 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,
-        create_time,
-        create_user,
         user_id, role_id
     </sql>
 

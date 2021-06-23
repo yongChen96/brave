@@ -14,6 +14,12 @@ public interface CommonConstants {
     String token_head = "Bearer ";
 
     /**
+     * 启用状态 0：正常 1：锁定
+     **/
+    String ENABLE = "0";
+    String DISABLE = "1";
+
+    /**
      * 账号是否被锁 0：正常 1：锁定
      **/
     String IS_LOCK_NO = "0";
@@ -26,7 +32,7 @@ public interface CommonConstants {
     String DELETED = "1";
 
     /**
-     * 逻辑删除标识 0: 正常 1：已删除
+     * 验证码类型： 1：png 2:gif 3:中文 4:算术
      **/
     String CAPTCH_PNG = "1";
     String CAPTCH_GIF = "2";

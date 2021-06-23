@@ -7,7 +7,7 @@ spring:
     nacos:
       discovery:
         server-addr: ${NACOS_IP:127.0.0.1}:${NACOS_PORT:8848}
-        namespace: 958118a9-b2a0-4d10-b84a-dc80b0ce6a76
+        namespace: ecfd1e10-0d45-4fb0-b4a8-74b77c4f7e65
       config:
         namespace: ${spring.cloud.nacos.discovery.namespace}
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
