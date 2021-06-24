@@ -15,7 +15,7 @@ spring:
   profiles:
     active: @profiles.active@
 swagger:
-  base-package: com.cloud.auth.controller
+  base-package: com.cloud.brave.controller
   title: ${spring.application.name}
   description: Brave 业务控制层模块
   version: v1.0

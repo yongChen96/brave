@@ -7,14 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
 /**
  * @ClassName: BraveSysLogListener
- * @Description: 系统日志监听器
+ * @Description: 异步监听日志事件
  * @Author: yongchen
  * @Date: 2021/5/21 16:10
  **/
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class BraveSysLogListener {
 

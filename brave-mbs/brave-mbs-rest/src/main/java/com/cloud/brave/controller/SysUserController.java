@@ -61,6 +61,7 @@ public class SysUserController extends BaseController {
      * @return: com.cloud.core.result.Result<UserInfoDTO>
      **/
     @GetMapping(value = "/getUserInfo")
+    @BraveSysLog(value = "获取用户信息")
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
     public Result<UserInfoDTO> getUserInfo(@RequestParam(value = "username") String username) {
         UserInfoDTO userInfo = sysUserService.getUserInfo(username);
@@ -78,6 +79,7 @@ public class SysUserController extends BaseController {
      * @return: com.cloud.core.result.Result<com.cloud.brave.dto.UserInfoDTO>
      **/
     @GetMapping("/info")
+    @BraveSysLog(value = "获取当前登录用户信息")
     @ApiOperation(value = "获取当前登录用户信息", notes = "获取当前登录用户信息")
     public Result<UserInfoDTO> info() {
         String phone = "13312341234";
@@ -99,6 +101,7 @@ public class SysUserController extends BaseController {
      * @return: com.cloud.core.result.Result<java.lang.Boolean>
      **/
     @PostMapping("/save")
+    @BraveSysLog(value = "添加新用户信息")
     @ApiOperation(value = "添加新用户信息", notes = "添加新用户信息")
     public Result<Boolean> save(@RequestBody @Validated UserDTO userDTO) {
         Boolean save = sysUserService.saveNewUser(userDTO);
@@ -116,6 +119,7 @@ public class SysUserController extends BaseController {
      * @return: com.cloud.core.result.Result<java.lang.Boolean>
      **/
     @PostMapping("/locking")
+    @BraveSysLog(value = "锁定用户")
     @ApiOperation(value = "锁定用户", notes = "锁定用户")
     public Result<Boolean> locking(@RequestParam Long id) {
         if (sysUserService.locking(id)) {
@@ -132,6 +136,7 @@ public class SysUserController extends BaseController {
      * @return: com.cloud.core.result.Result<java.lang.Boolean>
      **/
     @PostMapping("/unlock")
+    @BraveSysLog(value = "用户解锁")
     @ApiOperation(value = "用户解锁", notes = "用户解锁")
     public Result<Boolean> unlock(@RequestParam Long id) {
         if (sysUserService.unlock(id)) {

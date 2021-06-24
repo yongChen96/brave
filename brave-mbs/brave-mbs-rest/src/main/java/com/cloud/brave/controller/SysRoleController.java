@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.entity.SysRole;
 import com.cloud.brave.service.SysRoleService;
+import com.cloud.core.SnowflakeId.IdGenerate;
 import com.cloud.core.mybatisplus.page.PageParam;
 import com.cloud.core.result.Result;
 import com.cloud.log.annotation.BraveSysLog;
@@ -32,6 +33,7 @@ import com.cloud.core.base.controller.BaseController;
 public class SysRoleController extends BaseController {
 
     private final SysRoleService roleService;
+    private final IdGenerate<Long> idGenerate;
 
     /**
      * @Author: yongchen

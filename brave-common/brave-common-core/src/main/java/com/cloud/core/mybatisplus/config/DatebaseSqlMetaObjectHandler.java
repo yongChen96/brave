@@ -7,8 +7,11 @@ import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * @ClassName: DatebaseSqlMetaObjectHandler
@@ -17,6 +20,7 @@ import java.time.LocalDateTime;
  * @Date: 2021/5/26 9:41
  **/
 @Slf4j
+@Component
 public class DatebaseSqlMetaObjectHandler implements MetaObjectHandler {
     /**
      * id生成器
@@ -79,16 +83,16 @@ public class DatebaseSqlMetaObjectHandler implements MetaObjectHandler {
         if (flag) {
             Long id = idGenerate.idGenerate();
             if (StringUtils.equals(FIELD_TYPE_STRING, metaObject.getGetterType(ID).getName())) {
-                this.strictInsertFill(metaObject, ID, String.class, String.valueOf(id));
+                this.setFieldValByName(ID, String.valueOf(id), metaObject);
             } else {
-                this.strictInsertFill(metaObject, ID, Long.class, id);
+                this.setFieldValByName(ID, id, metaObject);
             }
         }
 
         // 插入时填充更新用户及更新时间
         if (metaObject.getOriginalObject() instanceof BaseEntity) {
             BaseEntity baseEntity = (BaseEntity) metaObject.getOriginalObject();
-            fillUpdate(metaObject, baseEntity, ET);
+            fillUpdate(metaObject, baseEntity, "");
         }
     }
 

@@ -16,21 +16,21 @@ public class MbsCodeGenerator {
 
     public static void main(String[] args) {
         CodeGeneratorConfig generatorConfig = new CodeGeneratorConfig();
-        String[] tableName = {"sys_user"};
+        String[] tableName = {"sys_dept"};
         generatorConfig.setTableName(tableName);
         generatorConfig.setTablePrefix("");
         generatorConfig.setAuthor("yongchen");
         generatorConfig.setParentPath("com.cloud.brave");
         generatorConfig.setOutputDir(System.getProperty("user.dir") + "/src/main/java");
 
-//        FileCreateConfig createConfig = new FileCreateConfig(true);
-        FileCreateConfig createConfig = new FileCreateConfig();
+        FileCreateConfig createConfig = new FileCreateConfig(true);
+        /*FileCreateConfig createConfig = new FileCreateConfig();
         createConfig.setGenerateController(false);
         createConfig.setGenerateEntity(true);
         createConfig.setGenerateService(false);
         createConfig.setGenerateServiceImpl(false);
         createConfig.setGenerateMapper(false);
-        createConfig.setGenerateXml(true);
+        createConfig.setGenerateXml(true);*/
         generatorConfig.setFileCreateConfig(createConfig);
 
         generatorConfig.setDataSourceConfig(new DataSourceConfig(DbType.MYSQL,

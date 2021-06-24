@@ -38,4 +38,9 @@ public interface CommonConstants {
     String CAPTCH_GIF = "2";
     String CAPTCH_CHINESE = "3";
     String CAPTCH_ARITHMETIC = "4";
+
+    /**
+     * 顶级菜单
+     **/
+    Long TOP_MENU = 0L;
 }

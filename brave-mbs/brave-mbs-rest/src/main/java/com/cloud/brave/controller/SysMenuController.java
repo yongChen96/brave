@@ -7,6 +7,7 @@ import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.service.SysMenuService;
 import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.result.Result;
+import com.cloud.log.annotation.BraveSysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class SysMenuController extends BaseController {
      * @Date 16:09 2021/6/23
      **/
     @GetMapping("/getMenus")
+    @BraveSysLog(value = "获取菜单列表")
     @ApiOperation(value = "获取菜单列表", notes = "获取菜单列表")
     public Result<List<SysMenu>> getMenus() {
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
@@ -53,11 +55,12 @@ public class SysMenuController extends BaseController {
      * @param sysMenu 菜单信息实体类
      * @return com.cloud.core.result.Result<java.lang.Boolean>
      * @Author yongchen
-     * @Description 新增菜单失败
+     * @Description 新增菜单
      * @Date 16:12 2021/6/23
      **/
     @PostMapping("/save")
-    @ApiOperation(value = "新增菜单失败", notes = "新增菜单失败")
+    @BraveSysLog(value = "新增菜单")
+    @ApiOperation(value = "新增菜单", notes = "新增菜单")
     public Result<Boolean> save(@RequestBody @Validated SysMenu sysMenu) {
         if (sysMenuService.save(sysMenu)) {
             return success(true);
@@ -73,6 +76,7 @@ public class SysMenuController extends BaseController {
      * @Date 16:14 2021/6/23
      **/
     @PostMapping("/update")
+    @BraveSysLog(value = "更新菜单")
     @ApiOperation(value = "更新菜单", notes = "更新菜单")
     public Result<Boolean> update(@RequestBody @Validated SysMenu sysMenu) {
         if (sysMenuService.updateById(sysMenu)) {
@@ -89,6 +93,7 @@ public class SysMenuController extends BaseController {
      * @Date 16:20 2021/6/23
      **/
     @GetMapping("/disableMenu")
+    @BraveSysLog(value = "禁用菜单")
     @ApiOperation(value = "禁用菜单", notes = "禁用菜单")
     public Result<Boolean> disableMenu(@RequestParam Long id) {
         LambdaUpdateWrapper<SysMenu> wrapper = new LambdaUpdateWrapper<>();
@@ -108,6 +113,7 @@ public class SysMenuController extends BaseController {
      * @Date 16:24 2021/6/23
      **/
     @GetMapping("/enableMenu")
+    @BraveSysLog(value = "启用菜单")
     @ApiOperation(value = "启用菜单", notes = "启用菜单")
     public Result<Boolean> enableMenu(@RequestParam Long id) {
         LambdaUpdateWrapper<SysMenu> wrapper = new LambdaUpdateWrapper<>();
@@ -127,6 +133,7 @@ public class SysMenuController extends BaseController {
      * @Date 16:26 2021/6/23
      **/
     @GetMapping("/delete")
+    @BraveSysLog(value = "删除菜单")
     @ApiOperation(value = "删除菜单", notes = "删除菜单")
     public Result<Boolean> delete(@RequestParam Long id) {
         LambdaUpdateWrapper<SysMenu> wrapper = new LambdaUpdateWrapper<>();

@@ -1,6 +1,7 @@
 package com.cloud.brave.dto;
 
 import com.cloud.brave.entity.SysUser;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ public class UserDTO extends SysUser {
      * 角色信息
      **/
     @NotNull(message = "用户角色不能为空")
+    @ApiModelProperty(value = "用户角色")
     private List<Long> roles;
 
 }
