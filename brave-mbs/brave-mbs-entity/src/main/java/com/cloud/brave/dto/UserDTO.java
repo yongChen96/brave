@@ -3,6 +3,7 @@ package com.cloud.brave.dto;
 import com.cloud.brave.entity.SysUser;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class UserDTO extends SysUser {
     /**
      * 角色信息
      **/
+    @NotNull(message = "用户角色不能为空")
     private List<Long> roles;
 
 }

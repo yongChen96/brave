@@ -103,7 +103,7 @@ public class SysUserController extends BaseController {
     public Result<Boolean> save(@RequestBody @Validated UserDTO userDTO) {
         Boolean save = sysUserService.saveNewUser(userDTO);
         if (save) {
-            return success(null);
+            return success(true);
         }
         return failed("添加新用户信息失败");
     }
@@ -119,7 +119,7 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "锁定用户", notes = "锁定用户")
     public Result<Boolean> locking(@RequestParam Long id) {
         if (sysUserService.locking(id)) {
-            return success(null);
+            return success(true);
         }
         return failed("锁定用户失败");
     }
@@ -135,7 +135,7 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "用户解锁", notes = "用户解锁")
     public Result<Boolean> unlock(@RequestParam Long id) {
         if (sysUserService.unlock(id)) {
-            return success(null);
+            return success(true);
         }
         return failed("用户解锁失败");
     }
