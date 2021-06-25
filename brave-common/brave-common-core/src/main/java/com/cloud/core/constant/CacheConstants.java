@@ -13,12 +13,6 @@ public interface CacheConstants {
      **/
     String USER_DETAILS_CACHE = "user_details";
     /**
-     * 权限缓存key
-     **/
-    String URL_PERM_ROLES_KEY = "system:permission:url_perm_roles:";
-    String BTN_PERM_ROLES_KEY = "system:permission:btn_perm_roles:";
-
-    /**
      * 验证码缓存key
      **/
     String CAPTCHA_KEY = "captcha_";

@@ -6,7 +6,7 @@ package com.cloud.core.constant;
  * @Author: yongchen
  * @Date: 2021/6/9 10:19
  **/
-public interface SecurityConstants {
+public interface SecurityClientConstants {
 
     /**
      * sys_oauth_client_details 表的字段，不包括client_id、client_secret

@@ -2,8 +2,7 @@ package com.cloud.auth.config;
 
 import com.cloud.auth.service.BraveClientDetailsService;
 import com.cloud.auth.service.BraveUserDetailsServiceImpl;
-import com.cloud.core.constant.SecurityConstants;
-import lombok.AllArgsConstructor;
+import com.cloud.core.constant.SecurityClientConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -47,8 +46,8 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         BraveClientDetailsService braveClientDetailsService = new BraveClientDetailsService(dataSource);
-        braveClientDetailsService.setSelectClientDetailsSql(SecurityConstants.DEFAULT_SELECT_STATEMENT);
-        braveClientDetailsService.setFindClientDetailsSql(SecurityConstants.DEFAULT_FIND_STATEMENT);
+        braveClientDetailsService.setSelectClientDetailsSql(SecurityClientConstants.DEFAULT_SELECT_STATEMENT);
+        braveClientDetailsService.setFindClientDetailsSql(SecurityClientConstants.DEFAULT_FIND_STATEMENT);
         clients.withClientDetails(braveClientDetailsService);
     }
 

@@ -1,5 +1,8 @@
 package com.cloud.gateway.component;
 
+import cn.hutool.json.JSONUtil;
+import com.cloud.core.enums.ResultCodeEnums;
+import com.cloud.core.result.Result;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
@@ -23,8 +26,7 @@ public class ResponseUtils {
         response.getHeaders().set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         response.getHeaders().set("Access-Control-Allow-Origin", "*");
         response.getHeaders().set("Cache-Control", "no-cache");
-//        String body = JSONUtil.toJsonStr(Result.failed("-1"));
-        String body = null;
+        String body = JSONUtil.toJsonStr(Result.failed(ResultCodeEnums.FAILED));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(Charset.forName("UTF-8")));
         return response.writeWith(Mono.just(buffer))
                 .doOnError(error -> DataBufferUtils.release(buffer));

@@ -26,11 +26,6 @@ public class BraveUser implements Serializable {
     private Long id;
 
     /**
-     * 用户呢称
-     **/
-    private String nickName;
-
-    /**
      * 用户姓名
      **/
     private String userName;
