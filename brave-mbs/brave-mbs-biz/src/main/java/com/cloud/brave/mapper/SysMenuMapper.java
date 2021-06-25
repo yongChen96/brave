@@ -2,6 +2,7 @@ package com.cloud.brave.mapper;
 
 import com.cloud.brave.entity.SysMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,11 +19,20 @@ import java.util.List;
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     /**
+     * @Author yongchen
+     * @Description 获取权限角色信息
+     * @Date 16:42 2021/6/25
+     * @param
+     * @return java.util.List<com.cloud.brave.entity.SysMenu>
+     **/
+    List<SysMenu> findPermissionsRole();
+
+    /**
      * @Author: yongchen
      * @Description: 根据角色获取访问权限
      * @Date: 17:33 2021/6/18
      * @Param: [roleId]
      * @return: java.util.List<com.cloud.brave.entity.SysMenu>
      **/
-    List<SysMenu> findPermissionsByRoleId(Long roleId);
+    List<SysMenu> findPermissionsByRoleId(@Param("roleId") Long roleId);
 }

@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yongchen
- * @since 2021-06-23
+ * @since 2021-06-25
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -25,6 +25,10 @@ import lombok.experimental.Accessors;
 public class SysMenu extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "类型（1：菜单，2：按钮）")
+    @TableField("menu_type")
+    private String menuType;
 
     @ApiModelProperty(value = "菜单名称")
     @TableField("menu_name")
@@ -38,7 +42,7 @@ public class SysMenu extends BaseEntity {
     @TableField("route_name")
     private String routeName;
 
-    @ApiModelProperty(value = "菜单权限标识")
+    @ApiModelProperty(value = "权限标识")
     @TableField("permission")
     private String permission;
 
@@ -58,7 +62,7 @@ public class SysMenu extends BaseEntity {
     @TableField("sort")
     private Integer sort;
 
-    @ApiModelProperty(value = "菜单状态（0：正常，1：禁用）")
+    @ApiModelProperty(value = "状态（0：正常，1：禁用）")
     @TableField("menu_status")
     private String menuStatus;
 

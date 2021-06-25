@@ -1,12 +1,17 @@
 package com.cloud.brave.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.mapper.SysMenuMapper;
 import com.cloud.brave.service.SysMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cloud.core.constant.CommonConstants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,6 +27,21 @@ import java.util.List;
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
 
     private final SysMenuMapper sysMenuMapper;
+    private final RedisTemplate redisTemplate;
+
+    /**
+     * @Author yongchen
+     * @Description 获取资源权限信息
+     * @Date 15:14 2021/6/25
+     * @param
+     * @return java.util.List<com.cloud.brave.entity.SysMenu>
+     **/
+    @Override
+    public List<SysMenu> findMenu() {
+        List<SysMenu> sysMenus = sysMenuMapper.findPermissionsRole();
+
+        return null;
+    }
 
     /**
      * @Author: yongchen

@@ -9,6 +9,7 @@
         <result column="create_time" property="createTime" />
         <result column="update_user" property="updateUser" />
         <result column="update_time" property="updateTime" />
+        <result column="menu_type" property="menuType" />
         <result column="menu_name" property="menuName" />
         <result column="parent_id" property="parentId" />
         <result column="route_name" property="routeName" />
@@ -28,7 +29,6 @@
         create_time,
         update_user,
         update_time,
-        menu_name, parent_id, route_name, permission, route_path, component, icon, sort, menu_status, del_state
+        menu_type, menu_name, parent_id, route_name, permission, route_path, component, icon, sort, menu_status, del_state
     </sql>
-
 </mapper>

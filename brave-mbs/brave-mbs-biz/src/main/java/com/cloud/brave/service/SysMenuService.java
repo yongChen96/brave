@@ -16,6 +16,15 @@ import java.util.List;
 public interface SysMenuService extends IService<SysMenu> {
 
     /**
+     * @Author yongchen
+     * @Description 获取资源权限信息
+     * @Date 15:14 2021/6/25
+     * @param
+     * @return java.util.List<com.cloud.brave.entity.SysMenu>
+     **/
+    List<SysMenu> findMenu();
+
+    /**
      * @Author: yongchen
      * @Description: 根据角色获取访问权限
      * @Date: 17:31 2021/6/18
