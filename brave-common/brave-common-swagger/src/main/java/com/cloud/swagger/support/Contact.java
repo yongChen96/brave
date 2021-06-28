@@ -2,6 +2,7 @@ package com.cloud.swagger.support;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @ClassName: Contact
@@ -10,6 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Date: 2021/5/28 17:45
  **/
 @Data
+@Configuration
 @ConfigurationProperties("contact")
 public class Contact {
     /**

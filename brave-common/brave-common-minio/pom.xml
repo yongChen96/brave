@@ -4,20 +4,21 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.cloud</groupId>
-        <artifactId>brave</artifactId>
+        <artifactId>brave-common</artifactId>
         <version>brave-1.0-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <artifactId>brave-common</artifactId>
-    <name>brave-common</name>
-    <packaging>pom</packaging>
-    <description>Brave 公共汇聚模块</description>
-
-    <modules>
-        <module>brave-common-core</module>
-        <module>brave-common-log</module>
-        <module>brave-common-minio</module>
-        <module>brave-common-swagger</module>
-    </modules>
+    <artifactId>brave-common-minio</artifactId>
+    <name>brave-common-minio</name>
+    <description>Minio工具模块</description>
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+        </dependency>
+    </dependencies>
 </project>
