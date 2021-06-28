@@ -12,9 +12,7 @@
     <artifactId>brave-common-minio</artifactId>
     <name>brave-common-minio</name>
     <description>Minio工具模块</description>
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.minio</groupId>

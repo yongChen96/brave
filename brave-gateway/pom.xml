@@ -96,5 +96,9 @@
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>9.10</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
     </dependencies>
 </project>

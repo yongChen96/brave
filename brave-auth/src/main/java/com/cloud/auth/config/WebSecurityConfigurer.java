@@ -24,7 +24,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/webjars/**", "/doc.html", "/swagger-resources/**", "/v2/api-docs")
+                .antMatchers("/actuator/*","/webjars/**", "/doc.html", "/swagger-resources/**", "/v2/api-docs")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
