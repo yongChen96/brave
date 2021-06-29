@@ -3,6 +3,8 @@ server:
 spring:
   application:
     name: @artifactId@
+  profiles:
+    active: @profiles.active@
   security:
     user:
       name: "admin"
@@ -12,13 +14,11 @@ spring:
       discovery:
         server-addr: ${NACOS_IP:127.0.0.1}:${NACOS_PORT:8848}
         namespace: ecfd1e10-0d45-4fb0-b4a8-74b77c4f7e65
+      config:
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yml
       metadata:
         user:
-          name: "admin"
-          password: "admin"
-    config:
-      namespace: ${spring.cloud.nacos.discovery.namespace}
-      server-addr: ${spring.cloud.nacos.discovery.server-addr}
-      file-extension: yml
-      profiles:
-        active: @profiles.active@
+          name: ${spring.security.user.name}
+          password: ${spring.security.user.password}

@@ -9,7 +9,5 @@ import org.springframework.context.annotation.Configuration;
  * @Author: yongchen
  * @Date: 2021/6/9 15:23
  **/
-@Configuration
-@MapperScan(basePackages = {"com.cloud.brave.mapper"})
 public class DataSourceConfig {
 }
