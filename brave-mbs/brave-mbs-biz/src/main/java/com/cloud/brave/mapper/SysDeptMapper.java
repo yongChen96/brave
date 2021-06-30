@@ -2,6 +2,7 @@ package com.cloud.brave.mapper;
 
 import com.cloud.brave.entity.SysDept;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author yongchen
  * @since 2021-06-24
  */
+@Repository
 public interface SysDeptMapper extends BaseMapper<SysDept> {
 
 }

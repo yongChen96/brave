@@ -1,6 +1,5 @@
 package com.cloud.core.exception;
 
-import com.cloud.core.enums.ResultCodeEnums;
 import com.cloud.core.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +8,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
  * @Date: 2021/5/25 14:08
  **/
 @Slf4j
+@Component
 @RestControllerAdvice
 public class BraveExceptionHandler {
     
