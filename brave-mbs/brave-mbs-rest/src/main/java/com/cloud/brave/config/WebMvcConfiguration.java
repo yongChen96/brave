@@ -1,7 +1,9 @@
 package com.cloud.brave.config;
 
 import com.cloud.core.config.BaseConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -13,5 +15,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfiguration extends BaseConfig implements WebMvcConfigurer {
 
-
+    /**
+     * @Author yongchen
+     * @Description 同意返回序列化
+     * @Date 17:22 2021/7/6
+     * @param builder
+     * @return com.fasterxml.jackson.databind.ObjectMapper
+     **/
+    @Override
+    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
+        return super.jacksonObjectMapper(builder);
+    }
 }
