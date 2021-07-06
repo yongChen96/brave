@@ -13,8 +13,10 @@
     <modules>
         <module>brave-auth</module>
         <module>brave-common</module>
+        <module>brave-flowable</module>
         <module>brave-gateway</module>
         <module>brave-mbs</module>
+        <module>brave-resource</module>
         <module>brave-visual</module>
     </modules>
 
@@ -39,6 +41,7 @@
         <easy-captcha.version>1.6.2</easy-captcha.version>
         <hibernate-validator.version>2.5.0</hibernate-validator.version>
         <minio-version>8.2.0</minio-version>
+        <flowable-version>6.6.0</flowable-version>
     </properties>
 
     <dependencies>
