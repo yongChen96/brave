@@ -40,6 +40,7 @@ public class BraveDefaultProcessDiagramCanvas extends DefaultProcessDiagramCanva
 
     public BraveDefaultProcessDiagramCanvas(int width, int height, int minX, int minY, String imageType, String activityFontName, String labelFontName, String annotationFontName, ClassLoader customClassLoader) {
         super(width, height, minX, minY, imageType, activityFontName, labelFontName, annotationFontName, customClassLoader);
+        this.initialize(imageType);
     }
 
     /**

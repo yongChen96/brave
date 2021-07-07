@@ -17,7 +17,7 @@ public class WebMvcConfiguration extends BaseConfig implements WebMvcConfigurer 
 
     /**
      * @Author yongchen
-     * @Description 同意返回序列化
+     * @Description 返回序列化
      * @Date 17:22 2021/7/6
      * @param builder
      * @return com.fasterxml.jackson.databind.ObjectMapper

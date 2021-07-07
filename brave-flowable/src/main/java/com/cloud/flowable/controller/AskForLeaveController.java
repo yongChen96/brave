@@ -2,9 +2,13 @@ package com.cloud.flowable.controller;
 
 import com.cloud.core.constant.FlowableConstants;
 import com.cloud.core.result.Result;
+import com.cloud.flowable.config.BraveDefaultProcessDiagramGenerator;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.engine.*;
+import org.flowable.engine.history.HistoricActivityInstance;
+import org.flowable.engine.history.HistoricProcessInstance;
 import org.flowable.engine.runtime.Execution;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.image.ProcessDiagramGenerator;
@@ -32,6 +36,7 @@ public class AskForLeaveController {
     private final TaskService taskService;
     private final RuntimeService runtimeService;
     private final RepositoryService repositoryService;
+    private final HistoryService historyService;
     private final ProcessEngine processEngine;
 
     /**
@@ -108,28 +113,43 @@ public class AskForLeaveController {
 
     @GetMapping("/genProcessDiagram")
     public void genProcessDiagram(HttpServletRequest request, HttpServletResponse response, String processId) throws Exception {
+        String psId = null;
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processId).singleResult();
-        // 流程完成不显示流程图
+        // 流程完成获取历史记录
         if (processInstance == null) {
-            return;
+            HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processId).singleResult();
+            psId = historicProcessInstance.getProcessDefinitionId();
+        }else {
+            psId = processInstance.getProcessDefinitionId();
         }
 
-        Task task = taskService.createTaskQuery().processInstanceId(processId).singleResult();
+        //Task task = taskService.createTaskQuery().processInstanceId(processId).singleResult();
         // 使用流程实例ID，查询正在执行的执行对象表，返回流程实例对象
-        String processInstanceId = task.getProcessInstanceId();
-        List<Execution> executions = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
+        //String processInstanceId = task.getProcessInstanceId();
+        //List<Execution> executions = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
         //得到正在执行的Activity的Id
         List<String> activityIds = new ArrayList<>();
-        List<String> flows = new ArrayList<>();
-        for (Execution execution : executions) {
+        /*for (Execution execution : executions) {
             List<String> activeActivityIds = runtimeService.getActiveActivityIds(execution.getId());
             activityIds.addAll(activeActivityIds);
+        }*/
+        //高亮线条
+        List<String> flows = new ArrayList<>();
+        // 获取活动的节点
+        List<HistoricActivityInstance> list = historyService.createHistoricActivityInstanceQuery().processInstanceId(processId).orderByHistoricActivityInstanceStartTime().asc().list();
+        for (HistoricActivityInstance historicActivityInstance : list) {
+            activityIds.add(historicActivityInstance.getActivityId());
+            if (StringUtils.equals("sequenceFlow", historicActivityInstance.getActivityType())){
+                flows.add(historicActivityInstance.getActivityId());
+            }
         }
 
         //获取流程图
-        BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(psId);
         ProcessEngineConfiguration engconf = processEngine.getProcessEngineConfiguration();
-        ProcessDiagramGenerator diagramGenerator = engconf.getProcessDiagramGenerator();
+//        ProcessDiagramGenerator diagramGenerator = engconf.getProcessDiagramGenerator();
+        //获取自定义图片生成器
+        BraveDefaultProcessDiagramGenerator diagramGenerator = new BraveDefaultProcessDiagramGenerator();
         InputStream in = diagramGenerator.generateDiagram(bpmnModel,
                 "png",
                 activityIds,

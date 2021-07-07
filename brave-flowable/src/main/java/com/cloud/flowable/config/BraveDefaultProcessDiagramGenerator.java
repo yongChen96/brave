@@ -238,7 +238,7 @@ public class BraveDefaultProcessDiagramGenerator extends DefaultProcessDiagramGe
             minY = 0;
         }
 
-        return new DefaultProcessDiagramCanvas((int) maxX + 10, (int) maxY + 10, (int) minX, (int) minY,
+        return new BraveDefaultProcessDiagramCanvas((int) maxX + 10, (int) maxY + 10, (int) minX, (int) minY,
                 imageType, activityFontName, labelFontName, annotationFontName, customClassLoader);
     }
 
