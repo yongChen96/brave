@@ -83,8 +83,4 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
         return keyStoreKeyFactory.getKeyPair("jwt", "123456.".toCharArray());
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 }

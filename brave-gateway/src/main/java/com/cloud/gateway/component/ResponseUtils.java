@@ -21,12 +21,12 @@ import java.nio.charset.Charset;
  **/
 public class ResponseUtils {
 
-    public static Mono writeErrorInfo(ServerHttpResponse response){
+    public static Mono writeErrorInfo(ServerHttpResponse response, ResultCodeEnums resultCodeEnums) {
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         response.getHeaders().set("Access-Control-Allow-Origin", "*");
         response.getHeaders().set("Cache-Control", "no-cache");
-        String body = JSONUtil.toJsonStr(Result.failed(ResultCodeEnums.FAILED));
+        String body = JSONUtil.toJsonStr(Result.failed(resultCodeEnums.getMsg()));
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(Charset.forName("UTF-8")));
         return response.writeWith(Mono.just(buffer))
                 .doOnError(error -> DataBufferUtils.release(buffer));

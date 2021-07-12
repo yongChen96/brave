@@ -16,7 +16,9 @@ import lombok.NoArgsConstructor;
 public enum ResultCodeEnums {
 
     SUCCESS(0,"操作成功"),
-    FAILED(-1,"操作失败");
+    FAILED(-1,"操作失败"),
+    UNAUTHORIZED(-2, "资源未授权"),
+    TOKENEXPIRED(-3, "token无效或者已过期");
 
     private Integer code;
     private String msg;

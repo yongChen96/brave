@@ -3,6 +3,7 @@ package com.cloud.gateway.config;
 
 import cn.hutool.core.convert.Convert;
 import com.cloud.core.constant.AuthConstants;
+import com.cloud.core.enums.ResultCodeEnums;
 import com.cloud.gateway.component.IgnoreUrlsConfig;
 import com.cloud.gateway.component.ResponseUtils;
 import lombok.AllArgsConstructor;
@@ -64,7 +65,7 @@ public class ResourceServerConfig {
     ServerAccessDeniedHandler accessDeniedHandler() {
         return (exchange, denied) -> {
             Mono<Void> mono = Mono.defer(() -> Mono.just(exchange.getResponse()))
-                    .flatMap(response -> ResponseUtils.writeErrorInfo(response));
+                    .flatMap(response -> ResponseUtils.writeErrorInfo(response, ResultCodeEnums.UNAUTHORIZED));
             return mono;
         };
     }
@@ -76,7 +77,7 @@ public class ResourceServerConfig {
     ServerAuthenticationEntryPoint authenticationEntryPoint() {
         return (exchange, e) -> {
             Mono<Void> mono = Mono.defer(() -> Mono.just(exchange.getResponse()))
-                    .flatMap(response -> ResponseUtils.writeErrorInfo(response));
+                    .flatMap(response -> ResponseUtils.writeErrorInfo(response, ResultCodeEnums.TOKENEXPIRED));
             return mono;
         };
     }

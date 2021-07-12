@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.cloud.core.constant.AuthConstants;
+import com.cloud.core.enums.ResultCodeEnums;
 import com.cloud.gateway.component.ResponseUtils;
 import com.nimbusds.jose.JWSObject;
 import lombok.SneakyThrows;
@@ -54,7 +55,7 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
         String jti = jsonObject.getStr(AuthConstants.JWT_JTI);
         Boolean isBlack = redisTemplate.hasKey(AuthConstants.TOKEN_BLACKLIST_PREFIX + jti);
         if (isBlack) {
-            return ResponseUtils.writeErrorInfo(response);
+            return ResponseUtils.writeErrorInfo(response, ResultCodeEnums.TOKENEXPIRED);
         }
 
         // 存在token且不是黑名单，request写入JWT的载体信息

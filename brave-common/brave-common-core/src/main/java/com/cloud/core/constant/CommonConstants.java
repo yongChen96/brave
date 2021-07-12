@@ -43,4 +43,29 @@ public interface CommonConstants {
      * 顶级菜单
      **/
     Long TOP_MENU = 0L;
+
+    /**
+     * http请求
+     */
+    String HTTP = "http://";
+    /**
+     * https请求
+     */
+    String HTTPS = "https://";
+    /** 菜单类型（目录） */
+    String TYPE_DIR = "M";
+    /** 菜单类型（菜单） */
+    String TYPE_MENU = "C";
+    /** 菜单类型（按钮） */
+    String TYPE_BUTTON = "F";
+    /** 是否菜单外链（是） */
+    String YES_FRAME = "0";
+    /** 是否菜单外链（否） */
+    String NO_FRAME = "1";
+    /** Layout组件标识 */
+    String LAYOUT = "Layout";
+    /** ParentView组件标识 */
+    String PARENT_VIEW = "ParentView";
+    /** InnerLink组件标识 */
+    String INNER_LINK = "InnerLink";
 }

@@ -1,5 +1,6 @@
 package com.cloud.brave.mapper;
 
+import com.cloud.brave.dto.MenuDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,4 +36,13 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @return: java.util.List<com.cloud.brave.entity.SysMenu>
      **/
     List<SysMenu> findPermissionsByRoleId(@Param("roleId") Long roleId);
+
+    /**
+     * @Author yongchen
+     * @Description 获取当前用户菜单路由信息
+     * @Date 10:50 2021/7/9
+     * @param userId
+     * @return java.util.List<com.cloud.brave.dto.MenuDTO>
+     **/
+    List<MenuDTO> findMenusByUserId(@Param("userId") Long userId);
 }

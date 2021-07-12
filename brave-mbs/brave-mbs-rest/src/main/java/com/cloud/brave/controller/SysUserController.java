@@ -82,7 +82,7 @@ public class SysUserController extends BaseController {
     @BraveSysLog(value = "获取当前登录用户信息")
     @ApiOperation(value = "获取当前登录用户信息", notes = "获取当前登录用户信息")
     public Result<UserInfoDTO> info() {
-        String phone = "13312341234";
+        String phone = "18311540852";
         if (StringUtils.isNotBlank(phone)) {
             UserInfoDTO userInfo = sysUserService.getUserInfo(phone);
             if (null == userInfo) {

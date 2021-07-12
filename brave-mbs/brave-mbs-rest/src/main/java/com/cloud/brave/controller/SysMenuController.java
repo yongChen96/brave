@@ -3,6 +3,8 @@ package com.cloud.brave.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.cloud.brave.dto.MenuDTO;
+import com.cloud.brave.dto.MenuRouterDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.service.SysMenuService;
 import com.cloud.core.constant.CommonConstants;
@@ -35,6 +37,22 @@ public class SysMenuController extends BaseController {
     private final SysMenuService sysMenuService;
 
     /**
+     * @Author yongchen
+     * @Description 获取当前用户菜单路由信息
+     * @Date 10:43 2021/7/9
+     * @param
+     * @return com.cloud.core.result.Result<java.util.List<MenuRouterDTO>>
+     **/
+    @GetMapping("/getRouters")
+    @ApiOperation(value = "获取当前用户菜单路由信息", notes = "获取当前用户菜单路由信息")
+    public Result<List<MenuRouterDTO>> getRouters(){
+        // TODO 获取当前登录用户id
+        Long userId = 1L;
+        List<MenuDTO> menus = sysMenuService.findMenusByUserId(userId);
+        return success(sysMenuService.buildMenus(menus));
+    }
+
+    /**
      * @param
      * @return com.cloud.core.result.Result<java.util.List < com.cloud.brave.entity.SysMenu>>
      * @Author yongchen
@@ -47,7 +65,7 @@ public class SysMenuController extends BaseController {
     public Result<List<SysMenu>> getMenus() {
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysMenu::getDelState, CommonConstants.NOT_DELETED)
-                .eq(SysMenu::getMenuStatus, CommonConstants.ENABLE);
+                .eq(SysMenu::getStatus, CommonConstants.ENABLE);
         return success(sysMenuService.list(queryWrapper));
     }
 
@@ -98,7 +116,7 @@ public class SysMenuController extends BaseController {
     public Result<Boolean> disableMenu(@RequestParam Long id) {
         LambdaUpdateWrapper<SysMenu> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysMenu::getId, id)
-                .set(SysMenu::getMenuStatus, CommonConstants.DISABLE);
+                .set(SysMenu::getStatus, CommonConstants.DISABLE);
         if (sysMenuService.update(wrapper)) {
             return success(true);
         }
@@ -118,7 +136,7 @@ public class SysMenuController extends BaseController {
     public Result<Boolean> enableMenu(@RequestParam Long id) {
         LambdaUpdateWrapper<SysMenu> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysMenu::getId, id)
-                .set(SysMenu::getMenuStatus, CommonConstants.ENABLE);
+                .set(SysMenu::getStatus, CommonConstants.ENABLE);
         if (sysMenuService.update(wrapper)) {
             return success(true);
         }
