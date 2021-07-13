@@ -4,8 +4,10 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserInfoDTO;
+import com.cloud.brave.dto.UserPageDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.entity.SysRole;
 import com.cloud.brave.entity.SysUser;
@@ -48,6 +50,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private final SysMenuService sysMenuService;
     private final IdGenerate<Long> idGenerate;
 
+    /**
+     * @Author yongchen
+     * @Description 用户分页查询
+     * @Date 17:37 2021/7/13
+     * @param page
+     * @param data
+     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.cloud.brave.dto.UserPageDTO>
+     **/
+    @Override
+    public Page<UserPageDTO> userPage(Page<Object> page, SysUser data) {
+        return sysUserMapper.userPage(page, data);
+    }
 
     /**
      * @Author: yongchen

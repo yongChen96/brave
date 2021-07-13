@@ -1,7 +1,9 @@
 package com.cloud.brave.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserInfoDTO;
+import com.cloud.brave.dto.UserPageDTO;
 import com.cloud.brave.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -14,7 +16,17 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-06-03
  */
 public interface SysUserService extends IService<SysUser> {
-
+    
+    /**
+     * @Author yongchen
+     * @Description 用户分页查询
+     * @Date 17:37 2021/7/13
+     * @param page
+     * @param data
+     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.cloud.brave.dto.UserPageDTO>
+     **/
+    Page<UserPageDTO> userPage(Page<Object> page, SysUser data);
+    
     /**
      * @Author: yongchen
      * @Description: 获取用户信息

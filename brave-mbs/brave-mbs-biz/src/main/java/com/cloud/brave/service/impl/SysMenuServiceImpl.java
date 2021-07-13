@@ -166,7 +166,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     private List<MenuDTO> getChildList(MenuDTO menuDTO, List<MenuDTO> list) {
         List<MenuDTO> tlist = new ArrayList<>();
         for (MenuDTO menu : list) {
-            if (menuDTO.getId() == menu.getParentId()) {
+            if (menuDTO.getId().longValue() == menu.getParentId().longValue()) {
                 tlist.add(menu);
             }
         }

@@ -43,6 +43,10 @@ public interface CommonConstants {
      * 顶级菜单
      **/
     Long TOP_MENU = 0L;
+    /**
+     * 顶级部门
+     **/
+    Long TOP_DEPT = 0L;
 
     /**
      * http请求

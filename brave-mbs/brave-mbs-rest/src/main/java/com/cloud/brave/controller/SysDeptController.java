@@ -3,6 +3,7 @@ package com.cloud.brave.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.cloud.brave.dto.DeptTreeDTO;
 import com.cloud.brave.dto.SysDeptDTO;
 import com.cloud.brave.entity.SysDept;
 import com.cloud.brave.service.SysDeptService;
@@ -57,6 +58,19 @@ public class SysDeptController extends BaseController {
                 .eq(SysDept::getParentId, CommonConstants.TOP_MENU)
                 .orderByAsc(SysDept::getSort);
         return success(sysDeptService.list(queryWrapper));
+    }
+
+    /**
+     * @Author yongchen
+     * @Description 获取部门树
+     * @Date 13:59 2021/7/13
+     * @param
+     * @return com.cloud.core.result.Result<java.util.List<com.cloud.brave.dto.DeptTreeDTO>>
+     **/
+    @GetMapping("/treeselect")
+    @ApiOperation(value = "获取部门树", notes = "获取部门树")
+    public Result<List<DeptTreeDTO>> treeselect(){
+        return success(sysDeptService.treeselect());
     }
 
     /**

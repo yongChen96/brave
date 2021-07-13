@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserInfoDTO;
+import com.cloud.brave.dto.UserPageDTO;
 import com.cloud.brave.entity.SysUser;
 import com.cloud.brave.service.SysUserService;
 import com.cloud.core.exception.BraveException;
@@ -47,9 +48,8 @@ public class SysUserController extends BaseController {
     @PostMapping("/page")
     @BraveSysLog(value = "分页获取用户信息")
     @ApiOperation(value = "分页获取用户信息", notes = "分页获取用户信息")
-    public Result<IPage<SysUser>> page(@RequestBody @Validated PageParam<SysUser> pp) {
-        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        Page<SysUser> page = sysUserService.page(pp.getPage(), queryWrapper);
+    public Result<Page<UserPageDTO>> page(@RequestBody @Validated PageParam<SysUser> pp) {
+        Page<UserPageDTO> page = sysUserService.userPage(pp.getPage(), pp.getData());
         return success(page);
     }
 
@@ -69,6 +69,20 @@ public class SysUserController extends BaseController {
             throw new BraveException("获取用户信息失败");
         }
         return success(userInfo);
+    }
+
+    /**
+     * @Author yongchen
+     * @Description 获取用户详细信息
+     * @Date 9:27 2021/7/13
+     * @param id
+     * @return com.cloud.core.result.Result<com.cloud.brave.entity.SysUser>
+     **/
+    @GetMapping("/user/{id}")
+    @BraveSysLog(value = "获取用户详细信息")
+    @ApiOperation(value = "获取用户详细信息", notes = "获取用户详细信息")
+    public Result<SysUser> getDetailsById(@PathVariable Long id){
+        return success(sysUserService.getById(id));
     }
 
     /**
