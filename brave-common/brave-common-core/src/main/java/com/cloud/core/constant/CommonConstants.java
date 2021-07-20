@@ -12,6 +12,10 @@ public interface CommonConstants {
      * token 头部
      **/
     String token_head = "Bearer ";
+    /**
+     * 用户初始密码
+     **/
+    String USER_INITIAL_PWD = "123456";
 
     /**
      * 启用状态 0：正常 1：锁定

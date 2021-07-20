@@ -2,6 +2,7 @@ package com.cloud.brave.service;
 
 import com.cloud.brave.dto.MenuDTO;
 import com.cloud.brave.dto.MenuRouterDTO;
+import com.cloud.brave.dto.RoleMenuTreeDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -53,4 +54,5 @@ public interface SysMenuService extends IService<SysMenu> {
      **/
     List<SysMenu> findPermissionsByRoleId(Long roleId);
 
+    RoleMenuTreeDTO roleMenuTreeselect(Long id);
 }

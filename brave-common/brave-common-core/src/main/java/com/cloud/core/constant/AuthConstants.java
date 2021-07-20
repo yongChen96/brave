@@ -45,6 +45,10 @@ public interface AuthConstants {
      */
     String JWT_JTI = "jti";
     /**
+     * JWT过期时间戳
+     */
+    String JWT_EXP = "exp";
+    /**
      * 黑名单token前缀
      */
     String TOKEN_BLACKLIST_PREFIX = "auth:token:blacklist:";

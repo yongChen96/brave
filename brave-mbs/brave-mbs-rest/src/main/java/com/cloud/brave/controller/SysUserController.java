@@ -1,15 +1,18 @@
 package com.cloud.brave.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import cn.hutool.log.Log;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.dto.UserDTO;
+import com.cloud.brave.dto.UserDetailsDTO;
 import com.cloud.brave.dto.UserInfoDTO;
-import com.cloud.brave.dto.UserPageDTO;
 import com.cloud.brave.entity.SysUser;
 import com.cloud.brave.service.SysUserService;
+import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.exception.BraveException;
+import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
 import com.cloud.core.mybatisplus.page.PageParam;
 import com.cloud.core.result.Result;
 import com.cloud.log.annotation.BraveSysLog;
@@ -48,9 +51,20 @@ public class SysUserController extends BaseController {
     @PostMapping("/page")
     @BraveSysLog(value = "分页获取用户信息")
     @ApiOperation(value = "分页获取用户信息", notes = "分页获取用户信息")
-    public Result<Page<UserPageDTO>> page(@RequestBody @Validated PageParam<SysUser> pp) {
-        Page<UserPageDTO> page = sysUserService.userPage(pp.getPage(), pp.getData());
-        return success(page);
+    public Result<Page<SysUser>> page(@RequestBody @Validated(BaseSuperEntuty.OnlyQuery.class) PageParam<SysUser> pp) {
+        SysUser data = pp.getData();
+        LambdaQueryWrapper<SysUser> pageWapper = new LambdaQueryWrapper<SysUser>();
+        pageWapper.eq(SysUser::getDelState, CommonConstants.NOT_DELETED);
+        if (StringUtils.isNotBlank(data.getUserName())) {
+            pageWapper.eq(SysUser::getUserName, data.getUserName());
+        }
+        if (StringUtils.isNotBlank(data.getSex())) {
+            pageWapper.eq(SysUser::getSex, data.getSex());
+        }
+        if (null != data.getDeptId()) {
+            pageWapper.eq(SysUser::getDeptId, data.getDeptId());
+        }
+        return success(sysUserService.page(pp.getPage(), pageWapper));
     }
 
     /**
@@ -72,17 +86,17 @@ public class SysUserController extends BaseController {
     }
 
     /**
+     * @param id
+     * @return com.cloud.core.result.Result<com.cloud.brave.entity.SysUser>
      * @Author yongchen
      * @Description 获取用户详细信息
      * @Date 9:27 2021/7/13
-     * @param id
-     * @return com.cloud.core.result.Result<com.cloud.brave.entity.SysUser>
      **/
-    @GetMapping("/user/{id}")
+    @GetMapping("/get")
     @BraveSysLog(value = "获取用户详细信息")
     @ApiOperation(value = "获取用户详细信息", notes = "获取用户详细信息")
-    public Result<SysUser> getDetailsById(@PathVariable Long id){
-        return success(sysUserService.getById(id));
+    public Result<UserDetailsDTO> getDetailsById(@RequestParam Long id) {
+        return success(sysUserService.getUserDetailsById(id));
     }
 
     /**
@@ -117,7 +131,7 @@ public class SysUserController extends BaseController {
     @PostMapping("/save")
     @BraveSysLog(value = "添加新用户信息")
     @ApiOperation(value = "添加新用户信息", notes = "添加新用户信息")
-    public Result<Boolean> save(@RequestBody @Validated UserDTO userDTO) {
+    public Result<Boolean> save(@RequestBody @Validated(BaseSuperEntuty.Save.class) UserDTO userDTO) {
         Boolean save = sysUserService.saveNewUser(userDTO);
         if (save) {
             return success(true);
@@ -127,35 +141,54 @@ public class SysUserController extends BaseController {
 
     /**
      * @Author: yongchen
-     * @Description: 锁定用户
+     * @Description: 修改用户锁定状态
      * @Date: 15:53 2021/6/8
      * @Param: [id]
      * @return: com.cloud.core.result.Result<java.lang.Boolean>
      **/
-    @PostMapping("/locking")
-    @BraveSysLog(value = "锁定用户")
-    @ApiOperation(value = "锁定用户", notes = "锁定用户")
-    public Result<Boolean> locking(@RequestParam Long id) {
-        if (sysUserService.locking(id)) {
+    @GetMapping("/updateLocalStatus")
+    @BraveSysLog(value = "修改用户锁定状态")
+    @ApiOperation(value = "修改用户锁定状态", notes = "修改用户锁定状态")
+    public Result<Boolean> updateLocalStatus(@RequestParam Long id, @RequestParam String locakStatus) {
+        if (sysUserService.locking(id, locakStatus)) {
             return success(true);
         }
         return failed("锁定用户失败");
     }
 
     /**
-     * @Author: yongchen
-     * @Description: 用户解锁
-     * @Date: 15:58 2021/6/8
-     * @Param: [id]
-     * @return: com.cloud.core.result.Result<java.lang.Boolean>
+     * @param id
+     * @return com.cloud.core.result.Result<java.lang.Boolean>
+     * @Author yongchen
+     * @Description 删除用户信息
+     * @Date 9:40 2021/7/19
      **/
-    @PostMapping("/unlock")
-    @BraveSysLog(value = "用户解锁")
-    @ApiOperation(value = "用户解锁", notes = "用户解锁")
-    public Result<Boolean> unlock(@RequestParam Long id) {
-        if (sysUserService.unlock(id)) {
+    @GetMapping("/del")
+    @BraveSysLog(value = "删除用户信息")
+    @ApiOperation(value = "删除用户信息", notes = "删除用户信息")
+    public Result<Boolean> deleteUser(@RequestParam Long id) {
+        LambdaUpdateWrapper<SysUser> delWapper = new LambdaUpdateWrapper<>();
+        delWapper.eq(SysUser::getId, id).set(SysUser::getDelState, CommonConstants.DELETED);
+        if (sysUserService.update(delWapper)) {
             return success(true);
         }
-        return failed("用户解锁失败");
+        return failed("删除用户信息失败");
+    }
+
+    /**
+     * @param id
+     * @return com.cloud.core.result.Result<java.lang.Boolean>
+     * @Author yongchen
+     * @Description 重置用户密码
+     * @Date 10:07 2021/7/19
+     **/
+    @GetMapping("/resetPwd")
+    @BraveSysLog(value = "重置用户密码")
+    @ApiOperation(value = "重置用户密码", notes = "重置用户密码")
+    public Result<Boolean> resetPassword(@RequestParam Long id) {
+        if (sysUserService.resetPassword(id)) {
+            return success(true);
+        }
+        return failed("重置用户密码失败");
     }
 }

@@ -1,12 +1,15 @@
 package com.cloud.brave.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.entity.SysRole;
 import com.cloud.brave.service.SysRoleService;
 import com.cloud.core.SnowflakeId.IdGenerate;
+import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.mybatisplus.page.PageParam;
 import com.cloud.core.result.Result;
 import com.cloud.log.annotation.BraveSysLog;
@@ -17,6 +20,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.cloud.core.base.controller.BaseController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -33,7 +38,6 @@ import com.cloud.core.base.controller.BaseController;
 public class SysRoleController extends BaseController {
 
     private final SysRoleService roleService;
-    private final IdGenerate<Long> idGenerate;
 
     /**
      * @Author: yongchen
@@ -46,9 +50,26 @@ public class SysRoleController extends BaseController {
     @BraveSysLog(value = "角色分页查询")
     @ApiOperation(value = "角色分页查询", notes = "角色分页查询")
     public Result<IPage<SysRole>> page(@RequestBody @Validated PageParam<SysRole> pp) {
-        QueryWrapper<SysRole> wrapper = new QueryWrapper<>();
+        LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysRole::getDelState, CommonConstants.NOT_DELETED);
         Page<SysRole> page = roleService.page(pp.getPage(), wrapper);
         return success(page);
+    }
+
+    /**
+     * @Author yongchen
+     * @Description 获取角色列表
+     * @Date 14:19 2021/7/16
+     * @param
+     * @return com.cloud.core.result.Result<java.util.List<com.cloud.brave.entity.SysRole>>
+     **/
+    @PostMapping("/list")
+    @BraveSysLog(value = "获取角色列表")
+    @ApiOperation(value = "获取角色列表", notes = "获取角色列表")
+    public Result<List<SysRole>> list(){
+        LambdaQueryWrapper<SysRole> listWapper = new LambdaQueryWrapper<>();
+        listWapper.eq(SysRole::getDelState, CommonConstants.NOT_DELETED);
+        return success(roleService.list(listWapper));
     }
 
     /**
@@ -103,6 +124,26 @@ public class SysRoleController extends BaseController {
     }
 
     /**
+     * @Author yongchen
+     * @Description 修改角色状态
+     * @Date 15:33 2021/7/19
+     * @param id
+     * @param roleStatus
+     * @return com.cloud.core.result.Result<java.lang.Boolean>
+     **/
+    @GetMapping("/updateRoleStatus")
+    @BraveSysLog(value = "修改角色状态")
+    @ApiOperation(value = "修改角色状态", notes = "修改角色状态")
+    public Result<Boolean> updateRoleStatus(@RequestParam Long id, @RequestParam String roleStatus){
+        LambdaUpdateWrapper<SysRole> roleWapper = new LambdaUpdateWrapper<>();
+        roleWapper.eq(SysRole::getId, id).set(SysRole::getRoleStatus, roleStatus);
+        if (roleService.update(roleWapper)) {
+            return success(true);
+        }
+        return failed("修改角色状态失败");
+    }
+
+    /**
      * @Author: yongchen
      * @Description: 删除角色
      * @Date: 17:29 2021/6/17
@@ -113,7 +154,9 @@ public class SysRoleController extends BaseController {
     @BraveSysLog(value = "删除角色")
     @ApiOperation(value = "删除角色", notes = "删除角色")
     public Result<Boolean> delete(@RequestParam("id") Long id) {
-        if (roleService.removeById(id)) {
+        LambdaUpdateWrapper<SysRole> roleWapper = new LambdaUpdateWrapper<>();
+        roleWapper.eq(SysRole::getId, id).set(SysRole::getDelState, CommonConstants.DELETED);
+        if (roleService.update(roleWapper)) {
             return success(true);
         }
         return failed("删除角色异常");

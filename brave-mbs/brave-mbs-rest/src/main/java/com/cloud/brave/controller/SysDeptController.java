@@ -49,13 +49,13 @@ public class SysDeptController extends BaseController {
      * @Description 获取菜单列表
      * @Date 16:05 2021/6/24
      **/
-    @GetMapping("/list")
+    @PostMapping("/list")
     @BraveSysLog(value = "获取菜单列表")
     @ApiOperation(value = "获取菜单列表", notes = "获取菜单列表")
-    public Result<List<SysDept>> list() {
+    public Result<List<SysDept>> list(@RequestBody SysDept sysDept) {
         LambdaQueryWrapper<SysDept> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysDept::getDelState, CommonConstants.NOT_DELETED)
-                .eq(SysDept::getParentId, CommonConstants.TOP_MENU)
+                .eq(SysDept::getDeptStatus, CommonConstants.ENABLE)
                 .orderByAsc(SysDept::getSort);
         return success(sysDeptService.list(queryWrapper));
     }

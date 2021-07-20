@@ -1,6 +1,7 @@
 package com.cloud.core.mybatisplus.code;
 
 import com.cloud.core.mybatisplus.config.DataSourceConfig;
+import com.cloud.core.mybatisplus.config.EntityType;
 import com.cloud.core.mybatisplus.config.FileCreateConfig;
 import lombok.Data;
 
@@ -25,27 +26,14 @@ public class CodeGeneratorConfig {
     private DataSourceConfig dataSourceConfig;
     private FileCreateConfig fileCreateConfig;
     private String[] columns;
+    private EntityType entityType;
 
-    public CodeGeneratorConfig(){
+    public CodeGeneratorConfig() {
         this.columns = SUPER_COLUMNS;
     }
 
     public CodeGeneratorConfig(String[] tableName, String tablePrefix, String outputDir, String author, String packagePath,
-                               String modelPath, String parentPath, DataSourceConfig dataSourceConfig, FileCreateConfig fileCreateConfig) {
-        this.tableName = tableName;
-        this.tablePrefix = tablePrefix;
-        this.outputDir = outputDir;
-        this.author = author;
-        this.packagePath = packagePath;
-        this.modelPath = modelPath;
-        this.parentPath = parentPath;
-        this.dataSourceConfig = dataSourceConfig;
-        this.fileCreateConfig = fileCreateConfig;
-        this.columns = SUPER_COLUMNS;
-    }
-
-    public CodeGeneratorConfig(String[] tableName, String tablePrefix, String outputDir, String author, String packagePath,
-                               String modelPath, String parentPath, DataSourceConfig dataSourceConfig, FileCreateConfig fileCreateConfig, String[] columns) {
+                               String modelPath, String parentPath, DataSourceConfig dataSourceConfig, FileCreateConfig fileCreateConfig, String[] columns, EntityType entityType) {
         this.tableName = tableName;
         this.tablePrefix = tablePrefix;
         this.outputDir = outputDir;
@@ -56,5 +44,6 @@ public class CodeGeneratorConfig {
         this.dataSourceConfig = dataSourceConfig;
         this.fileCreateConfig = fileCreateConfig;
         this.columns = columns;
+        this.entityType = entityType;
     }
 }

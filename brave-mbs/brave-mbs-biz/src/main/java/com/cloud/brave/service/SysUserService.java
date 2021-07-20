@@ -2,8 +2,8 @@ package com.cloud.brave.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.dto.UserDTO;
+import com.cloud.brave.dto.UserDetailsDTO;
 import com.cloud.brave.dto.UserInfoDTO;
-import com.cloud.brave.dto.UserPageDTO;
 import com.cloud.brave.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,17 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-06-03
  */
 public interface SysUserService extends IService<SysUser> {
-    
-    /**
-     * @Author yongchen
-     * @Description 用户分页查询
-     * @Date 17:37 2021/7/13
-     * @param page
-     * @param data
-     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.cloud.brave.dto.UserPageDTO>
-     **/
-    Page<UserPageDTO> userPage(Page<Object> page, SysUser data);
-    
+
     /**
      * @Author: yongchen
      * @Description: 获取用户信息
@@ -47,19 +37,28 @@ public interface SysUserService extends IService<SysUser> {
 
     /**
      * @Author: yongchen
-     * @Description: 锁定用户
+     * @Description: 修改用户锁定状态
      * @Date: 15:55 2021/6/8
-     * @Param: [id]
+     * @Param: [id, locakStatus]
      * @return: java.lang.Boolean
      **/
-    Boolean locking(Long id);
+    Boolean locking(Long id, String locakStatus);
 
     /**
-     * @Author: yongchen
-     * @Description: 用户解锁
-     * @Date: 15:59 2021/6/8
-     * @Param: [id]
-     * @return: java.lang.Boolean
+     * @Author yongchen
+     * @Description 获取用户详细信息
+     * @Date 15:07 2021/7/15
+     * @param id
+     * @return com.cloud.brave.dto.UserDetailsDTO
      **/
-    Boolean unlock(Long id);
+    UserDetailsDTO getUserDetailsById(Long id);
+
+    /**
+     * @Author yongchen
+     * @Description 重置用户密码
+     * @Date 10:02 2021/7/19
+     * @param id
+     * @return boolean
+     **/
+    boolean resetPassword(Long id);
 }

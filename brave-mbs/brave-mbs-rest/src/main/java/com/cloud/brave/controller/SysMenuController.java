@@ -3,11 +3,14 @@ package com.cloud.brave.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cloud.brave.dto.MenuDTO;
 import com.cloud.brave.dto.MenuRouterDTO;
+import com.cloud.brave.dto.RoleMenuTreeDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.service.SysMenuService;
 import com.cloud.core.constant.CommonConstants;
+import com.cloud.core.mybatisplus.page.PageParam;
 import com.cloud.core.result.Result;
 import com.cloud.log.annotation.BraveSysLog;
 import io.swagger.annotations.Api;
@@ -35,6 +38,38 @@ import java.util.List;
 public class SysMenuController extends BaseController {
 
     private final SysMenuService sysMenuService;
+
+    /**
+     * @Author yongchen
+     * @Description 分页查询菜单信息
+     * @Date 14:16 2021/7/14
+     * @param pp
+     * @return com.cloud.core.result.Result<com.baomidou.mybatisplus.core.metadata.IPage<com.cloud.brave.entity.SysMenu>>
+     **/
+    @PostMapping("/page")
+    @BraveSysLog(value = "分页查询菜单信息")
+    @ApiOperation(value = "分页查询菜单信息", notes = "分页查询菜单信息")
+    public Result<IPage<SysMenu>> page(@RequestBody @Validated PageParam<SysMenu> pp){
+        LambdaQueryWrapper<SysMenu> pageWapper = new LambdaQueryWrapper<>();
+        return success(sysMenuService.page(pp.getPage(),pageWapper));
+    }
+
+    /**
+     * @Author yongchen
+     * @Description 获取菜单列表
+     * @Date 14:30 2021/7/14
+     * @param sysMenu
+     * @return com.cloud.core.result.Result<java.util.List<com.cloud.brave.dto.MenuTreeDTO>>
+     **/
+    @PostMapping("/list")
+    @BraveSysLog("获取菜单列表")
+    @ApiOperation(value = "获取菜单列表", notes = "获取菜单列表")
+    public Result<List<SysMenu>> list(@RequestBody SysMenu sysMenu){
+        LambdaQueryWrapper<SysMenu> menuListWapper = new LambdaQueryWrapper<>();
+        menuListWapper.eq(SysMenu::getStatus, CommonConstants.ENABLE)
+                        .eq(SysMenu::getDelState, CommonConstants.NOT_DELETED);
+        return success(sysMenuService.list(menuListWapper));
+    }
 
     /**
      * @Author yongchen
@@ -161,6 +196,12 @@ public class SysMenuController extends BaseController {
             return success(true);
         }
         return failed("删除菜单信息");
+    }
+
+    @GetMapping("/roleMenuTreeselect")
+    public Result<RoleMenuTreeDTO>  roleMenuTreeselect(@RequestParam Long id){
+        RoleMenuTreeDTO dto = sysMenuService.roleMenuTreeselect(id);
+        return null;
     }
 
 }

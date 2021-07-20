@@ -256,7 +256,7 @@ public class CodeGenerator {
         strategy.setEntityBuilderModel(true);
         strategy.setRestControllerStyle(true);
         // 你自己的父类实体,没有就不用设置!
-        strategy.setSuperEntityClass(BaseEntity.class);
+        strategy.setSuperEntityClass(codeGeneratorConfig.getEntityType().getVal());
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns(codeGeneratorConfig.getColumns());
         // 公共父类 你自己的父类控制器,没有就不用设置!

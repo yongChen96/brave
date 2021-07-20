@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -28,9 +29,9 @@ public class BaseSuperEntuty<T> implements Serializable {
     /**
      * 主键id
      **/
-    @NotNull(message = "主键id不能为空")
     @ApiModelProperty(value = "主键id")
     @TableId(value = "id", type = IdType.INPUT)
+    @NotNull(message = "主键id不能为空", groups = BaseSuperEntuty.Update.class)
     protected Long id;
 
     /**
@@ -46,4 +47,19 @@ public class BaseSuperEntuty<T> implements Serializable {
     @ApiModelProperty(value = "创建用户")
     @TableField(value = "create_user", fill = FieldFill.INSERT)
     protected T createUser;
+
+    public interface OnlyQuery {
+    }
+
+    public interface OnlyUpdate {
+    }
+
+    public interface OnlySave {
+    }
+
+    public interface Update extends Default {
+    }
+
+    public interface Save extends Default {
+    }
 }

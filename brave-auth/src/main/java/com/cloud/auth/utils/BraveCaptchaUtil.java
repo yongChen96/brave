@@ -48,7 +48,7 @@ public class BraveCaptchaUtil {
      * @Param:
      * @return: void
      **/
-    public String captchaForPng() {
+    public String captchaForPng(HttpServletResponse response) throws IOException {
         Map<String, String> map = new HashMap<>();
         SpecCaptcha captcha = new SpecCaptcha(CAPTCHA_WIDTH, CAPTCHA_HEIGH);
         //获取验证码字符
@@ -57,8 +57,10 @@ public class BraveCaptchaUtil {
         String lowerCase = text.toLowerCase();
         // 验证码添加到缓存
         redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY + lowerCase, lowerCase, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
-        //输出验证码
+        //输出base64验证码
         return captcha.toBase64("");
+        /*response.setContentType("image/png");
+        captcha.out(response.getOutputStream());*/
     }
 
 
@@ -69,7 +71,7 @@ public class BraveCaptchaUtil {
      * @Param:
      * @return: void
      **/
-    public String captchaForGif() {
+    public String captchaForGif(HttpServletResponse response) throws IOException {
         //GIF类型验证码，宽、高、验证码位数
         GifCaptcha captcha = new GifCaptcha(CAPTCHA_WIDTH, CAPTCHA_WIDTH, CAPTCHA_LEN);
         //设置验证码类型：字符数字混合
@@ -82,6 +84,8 @@ public class BraveCaptchaUtil {
         redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY + lowerCase, lowerCase, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
         return captcha.toBase64("");
+        /*response.setContentType("image/png");
+        captcha.out(response.getOutputStream());*/
     }
 
     /**
@@ -91,7 +95,7 @@ public class BraveCaptchaUtil {
      * @Param:
      * @return: void
      **/
-    public String captchaForChinese() {
+    public String captchaForChinese(HttpServletResponse response) throws IOException {
         //中文类型验证码，宽、高
         ChineseCaptcha chineseCaptcha = new ChineseCaptcha(CAPTCHA_WIDTH, CAPTCHA_HEIGH);
         //获取验证码字符
@@ -99,7 +103,9 @@ public class BraveCaptchaUtil {
         // 验证码添加到缓存
         redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY + text, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
-        return chineseCaptcha.toBase64("");
+       return chineseCaptcha.toBase64("");
+        /*response.setContentType("image/png");
+        chineseCaptcha.out(response.getOutputStream());*/
     }
 
     /**
@@ -109,7 +115,7 @@ public class BraveCaptchaUtil {
      * @Param:
      * @return: void
      **/
-    public String captchaForArithmetic() {
+    public String captchaForArithmetic(HttpServletResponse response) throws IOException {
         //算术类型验证码：宽、高
         ArithmeticCaptcha arithmeticCaptcha = new ArithmeticCaptcha(CAPTCHA_WIDTH, CAPTCHA_HEIGH);
         //运算位数
@@ -122,5 +128,7 @@ public class BraveCaptchaUtil {
         redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY + text, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
         //输出验证码
         return arithmeticCaptcha.toBase64("");
+        /*response.setContentType("image/png");
+        arithmeticCaptcha.out(response.getOutputStream());*/
     }
 }

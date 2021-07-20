@@ -1,25 +1,22 @@
 package com.cloud.brave.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.dto.UserDTO;
+import com.cloud.brave.dto.UserDetailsDTO;
 import com.cloud.brave.dto.UserInfoDTO;
-import com.cloud.brave.dto.UserPageDTO;
-import com.cloud.brave.entity.SysMenu;
-import com.cloud.brave.entity.SysRole;
-import com.cloud.brave.entity.SysUser;
-import com.cloud.brave.entity.SysUserRole;
+import com.cloud.brave.entity.*;
 import com.cloud.brave.mapper.SysUserMapper;
-import com.cloud.brave.service.SysMenuService;
-import com.cloud.brave.service.SysRoleService;
-import com.cloud.brave.service.SysUserRoleService;
-import com.cloud.brave.service.SysUserService;
+import com.cloud.brave.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cloud.core.SnowflakeId.IdGenerate;
 import com.cloud.core.constant.CommonConstants;
+import com.cloud.core.exception.BraveException;
+import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,22 +43,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final SysUserMapper sysUserMapper;
     private final SysRoleService sysRoleService;
+    private final SysDeptService sysDeptService;
     private final SysUserRoleService sysUserRoleService;
     private final SysMenuService sysMenuService;
     private final IdGenerate<Long> idGenerate;
-
-    /**
-     * @Author yongchen
-     * @Description 用户分页查询
-     * @Date 17:37 2021/7/13
-     * @param page
-     * @param data
-     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.cloud.brave.dto.UserPageDTO>
-     **/
-    @Override
-    public Page<UserPageDTO> userPage(Page<Object> page, SysUser data) {
-        return sysUserMapper.userPage(page, data);
-    }
 
     /**
      * @Author: yongchen
@@ -74,8 +59,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public UserInfoDTO getUserInfo(String username) {
         LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysUserLambdaQueryWrapper.eq(SysUser::getPhone, username)
-                                    .eq(SysUser::getIsLock, CommonConstants.IS_LOCK_NO)
-                                    .eq(SysUser::getDelState, CommonConstants.NOT_DELETED);
+                .eq(SysUser::getIsLock, CommonConstants.IS_LOCK_NO)
+                .eq(SysUser::getDelState, CommonConstants.NOT_DELETED);
         SysUser sysUser = this.getOne(sysUserLambdaQueryWrapper);
         List<Long> roleIds = sysRoleService.findRolesByUserId(sysUser.getId()).stream().map(SysRole::getId)
                 .collect(Collectors.toList());
@@ -105,9 +90,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setId(id);
         sysUser.setDelState(CommonConstants.NOT_DELETED);
         sysUser.setIsLock(CommonConstants.IS_LOCK_NO);
-        sysUser.setPassWord(passwordEncoder.encode(sysUser.getPassWord()));
+        sysUser.setPassWord(passwordEncoder.encode(CommonConstants.USER_INITIAL_PWD));
         sysUserMapper.insert(sysUser);
         // 添加角色关联信息
+//        List<SysUserRole> sysUserRoles = Convert.toList(Long.class, userDTO.getRoles()).stream().map(roleId -> {
         List<SysUserRole> sysUserRoles = userDTO.getRoles().stream().map(roleId -> {
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setUserId(sysUser.getId());
@@ -119,31 +105,63 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * @Author: yongchen
-     * @Description: 锁定用户
+     * @Description: 修改用户锁定状态
      * @Date: 15:55 2021/6/8
-     * @Param: [id]
+     * @Param: [id, locakStatus]
      * @return: java.lang.Boolean
      **/
     @Override
-    public Boolean locking(Long id) {
+    public Boolean locking(Long id, String locakStatus) {
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, id)
-                        .eq(SysUser::getIsLock, CommonConstants.IS_LOCK_YES);
+                .set(SysUser::getIsLock, locakStatus);
         return this.update(updateWrapper);
     }
 
     /**
-     * @Author: yongchen
-     * @Description: 用户解锁
-     * @Date: 15:59 2021/6/8
-     * @Param: [id]
-     * @return: java.lang.Boolean
+     * @param id
+     * @return com.cloud.brave.dto.UserDetailsDTO
+     * @Author yongchen
+     * @Description 获取用户详细信息
+     * @Date 15:07 2021/7/15
      **/
     @Override
-    public Boolean unlock(Long id) {
+    public UserDetailsDTO getUserDetailsById(Long id) {
+        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+        SysUser sysUser = getById(id);
+        if (null == sysUser) {
+            throw new BraveException("用户信息不存在");
+        }
+        BeanUtils.copyProperties(sysUser, userDetailsDTO);
+        //用户本门信息
+        SysDept dept = sysDeptService.getById(userDetailsDTO.getDeptId());
+        userDetailsDTO.setSysDept(dept);
+        //用户角色信息
+        List<SysRole> roles = sysRoleService.findRolesByUserId(id);
+        List<Long> collect = roles.stream().map(SysRole::getId).collect(Collectors.toList());
+        userDetailsDTO.setRoles(collect);
+        return userDetailsDTO;
+    }
+
+    /**
+     * @Author yongchen
+     * @Description 重置用户密码
+     * @Date 10:03 2021/7/19
+     * @param id
+     * @return boolean
+     **/
+    @Override
+    public boolean resetPassword(Long id) {
+        // 逻辑删除用户信息
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, id)
-                .eq(SysUser::getIsLock, CommonConstants.IS_LOCK_NO);
-        return this.update(updateWrapper);
+                        .set(SysUser::getPassWord, passwordEncoder.encode(CommonConstants.USER_INITIAL_PWD));
+        if (this.update(updateWrapper)) {
+            //物理删除用户角色中间信息
+            LambdaUpdateWrapper<SysUserRole> userRoleWapper = new LambdaUpdateWrapper<>();
+            userRoleWapper.eq(SysUserRole::getUserId, id);
+            return sysUserRoleService.remove(userRoleWapper);
+        }
+        return false;
     }
 }

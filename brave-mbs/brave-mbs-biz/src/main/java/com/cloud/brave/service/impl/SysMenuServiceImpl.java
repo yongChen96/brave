@@ -3,6 +3,7 @@ package com.cloud.brave.service.impl;
 import com.cloud.brave.dto.MenuDTO;
 import com.cloud.brave.dto.MenuRouterDTO;
 import com.cloud.brave.dto.MetaDTO;
+import com.cloud.brave.dto.RoleMenuTreeDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.mapper.SysMenuMapper;
 import com.cloud.brave.service.SysMenuService;
@@ -121,6 +122,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<SysMenu> findPermissionsByRoleId(Long roleId) {
         return sysMenuMapper.findPermissionsByRoleId(roleId);
+    }
+
+    @Override
+    public RoleMenuTreeDTO roleMenuTreeselect(Long id) {
+        return null;
     }
 
     /**

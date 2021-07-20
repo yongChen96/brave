@@ -5,6 +5,10 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.cloud.brave.entity.SysRoleMenu">
         <result column="id" property="id" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_time" property="updateTime" />
         <result column="role_id" property="roleId" />
         <result column="menu_id" property="menuId" />
     </resultMap>
@@ -12,6 +16,10 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,
+        create_user,
+        create_time,
+        update_user,
+        update_time,
         role_id, menu_id
     </sql>
 

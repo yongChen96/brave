@@ -1,12 +1,16 @@
 package com.cloud.auth.rest;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.cloud.auth.entity.BraveLoginInfo;
 import com.cloud.auth.entity.Oauth2AccessToken;
 import com.cloud.auth.utils.BraveCaptchaUtil;
+import com.cloud.core.constant.AuthConstants;
 import com.cloud.core.constant.CacheConstants;
 import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.exception.BraveException;
 import com.cloud.core.result.Result;
+import com.wf.captcha.ArithmeticCaptcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,13 +21,18 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName: AuthTokenController
@@ -54,7 +63,7 @@ public class AuthTokenController {
         try {
             //验证码校验
             String code = braveLoginInfo.getCode();
-            if (StringUtils.isBlank(code)){
+            if (StringUtils.isBlank(code)) {
                 return Result.failed("验证码不能为空");
             }
             String captchaText = (String) redisTemplate.opsForValue().get(CacheConstants.CAPTCHA_KEY + code.toLowerCase());
@@ -67,11 +76,11 @@ public class AuthTokenController {
             redisTemplate.delete(CacheConstants.CAPTCHA_KEY);
 
             Map<String, String> parameters = new HashMap<>();
-            parameters.put("grant_type",braveLoginInfo.getGrantType());
-            parameters.put("client_id",braveLoginInfo.getClientId());
-            parameters.put("client_secret",braveLoginInfo.getClientSecret());
-            parameters.put("username",braveLoginInfo.getUsername());
-            parameters.put("password",braveLoginInfo.getPassword());
+            parameters.put("grant_type", braveLoginInfo.getGrantType());
+            parameters.put("client_id", braveLoginInfo.getClientId());
+            parameters.put("client_secret", braveLoginInfo.getClientSecret());
+            parameters.put("username", braveLoginInfo.getUsername());
+            parameters.put("password", braveLoginInfo.getPassword());
             OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
             Oauth2AccessToken accessToken = Oauth2AccessToken.builder()
                     .token(oAuth2AccessToken.getValue())
@@ -87,14 +96,18 @@ public class AuthTokenController {
 
     /**
      * @Author: yongchen
-     * @Description: 推出系统
+     * @Description: 退出登录
      * @Date: 16:52 2021/6/18
      * @Param: []
      * @return: com.cloud.core.result.Result
      **/
     @PostMapping("/logout")
-    @ApiOperation(value = "推出系统", notes = "推出系统")
-    public Result logout(){
+    @ApiOperation(value = "退出登录", notes = "退出登录")
+    public Result logout(HttpServletRequest request) throws UnsupportedEncodingException {
+        String payload = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader(AuthConstants.JWT_PAYLOAD_KEY);
+        JSONObject payloadJSON = JSONUtil.parseObj(URLDecoder.decode(payload, "UTF-8"));
+        String jti = payloadJSON.getStr(AuthConstants.JWT_JTI);
+        Long expireTime = payloadJSON.getLong(AuthConstants.JWT_EXP);
 
         return Result.success();
     }
@@ -110,24 +123,50 @@ public class AuthTokenController {
     @ApiOperation(value = "获取验证码", notes = "获取验证码")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "captchType", defaultValue = "1", value = "验证码类型：1:png 2:gif 3:中文 4:算术", required = true))
-    public Result getCaptch(@RequestParam(value = "captchType") String captchType) {
-        String captha = null;
+    public Result<String> getCaptch(@RequestParam(value = "captchType") String captchType,
+                                    HttpServletResponse response) throws IOException {
+        String captch = null;
         switch (captchType) {
             case CommonConstants.CAPTCH_PNG:
-                captha = braveCaptchaUtil.captchaForPng();
+                captch = braveCaptchaUtil.captchaForPng(response);
                 break;
             case CommonConstants.CAPTCH_GIF:
-                captha = braveCaptchaUtil.captchaForGif();
+                captch = braveCaptchaUtil.captchaForGif(response);
                 break;
             case CommonConstants.CAPTCH_CHINESE:
-                captha = braveCaptchaUtil.captchaForChinese();
+                captch = braveCaptchaUtil.captchaForChinese(response);
                 break;
             case CommonConstants.CAPTCH_ARITHMETIC:
-                captha = braveCaptchaUtil.captchaForArithmetic();
+                captch = braveCaptchaUtil.captchaForArithmetic(response);
                 break;
             default:
-                captha = braveCaptchaUtil.captchaForPng();
+                captch = braveCaptchaUtil.captchaForPng(response);
         }
-        return Result.success(captha);
+        return Result.success(captch);
+    }
+
+    /**
+     * @param response
+     * @return void
+     * @Author yongchen
+     * @Description 获取验证码-流
+     * @Date 9:10 2021/7/15
+     **/
+    @GetMapping("/captchStream")
+    @ApiOperation(value = "获取验证码", notes = "获取验证码")
+    public void getCaptchStream(HttpServletResponse response) throws IOException {
+        //算术类型验证码：宽、高
+        ArithmeticCaptcha arithmeticCaptcha = new ArithmeticCaptcha(100, 40);
+        //运算位数
+        arithmeticCaptcha.setLen(2);
+        //获取运算公式
+        String arithmeticString = arithmeticCaptcha.getArithmeticString();
+        //获取运算结果
+        String text = arithmeticCaptcha.text();
+        // 验证码添加到缓存
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_KEY + text, text, CacheConstants.CODE_TIME, TimeUnit.SECONDS);
+        //输出验证码
+        response.setContentType("image/png");
+        arithmeticCaptcha.out(response.getOutputStream());
     }
 }

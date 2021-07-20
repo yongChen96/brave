@@ -41,7 +41,7 @@ public class SysUser extends BaseEntity {
 
     @ApiModelProperty(value = "邮箱")
     @TableField("e_mail")
-    private String eMail;
+    private String email;
 
     @ApiModelProperty(value = "性别（0：女，1：男）")
     @TableField("sex")
