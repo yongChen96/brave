@@ -10,12 +10,15 @@ import com.cloud.brave.entity.SysRole;
 import com.cloud.brave.service.SysRoleService;
 import com.cloud.core.SnowflakeId.IdGenerate;
 import com.cloud.core.constant.CommonConstants;
+import com.cloud.core.exception.BraveException;
+import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
 import com.cloud.core.mybatisplus.page.PageParam;
 import com.cloud.core.result.Result;
 import com.cloud.log.annotation.BraveSysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +55,12 @@ public class SysRoleController extends BaseController {
     public Result<IPage<SysRole>> page(@RequestBody @Validated PageParam<SysRole> pp) {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysRole::getDelState, CommonConstants.NOT_DELETED);
+        if (StringUtils.isNotBlank(pp.getData().getRoleName())){
+            wrapper.like(SysRole::getRoleName, pp.getData().getRoleName());
+        }
+        if (StringUtils.isNotBlank(pp.getData().getRoleCode())){
+            wrapper.eq(SysRole::getRoleCode, pp.getData().getRoleCode());
+        }
         Page<SysRole> page = roleService.page(pp.getPage(), wrapper);
         return success(page);
     }
@@ -96,7 +105,18 @@ public class SysRoleController extends BaseController {
     @PostMapping("/save")
     @BraveSysLog(value = "添加角色信息")
     @ApiOperation(value = "添加角色信息", notes = "添加角色信息")
-    public Result<Boolean> save(@RequestBody SysRole sysRole) {
+    public Result<Boolean> save(@RequestBody @Validated({BaseSuperEntuty.Save.class}) SysRole sysRole) {
+        //角色名称、角色编码判重
+        LambdaQueryWrapper<SysRole> roleNameWapper = new LambdaQueryWrapper<>();
+        roleNameWapper.eq(SysRole::getRoleName, sysRole.getRoleName()).eq(SysRole::getDelState, CommonConstants.NOT_DELETED);
+        if (roleService.count(roleNameWapper) > 0) {
+            throw new BraveException("该角色名已存在");
+        }
+        LambdaQueryWrapper<SysRole> roleCodeWapper = new LambdaQueryWrapper<>();
+        roleNameWapper.eq(SysRole::getRoleCode, sysRole.getRoleCode()).eq(SysRole::getDelState, CommonConstants.NOT_DELETED);
+        if (roleService.count(roleCodeWapper) > 0) {
+            throw  new BraveException("角色编码已存在");
+        }
         if (roleService.save(sysRole)) {
             return success(true);
         }

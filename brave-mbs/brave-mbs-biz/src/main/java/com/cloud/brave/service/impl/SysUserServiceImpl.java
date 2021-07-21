@@ -22,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -101,6 +102,40 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return sysUserRole;
         }).collect(Collectors.toList());
         return sysUserRoleService.saveBatch(sysUserRoles);
+    }
+
+    /**
+     * @Author yongchen
+     * @Description 更新用户信息
+     * @Date 9:11 2021/7/21
+     * @param userDTO
+     * @return java.lang.Boolean
+     **/
+    @Override
+    public Boolean updateUser(UserDTO userDTO) {
+        SysUser user = new SysUser();
+        BeanUtils.copyProperties(userDTO, user);
+        if (this.updateById(user)) {
+            // 角色信息更新
+            LambdaQueryWrapper<SysUserRole> userRoleWpper = new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userDTO.getId());
+            List<SysUserRole> list = sysUserRoleService.list(userRoleWpper);
+            if (!CollectionUtils.isEmpty(list)){
+                List<Long> ids = list.stream().map(item -> item.getId()).collect(Collectors.toList());
+                sysUserRoleService.removeByIds(ids);
+            }
+
+            List<Long> roles = userDTO.getRoles();
+            if (!CollectionUtils.isEmpty(roles)){
+                for (Long role : roles) {
+                    SysUserRole sysUserRole = new SysUserRole();
+                    sysUserRole.setUserId(userDTO.getId());
+                    sysUserRole.setRoleId(role);
+                    return sysUserRoleService.save(sysUserRole);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     /**

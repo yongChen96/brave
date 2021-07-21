@@ -7,6 +7,7 @@ import com.cloud.brave.mapper.SysDeptMapper;
 import com.cloud.brave.service.SysDeptService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cloud.core.constant.CommonConstants;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -33,10 +34,18 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * @Date 11:39 2021/7/13
      **/
     @Override
-    public List<DeptTreeDTO> treeselect() {
+    public List<DeptTreeDTO> treeselect(String deptName, String leader, String deptStatus) {
         LambdaQueryWrapper<SysDept> deptWapper = new LambdaQueryWrapper<>();
-        deptWapper.eq(SysDept::getDeptStatus, CommonConstants.ENABLE)
-                .eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
+        if (StringUtils.isNotBlank(deptName)){
+            deptWapper.eq(SysDept::getDeptName, deptName);
+        }
+        if (StringUtils.isNotBlank(leader)){
+            deptWapper.eq(SysDept::getLeader, leader);
+        }
+        if (StringUtils.isNotBlank(deptStatus)){
+            deptWapper.eq(SysDept::getDeptStatus, deptStatus);
+        }
+        deptWapper.eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
         List<SysDept> depts = this.list(deptWapper);
         return getTree(depts);
     }

@@ -3,6 +3,8 @@ package com.cloud.brave.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.dto.DeptTreeDTO;
 import com.cloud.brave.dto.SysDeptDTO;
 import com.cloud.brave.entity.SysDept;
@@ -10,6 +12,8 @@ import com.cloud.brave.service.SysDeptService;
 import com.cloud.core.SnowflakeId.IdGenerate;
 import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.exception.BraveException;
+import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
+import com.cloud.core.mybatisplus.page.PageParam;
 import com.cloud.core.result.Result;
 import com.cloud.log.annotation.BraveSysLog;
 import io.swagger.annotations.Api;
@@ -43,6 +47,33 @@ public class SysDeptController extends BaseController {
     private final IdGenerate<Long> idGenerate;
 
     /**
+     * @param pp
+     * @return com.cloud.core.result.Result<com.baomidou.mybatisplus.core.metadata.IPage < com.cloud.brave.entity.SysDept>>
+     * @Author yongchen
+     * @Description 分页查询部门信息
+     * @Date 11:53 2021/7/21
+     **/
+    @PostMapping("/page")
+    @BraveSysLog(value = "分页查询部门信息")
+    @ApiOperation(value = "分页查询部门信息", notes = "分页查询部门信息")
+    public Result<IPage<SysDept>> page(@RequestBody @Validated(BaseSuperEntuty.OnlyQuery.class) PageParam<SysDept> pp) {
+        LambdaQueryWrapper<SysDept> pageWapper = new LambdaQueryWrapper<>();
+        pageWapper.eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
+        SysDept dept = pp.getData();
+        if (StringUtils.isNotBlank(dept.getDeptName())) {
+            pageWapper.like(SysDept::getDeptName, dept.getDeptName());
+        }
+        if (StringUtils.isNotBlank(dept.getLeader())) {
+            pageWapper.like(SysDept::getLeader, dept.getLeader());
+        }
+        if (StringUtils.isNotBlank(dept.getDeptStatus())) {
+            pageWapper.eq(SysDept::getDeptStatus, dept.getDeptStatus());
+        }
+        Page<SysDept> page = sysDeptService.page(pp.getPage(), pageWapper);
+        return success(page);
+    }
+
+    /**
      * @param
      * @return com.cloud.core.result.Result<java.util.List < com.cloud.brave.entity.SysDept>>
      * @Author yongchen
@@ -61,16 +92,18 @@ public class SysDeptController extends BaseController {
     }
 
     /**
+     * @param
+     * @return com.cloud.core.result.Result<java.util.List < com.cloud.brave.dto.DeptTreeDTO>>
      * @Author yongchen
      * @Description 获取部门树
      * @Date 13:59 2021/7/13
-     * @param
-     * @return com.cloud.core.result.Result<java.util.List<com.cloud.brave.dto.DeptTreeDTO>>
      **/
-    @GetMapping("/treeselect")
+    @GetMapping("/tree")
     @ApiOperation(value = "获取部门树", notes = "获取部门树")
-    public Result<List<DeptTreeDTO>> treeselect(){
-        return success(sysDeptService.treeselect());
+    public Result<List<DeptTreeDTO>> treeselect(@RequestParam(value = "deptName", required = false) String deptName,
+                                                @RequestParam(value = "leader", required = false) String leader,
+                                                @RequestParam(value = "deptStatus", required = false) String deptStatus) {
+        return success(sysDeptService.treeselect(deptName, leader, deptStatus));
     }
 
     /**
@@ -122,8 +155,13 @@ public class SysDeptController extends BaseController {
         sysDept.setId(deptId);
         if (sysDept.getParentId() != null) {
             SysDept dept = sysDeptService.getById(sysDeptDTO.getParentId());
-            sysDept.setIdPath(String.format("%s/%s", dept.getIdPath(), sysDept.getId()));
-            sysDept.setNamePath(String.format("%s/%s", dept.getNamePath(), sysDept.getDeptName()));
+            if (null == dept){
+                sysDept.setIdPath(sysDept.getParentId().toString());
+                sysDept.setNamePath(sysDept.getDeptName());
+            }else {
+                sysDept.setIdPath(String.format("%s/%s", dept.getIdPath(), sysDept.getId()));
+                sysDept.setNamePath(String.format("%s/%s", dept.getNamePath(), sysDept.getDeptName()));
+            }
         } else {
             sysDept.setParentId(CommonConstants.TOP_MENU);
             sysDept.setIdPath(sysDept.getId().toString());
@@ -151,8 +189,13 @@ public class SysDeptController extends BaseController {
         BeanUtils.copyProperties(sysDeptDTO, sysDept);
         if (sysDept.getParentId() != null) {
             SysDept dept = sysDeptService.getById(sysDeptDTO.getParentId());
-            sysDept.setIdPath(String.format("%s/%s", dept.getIdPath(), sysDept.getId()));
-            sysDept.setNamePath(String.format("%s/%s", dept.getNamePath(), sysDept.getDeptName()));
+            if (null == dept){
+                sysDept.setIdPath(sysDept.getId().toString());
+                sysDept.setNamePath(sysDept.getDeptName());
+            }else {
+                sysDept.setIdPath(String.format("%s/%s", dept.getIdPath(), sysDept.getId()));
+                sysDept.setNamePath(String.format("%s/%s", dept.getNamePath(), sysDept.getDeptName()));
+            }
         } else {
             sysDept.setIdPath(sysDept.getId().toString());
             sysDept.setNamePath(sysDept.getDeptName());
@@ -178,7 +221,7 @@ public class SysDeptController extends BaseController {
         queryWrapper.likeLeft(SysDept::getIdPath, id)
                 .eq(SysDept::getDeptStatus, CommonConstants.ENABLE)
                 .eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
-        if (sysDeptService.count(queryWrapper) > 0) {
+        if (sysDeptService.count(queryWrapper) > 1) {
             throw new BraveException("该部门下有未禁用部门");
         }
         LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
@@ -208,7 +251,7 @@ public class SysDeptController extends BaseController {
             queryWrapper.eq(SysDept::getId, deptId)
                     .eq(SysDept::getDeptStatus, CommonConstants.DISABLE)
                     .eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
-            if (sysDeptService.count(queryWrapper) > 0) {
+            if (sysDeptService.count(queryWrapper) > 1) {
                 throw new BraveException("该部门上级被禁用");
             }
         }

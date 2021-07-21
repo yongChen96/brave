@@ -37,6 +37,15 @@ public interface SysUserService extends IService<SysUser> {
 
     /**
      * @Author: yongchen
+     * @Description: 更新用户信息
+     * @Date: 11:01 2021/6/7
+     * @Param: [userDTO]
+     * @return: java.lang.Boolean
+     **/
+    Boolean updateUser(UserDTO userDTO);
+
+    /**
+     * @Author: yongchen
      * @Description: 修改用户锁定状态
      * @Date: 15:55 2021/6/8
      * @Param: [id, locakStatus]

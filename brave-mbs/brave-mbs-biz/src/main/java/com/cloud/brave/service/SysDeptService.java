@@ -22,5 +22,5 @@ public interface SysDeptService extends IService<SysDept> {
      * @param
      * @return java.util.List<com.cloud.brave.dto.DeptTreeDTO>
      **/
-    List<DeptTreeDTO> treeselect();
+    List<DeptTreeDTO> treeselect(String deptName, String leader, String deptStatus);
 }

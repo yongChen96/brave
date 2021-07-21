@@ -12,13 +12,13 @@
         <result column="user_name" property="userName" />
         <result column="pass_word" property="passWord" />
         <result column="phone" property="phone" />
-        <result column="e_mail" property="email" />
+        <result column="email" property="email" />
         <result column="sex" property="sex" />
         <result column="birthday" property="birthday" />
         <result column="dept_id" property="deptId" />
         <result column="avatar_url" property="avatarUrl" />
-        <result column="signature" property="signature" />
         <result column="is_lock" property="isLock" />
+        <result column="Is_online" property="isOnline" />
         <result column="del_state" property="delState" />
     </resultMap>
 
@@ -29,7 +29,7 @@
         create_time,
         update_user,
         update_time,
-        user_name, pass_word, phone, e_mail, sex, birthday, dept_id, avatar_url, signature, is_lock, del_state
+        user_name, pass_word, phone, email, sex, birthday, dept_id, avatar_url, is_lock, Is_online, del_state
     </sql>
 
 </mapper>

@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yongchen
- * @since 2021-06-23
+ * @since 2021-07-20
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -40,7 +40,7 @@ public class SysUser extends BaseEntity {
     private String phone;
 
     @ApiModelProperty(value = "邮箱")
-    @TableField("e_mail")
+    @TableField("email")
     private String email;
 
     @ApiModelProperty(value = "性别（0：女，1：男）")
@@ -59,13 +59,13 @@ public class SysUser extends BaseEntity {
     @TableField("avatar_url")
     private String avatarUrl;
 
-    @ApiModelProperty(value = "个性签名")
-    @TableField("signature")
-    private String signature;
-
     @ApiModelProperty(value = "是否锁定（0：否，1：是）")
     @TableField("is_lock")
     private String isLock;
+
+    @ApiModelProperty(value = "是否在线（0：是，1：否）")
+    @TableField("Is_online")
+    private String isOnline;
 
     @ApiModelProperty(value = "是否删除（0：否，1：是）")
     @TableField("del_state")

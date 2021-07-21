@@ -58,8 +58,11 @@ public class SysUserController extends BaseController {
         if (StringUtils.isNotBlank(data.getUserName())) {
             pageWapper.eq(SysUser::getUserName, data.getUserName());
         }
-        if (StringUtils.isNotBlank(data.getSex())) {
-            pageWapper.eq(SysUser::getSex, data.getSex());
+        if (StringUtils.isNotBlank(data.getPhone())) {
+            pageWapper.eq(SysUser::getPhone, data.getPhone());
+        }
+        if (StringUtils.isNotBlank(data.getIsLock())){
+            pageWapper.eq(SysUser::getIsLock, data.getIsLock());
         }
         if (null != data.getDeptId()) {
             pageWapper.eq(SysUser::getDeptId, data.getDeptId());
@@ -132,11 +135,27 @@ public class SysUserController extends BaseController {
     @BraveSysLog(value = "添加新用户信息")
     @ApiOperation(value = "添加新用户信息", notes = "添加新用户信息")
     public Result<Boolean> save(@RequestBody @Validated(BaseSuperEntuty.Save.class) UserDTO userDTO) {
-        Boolean save = sysUserService.saveNewUser(userDTO);
-        if (save) {
+        if (sysUserService.saveNewUser(userDTO)) {
             return success(true);
         }
         return failed("添加新用户信息失败");
+    }
+    
+    /**
+     * @Author yongchen
+     * @Description 更新用户信息
+     * @Date 9:27 2021/7/21
+     * @param userDTO
+     * @return com.cloud.core.result.Result<java.lang.Boolean>
+     **/
+    @PostMapping("/update")
+    @BraveSysLog(value = "更新用户信息")
+    @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
+    public Result<Boolean> update(@RequestBody @Validated(BaseSuperEntuty.Update.class) UserDTO userDTO){
+        if (sysUserService.updateUser(userDTO)) {
+            return success(true);
+        }
+        return failed("更新用户信息失败");
     }
 
     /**
@@ -146,10 +165,10 @@ public class SysUserController extends BaseController {
      * @Param: [id]
      * @return: com.cloud.core.result.Result<java.lang.Boolean>
      **/
-    @GetMapping("/updateLocalStatus")
+    @GetMapping("/updateLocakStatus")
     @BraveSysLog(value = "修改用户锁定状态")
     @ApiOperation(value = "修改用户锁定状态", notes = "修改用户锁定状态")
-    public Result<Boolean> updateLocalStatus(@RequestParam Long id, @RequestParam String locakStatus) {
+    public Result<Boolean> updateLocakStatus(@RequestParam Long id, @RequestParam String locakStatus) {
         if (sysUserService.locking(id, locakStatus)) {
             return success(true);
         }
