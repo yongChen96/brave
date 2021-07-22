@@ -155,10 +155,10 @@ public class SysDeptController extends BaseController {
         sysDept.setId(deptId);
         if (sysDept.getParentId() != null) {
             SysDept dept = sysDeptService.getById(sysDeptDTO.getParentId());
-            if (null == dept){
+            if (null == dept) {
                 sysDept.setIdPath(sysDept.getParentId().toString());
                 sysDept.setNamePath(sysDept.getDeptName());
-            }else {
+            } else {
                 sysDept.setIdPath(String.format("%s/%s", dept.getIdPath(), sysDept.getId()));
                 sysDept.setNamePath(String.format("%s/%s", dept.getNamePath(), sysDept.getDeptName()));
             }
@@ -189,10 +189,10 @@ public class SysDeptController extends BaseController {
         BeanUtils.copyProperties(sysDeptDTO, sysDept);
         if (sysDept.getParentId() != null) {
             SysDept dept = sysDeptService.getById(sysDeptDTO.getParentId());
-            if (null == dept){
+            if (null == dept) {
                 sysDept.setIdPath(sysDept.getId().toString());
                 sysDept.setNamePath(sysDept.getDeptName());
-            }else {
+            } else {
                 sysDept.setIdPath(String.format("%s/%s", dept.getIdPath(), sysDept.getId()));
                 sysDept.setNamePath(String.format("%s/%s", dept.getNamePath(), sysDept.getDeptName()));
             }
@@ -217,12 +217,13 @@ public class SysDeptController extends BaseController {
     @BraveSysLog(value = "禁用部门")
     @ApiOperation(value = "禁用部门", notes = "禁用部门")
     public Result<Boolean> disableDept(@RequestParam Long id) {
+        //判断下级部门是否正常使用，下级部门正常使用则上级部门不能禁用
         LambdaQueryWrapper<SysDept> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.likeLeft(SysDept::getIdPath, id)
+        queryWrapper.eq(SysDept::getParentId, id)
                 .eq(SysDept::getDeptStatus, CommonConstants.ENABLE)
                 .eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
-        if (sysDeptService.count(queryWrapper) > 1) {
-            throw new BraveException("该部门下有未禁用部门");
+        if (sysDeptService.count(queryWrapper) > 0) {
+            throw new BraveException("该部门下存在使用中得部门，无法禁用");
         }
         LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysDept::getId, id)
@@ -244,17 +245,16 @@ public class SysDeptController extends BaseController {
     @BraveSysLog(value = "启用部门")
     @ApiOperation(value = "启用部门", notes = "启用部门")
     public Result<Boolean> enableDept(@RequestParam Long id) {
+        //判断上级部门是否启用，上级部门未启用下级无法启用
         SysDept dept = sysDeptService.getById(id);
-        String[] split = dept.getIdPath().split("/");
-        for (String deptId : split) {
-            LambdaQueryWrapper<SysDept> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(SysDept::getId, deptId)
-                    .eq(SysDept::getDeptStatus, CommonConstants.DISABLE)
-                    .eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
-            if (sysDeptService.count(queryWrapper) > 1) {
-                throw new BraveException("该部门上级被禁用");
-            }
+        LambdaQueryWrapper<SysDept> superDeptWapper = new LambdaQueryWrapper<>();
+        superDeptWapper.eq(SysDept::getId, dept.getParentId())
+                .eq(SysDept::getDelState, CommonConstants.NOT_DELETED)
+                .eq(SysDept::getDeptStatus, CommonConstants.DISABLE);
+        if (sysDeptService.count(superDeptWapper) > 0) {
+            throw new BraveException("上级部门已被禁用，请先启用上级部门");
         }
+
         LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysDept::getId, id)
                 .set(SysDept::getDeptStatus, CommonConstants.ENABLE);
@@ -275,6 +275,12 @@ public class SysDeptController extends BaseController {
     @BraveSysLog(value = "删除部门信息")
     @ApiOperation(value = "删除部门信息", notes = "删除部门信息")
     public Result<Boolean> delete(@RequestParam Long id) {
+        // 判断是否存在下级部门，存在下级部门则无法删除
+        LambdaQueryWrapper<SysDept> deptWapper = new LambdaQueryWrapper<>();
+        deptWapper.eq(SysDept::getParentId, id).eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
+        if (sysDeptService.count(deptWapper) > 0) {
+            throw new BraveException("改部门下级存在部门，无法删除");
+        }
         LambdaUpdateWrapper<SysDept> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysDept::getId, id)
                 .set(SysDept::getDelState, CommonConstants.DELETED);

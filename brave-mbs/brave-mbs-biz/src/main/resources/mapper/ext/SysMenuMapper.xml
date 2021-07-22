@@ -28,10 +28,9 @@
         m.sort,
         m.path,
         m.component,
-        m.is_frame AS isFrame,
-        m.is_cache AS isCache,
+        m.is_external_link AS isExternalLink,
         m.menu_type AS menuType,
-        m.visible,
+        m.is_display AS isDisplay,
         m.status,
         m.perms,
         m.icon
@@ -48,6 +47,6 @@
         AND role.role_status = 0
         AND m.del_state = 0
         AND m.status = 0
-        AND m.menu_type in ('M', 'C')
+        <!--AND m.menu_type in ('M', 'C')-->
     </select>
 </mapper>

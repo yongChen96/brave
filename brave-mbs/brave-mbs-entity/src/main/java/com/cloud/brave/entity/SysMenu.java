@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yongchen
- * @since 2021-07-12
+ * @since 2021-07-22
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -47,22 +47,18 @@ public class SysMenu extends BaseEntity {
     private String component;
 
     @ApiModelProperty(value = "是否为外链（0：是，1：否）")
-    @TableField("is_frame")
-    private String isFrame;
+    @TableField("is_external_link")
+    private String isExternalLink;
 
-    @ApiModelProperty(value = "是否缓存（0缓存 1不缓存）")
-    @TableField("is_cache")
-    private String isCache;
-
-    @ApiModelProperty(value = "菜单类型（M：目录,C：菜单，F：按钮）")
+    @ApiModelProperty(value = "菜单类型（0：目录，1：菜单，2：按钮）")
     @TableField("menu_type")
     private String menuType;
 
-    @ApiModelProperty(value = "菜单状态（0：显示，1：隐藏）")
-    @TableField("visible")
-    private String visible;
+    @ApiModelProperty(value = "显示状态（0：显示，1：隐藏）")
+    @TableField("is_display")
+    private String isDisplay;
 
-    @ApiModelProperty(value = "菜单状态（0：正常，1：停用）")
+    @ApiModelProperty(value = "菜单状态（0：启用，1：禁用）")
     @TableField("status")
     private String status;
 

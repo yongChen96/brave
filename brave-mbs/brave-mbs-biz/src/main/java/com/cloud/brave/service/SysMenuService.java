@@ -1,8 +1,6 @@
 package com.cloud.brave.service;
 
 import com.cloud.brave.dto.MenuDTO;
-import com.cloud.brave.dto.MenuRouterDTO;
-import com.cloud.brave.dto.RoleMenuTreeDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -28,15 +26,6 @@ public interface SysMenuService extends IService<SysMenu> {
     List<MenuDTO> findMenusByUserId(Long userId);
 
     /**
-     * @Author yongchen
-     * @Description 构建菜单结构
-     * @Date 15:22 2021/7/9
-     * @param menus
-     * @return java.util.List<com.cloud.brave.dto.MenuRouterDTO>
-     **/
-    List<MenuRouterDTO> buildMenus(List<MenuDTO> menus);
-
-    /**
      * @param
      * @return java.util.List<com.cloud.brave.entity.SysMenu>
      * @Author yongchen
@@ -54,5 +43,16 @@ public interface SysMenuService extends IService<SysMenu> {
      **/
     List<SysMenu> findPermissionsByRoleId(Long roleId);
 
-    RoleMenuTreeDTO roleMenuTreeselect(Long id);
+    /**
+     * @Author yongchen
+     * @Description 获取角色树
+     * @Date 17:14 2021/7/22
+     * @param menuName 资源名称
+     * @param isExternalLink 是否外链
+     * @param menuType 资源类型
+     * @param isDisplay 显示状态
+     * @param status 资源状态
+     * @return java.util.List<com.cloud.brave.dto.MenuDTO>
+     **/
+    List<MenuDTO> getRoleTree(String menuName, String isExternalLink, String menuType, String isDisplay, String status);
 }

@@ -1,9 +1,8 @@
 package com.cloud.brave.service.impl;
 
+import cn.hutool.core.collection.ListUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cloud.brave.dto.MenuDTO;
-import com.cloud.brave.dto.MenuRouterDTO;
-import com.cloud.brave.dto.MetaDTO;
-import com.cloud.brave.dto.RoleMenuTreeDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.mapper.SysMenuMapper;
 import com.cloud.brave.service.SysMenuService;
@@ -18,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -45,58 +43,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      **/
     @Override
     public List<MenuDTO> findMenusByUserId(Long userId) {
+        List<MenuDTO> menuTree = new ArrayList<>();
         List<MenuDTO> userMenus = sysMenuMapper.findMenusByUserId(userId);
-        return getMenuTree(userMenus);
-    }
-
-    /**
-     * @param menus
-     * @return java.util.List<com.cloud.brave.dto.MenuRouterDTO>
-     * @Author yongchen
-     * @Description 构建菜单结构
-     * @Date 15:23 2021/7/9
-     **/
-    @Override
-    public List<MenuRouterDTO> buildMenus(List<MenuDTO> menus) {
-        List<MenuRouterDTO> routers = new LinkedList<MenuRouterDTO>();
-        for (MenuDTO menu : menus) {
-            MenuRouterDTO router = new MenuRouterDTO();
-            router.setHidden(!StringUtils.equals(CommonConstants.ENABLE, menu.getStatus()));
-            router.setName(getRouteName(menu));
-            router.setPath(getRouterPath(menu));
-            router.setComponent(getComponent(menu));
-            router.setMeta(new MetaDTO(menu.getMenuName(), menu.getIcon(), !StringUtils.equals(CommonConstants.ENABLE, menu.getIsCache()), ishttp(menu.getPath()) ? menu.getPath() : null));
-            List<MenuDTO> cMenus = menu.getChildren();
-            if (!CollectionUtils.isEmpty(cMenus)) {
-                router.setAlwaysShow(true);
-                router.setRedirect("noRedirect");
-                router.setChildren(buildMenus(cMenus));
-            } else if (isMenuFrame(menu)) {
-                router.setMeta(null);
-                List<MenuRouterDTO> childrenList = new ArrayList<MenuRouterDTO>();
-                MenuRouterDTO children = new MenuRouterDTO();
-                children.setPath(menu.getPath());
-                children.setComponent(menu.getComponent());
-                children.setName(StringUtils.capitalize(menu.getPath()));
-                children.setMeta(new MetaDTO(menu.getMenuName(), menu.getIcon(), !StringUtils.equals(CommonConstants.ENABLE, menu.getIsCache()), ishttp(menu.getPath()) ? menu.getPath() : null));
-                childrenList.add(children);
-                router.setChildren(childrenList);
-            } else if (menu.getParentId().intValue() == 0 && isInnerLink(menu)) {
-                router.setMeta(null);
-                router.setPath("/inner");
-                List<MenuRouterDTO> childrenList = new ArrayList<MenuRouterDTO>();
-                MenuRouterDTO children = new MenuRouterDTO();
-                String routerPath = StringUtils.replaceEach(menu.getPath(), new String[]{CommonConstants.HTTP, CommonConstants.HTTPS}, new String[]{"", ""});
-                children.setPath(routerPath);
-                children.setComponent(CommonConstants.INNER_LINK);
-                children.setName(StringUtils.capitalize(routerPath));
-                children.setMeta(new MetaDTO(menu.getMenuName(), menu.getIcon(), menu.getPath()));
-                childrenList.add(children);
-                router.setChildren(childrenList);
+        for (MenuDTO userMenu : userMenus) {
+            if (CommonConstants.TOP_MENU == userMenu.getParentId()) {
+                //递归获取子节点
+                recursionChildren(userMenu, userMenus);
+                menuTree.add(userMenu);
             }
-            routers.add(router);
         }
-        return routers;
+        return menuTree;
     }
 
     /**
@@ -124,164 +80,74 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return sysMenuMapper.findPermissionsByRoleId(roleId);
     }
 
-    @Override
-    public RoleMenuTreeDTO roleMenuTreeselect(Long id) {
-        return null;
-    }
-
     /**
-     * @param list
-     * @return java.util.List<com.cloud.brave.dto.MenuDTO>
      * @Author yongchen
-     * @Description 获取菜单树结构
-     * @Date 14:16 2021/7/9
+     * @Description 获取角色树
+     * @Date 17:14 2021/7/22
+     * @param menuName 资源名称
+     * @param isExternalLink 是否外链
+     * @param menuType 资源类型
+     * @param isDisplay 显示状态
+     * @param status 资源状态
+     * @return java.util.List<com.cloud.brave.dto.MenuDTO>
      **/
-    private List<MenuDTO> getMenuTree(List<MenuDTO> list) {
-        List<MenuDTO> menus = new ArrayList<>();
-        for (MenuDTO menu : list) {
-            if (CommonConstants.TOP_MENU == menu.getParentId()) {
-                recursionMenu(menu, list);
-                menus.add(menu);
+    @Override
+    public List<MenuDTO> getRoleTree(String menuName, String isExternalLink, String menuType, String isDisplay, String status) {
+        List<MenuDTO> menuTree = new ArrayList<>();
+        LambdaQueryWrapper<SysMenu> menuTreeWapper = new LambdaQueryWrapper<>();
+        menuTreeWapper.eq(SysMenu::getDelState, CommonConstants.NOT_DELETED);
+        if (StringUtils.isNotBlank(menuName)) {
+            menuTreeWapper.eq(SysMenu::getMenuName, menuName);
+        }
+        if (StringUtils.isNotBlank(isExternalLink)) {
+            menuTreeWapper.eq(SysMenu::getIsExternalLink, isExternalLink);
+        }
+        if (StringUtils.isNotBlank(menuType)) {
+            menuTreeWapper.eq(SysMenu::getMenuType, menuType);
+        }
+        if (StringUtils.isNotBlank(isDisplay)) {
+            menuTreeWapper.eq(SysMenu::getIsDisplay, isDisplay);
+        }
+        if (StringUtils.isNotBlank(status)) {
+            menuTreeWapper.eq(SysMenu::getStatus, status);
+        }
+        List<SysMenu> sysMenus = sysMenuMapper.selectList(menuTreeWapper);
+        if (!CollectionUtils.isEmpty(sysMenus)){
+            List<MenuDTO> list = new ArrayList<>();
+            sysMenus.forEach(sysMenu -> {
+                MenuDTO menuDTO = new MenuDTO();
+                BeanUtils.copyProperties(sysMenu, menuDTO);
+                list.add(menuDTO);
+            });
+            if (!CollectionUtils.isEmpty(list)){
+                for (MenuDTO menuDTO : list) {
+                    if (CommonConstants.TOP_MENU == menuDTO.getParentId()) {
+                        //递归获取子节点
+                        recursionChildren(menuDTO, list);
+                        menuTree.add(menuDTO);
+                    }
+                }
             }
         }
-        return menus;
+        return menuTree;
     }
 
     /**
-     * @param menuDTO
-     * @param list
+     * @param userMenu
+     * @param userMenus
      * @return void
      * @Author yongchen
-     * @Description 递归列表
-     * @Date 14:16 2021/7/9
+     * @Description 递归获取子节点
+     * @Date 13:52 2021/7/22
      **/
-    private void recursionMenu(MenuDTO menuDTO, List<MenuDTO> list) {
-        // 得到子节点列表
-        List<MenuDTO> childList = getChildList(menuDTO, list);
-        menuDTO.setChildren(childList);
-        for (MenuDTO tChild : childList) {
-            if (hasChild(tChild, list)) {
-                recursionMenu(tChild, list);
+    private void recursionChildren(MenuDTO userMenu, List<MenuDTO> userMenus) {
+        List<MenuDTO> childrens = new ArrayList<>();
+        for (MenuDTO menu : userMenus) {
+            if (menu.getParentId().longValue() == userMenu.getId().longValue()) {
+                recursionChildren(menu, userMenus);
+                childrens.add(menu);
             }
         }
+        userMenu.setChildren(childrens);
     }
-
-    /**
-     * 得到子节点列表
-     */
-    private List<MenuDTO> getChildList(MenuDTO menuDTO, List<MenuDTO> list) {
-        List<MenuDTO> tlist = new ArrayList<>();
-        for (MenuDTO menu : list) {
-            if (menuDTO.getId().longValue() == menu.getParentId().longValue()) {
-                tlist.add(menu);
-            }
-        }
-        return tlist;
-    }
-
-    /**
-     * 判断是否有子节点
-     */
-    private boolean hasChild(MenuDTO t, List<MenuDTO> list) {
-        return getChildList(t, list).size() > 0 ? true : false;
-    }
-
-    /**
-     * 获取路由名称
-     *
-     * @param menu 菜单信息
-     * @return 路由名称
-     */
-    public String getRouteName(MenuDTO menu) {
-        String routerName = StringUtils.capitalize(menu.getPath());
-        // 非外链并且是一级目录（类型为目录）
-        if (isMenuFrame(menu)) {
-            routerName = StringUtils.EMPTY;
-        }
-        return routerName;
-    }
-
-    /**
-     * 获取路由地址
-     *
-     * @param menu 菜单信息
-     * @return 路由地址
-     */
-    public String getRouterPath(MenuDTO menu) {
-        String routerPath = menu.getPath();
-        // 内链打开外网方式
-        if (menu.getParentId().intValue() != 0 && isInnerLink(menu)) {
-            routerPath = StringUtils.replaceEach(routerPath, new String[]{CommonConstants.HTTP, CommonConstants.HTTPS}, new String[]{"", ""});
-        }
-        // 非外链并且是一级目录（类型为目录）
-        if (0 == menu.getParentId().intValue() && CommonConstants.TYPE_DIR.equals(menu.getMenuType())
-                && CommonConstants.NO_FRAME.equals(menu.getIsFrame())) {
-            routerPath = "/" + menu.getPath();
-        }
-        // 非外链并且是一级目录（类型为菜单）
-        else if (isMenuFrame(menu)) {
-            routerPath = "/";
-        }
-        return routerPath;
-    }
-
-    /**
-     * 获取组件信息
-     *
-     * @param menu 菜单信息
-     * @return 组件信息
-     */
-    public String getComponent(MenuDTO menu) {
-        String component = CommonConstants.LAYOUT;
-        if (StringUtils.isNotEmpty(menu.getComponent()) && !isMenuFrame(menu)) {
-            component = menu.getComponent();
-        } else if (StringUtils.isEmpty(menu.getComponent()) && menu.getParentId().intValue() != 0 && isInnerLink(menu)) {
-            component = CommonConstants.INNER_LINK;
-        } else if (StringUtils.isEmpty(menu.getComponent()) && isParentView(menu)) {
-            component = CommonConstants.PARENT_VIEW;
-        }
-        return component;
-    }
-
-    /**
-     * 是否为菜单内部跳转
-     *
-     * @param menu 菜单信息
-     * @return 结果
-     */
-    public boolean isMenuFrame(MenuDTO menu) {
-        return menu.getParentId().intValue() == 0 && CommonConstants.TYPE_MENU.equals(menu.getMenuType())
-                && menu.getIsFrame().equals(CommonConstants.NO_FRAME);
-    }
-
-    /**
-     * 是否为内链组件
-     *
-     * @param menu 菜单信息
-     * @return 结果
-     */
-    public boolean isInnerLink(MenuDTO menu) {
-        return menu.getIsFrame().equals(CommonConstants.NO_FRAME) && ishttp(menu.getPath());
-    }
-
-    /**
-     * 是否为parent_view组件
-     *
-     * @param menu 菜单信息
-     * @return 结果
-     */
-    public boolean isParentView(MenuDTO menu) {
-        return menu.getParentId().intValue() != 0 && CommonConstants.TYPE_DIR.equals(menu.getMenuType());
-    }
-
-    /**
-     * 是否为http(s)://开头
-     *
-     * @param link 链接
-     * @return 结果
-     */
-    public static boolean ishttp(String link) {
-        return StringUtils.startsWithAny(link, CommonConstants.HTTP, CommonConstants.HTTPS);
-    }
-
 }

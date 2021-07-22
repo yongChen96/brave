@@ -14,10 +14,9 @@
         <result column="sort" property="sort" />
         <result column="path" property="path" />
         <result column="component" property="component" />
-        <result column="is_frame" property="isFrame" />
-        <result column="is_cache" property="isCache" />
+        <result column="is_external_link" property="isExternalLink" />
         <result column="menu_type" property="menuType" />
-        <result column="visible" property="visible" />
+        <result column="is_display" property="isDisplay" />
         <result column="status" property="status" />
         <result column="perms" property="perms" />
         <result column="icon" property="icon" />
@@ -31,7 +30,7 @@
         create_time,
         update_user,
         update_time,
-        menu_name, parent_id, sort, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, del_state
+        menu_name, parent_id, sort, path, component, is_external_link, menu_type, is_display, status, perms, icon, del_state
     </sql>
 
 </mapper>
