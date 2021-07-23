@@ -91,7 +91,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setId(id);
         sysUser.setDelState(CommonConstants.NOT_DELETED);
         sysUser.setIsLock(CommonConstants.IS_LOCK_NO);
-        sysUser.setPassWord(passwordEncoder.encode(CommonConstants.USER_INITIAL_PWD));
+        sysUser.setPassWord(String.format("%s%s",CommonConstants.PASSWORD_PREFIX,passwordEncoder.encode(CommonConstants.USER_INITIAL_PWD)));
         sysUserMapper.insert(sysUser);
         // 添加角色关联信息
 //        List<SysUserRole> sysUserRoles = Convert.toList(Long.class, userDTO.getRoles()).stream().map(roleId -> {

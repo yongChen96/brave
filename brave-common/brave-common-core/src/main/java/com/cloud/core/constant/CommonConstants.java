@@ -13,10 +13,13 @@ public interface CommonConstants {
      **/
     String token_head = "Bearer ";
     /**
+     * 加密密码前缀
+     **/
+    String PASSWORD_PREFIX = "{bcrypt}";
+    /**
      * 用户初始密码
      **/
     String USER_INITIAL_PWD = "123456";
-
     /**
      * 启用状态 0：正常 1：锁定
      **/
