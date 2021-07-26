@@ -63,8 +63,8 @@ public class SysUser extends BaseEntity {
     @TableField("is_lock")
     private String isLock;
 
-    @ApiModelProperty(value = "是否在线（0：是，1：否）")
-    @TableField("Is_online")
+    @ApiModelProperty(value = "是否在线（0：否，1：是）")
+    @TableField("is_online")
     private String isOnline;
 
     @ApiModelProperty(value = "是否删除（0：否，1：是）")

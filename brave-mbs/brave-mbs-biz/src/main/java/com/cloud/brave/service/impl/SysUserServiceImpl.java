@@ -130,7 +130,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     SysUserRole sysUserRole = new SysUserRole();
                     sysUserRole.setUserId(userDTO.getId());
                     sysUserRole.setRoleId(role);
-                    return sysUserRoleService.save(sysUserRole);
+                    if (!sysUserRoleService.save(sysUserRole)) {
+                        throw new BraveException("更新角色信息失败");
+                    }
                 }
             }
             return true;
