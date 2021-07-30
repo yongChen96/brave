@@ -27,12 +27,12 @@
         m.parent_id AS parentId,
         m.sort,
         m.path,
-        m.component,
         m.is_external_link AS isExternalLink,
         m.menu_type AS menuType,
         m.is_display AS isDisplay,
         m.status,
-        m.perms,
+        m.url_perm AS urlPerm,
+        m.btn_perm AS btnPerm,
         m.icon
         FROM
         sys_menu m

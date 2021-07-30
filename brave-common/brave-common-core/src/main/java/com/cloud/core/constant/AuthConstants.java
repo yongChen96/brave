@@ -34,8 +34,8 @@ public interface AuthConstants {
     /**
      * 权限缓存key
      **/
-    String URL_PERM_ROLES_KEY = "system:permission:url_perm_roles:";
-    String BTN_PERM_ROLES_KEY = "system:permission:btn_perm_roles:";
+    String URL_PERM_ROLES_KEY = "system:permission:url_perm_roles";
+    String BTN_PERM_ROLES_KEY = "system:permission:btn_perm_roles";
     /**
      * JWT载体key
      */
@@ -52,4 +52,20 @@ public interface AuthConstants {
      * 黑名单token前缀
      */
     String TOKEN_BLACKLIST_PREFIX = "auth:token:blacklist:";
+    /**
+     * 用户id
+     */
+    String USER_ID_KEY = "userId";
+    /**
+     * 用户名
+     */
+    String USER_NAME_KEY = "username";
+    /**
+     * 客户端id
+     */
+    String CLIENT_ID_KEY = "client_id";
+    /**
+     * Basic认证前缀
+     */
+    String BASIC_PREFIX = "Basic ";
 }

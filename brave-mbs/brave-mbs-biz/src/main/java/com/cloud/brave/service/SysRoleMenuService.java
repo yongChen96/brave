@@ -1,5 +1,6 @@
 package com.cloud.brave.service;
 
+import com.cloud.brave.dto.RolePremsDTO;
 import com.cloud.brave.entity.SysRoleMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -23,4 +24,13 @@ public interface SysRoleMenuService extends IService<SysRoleMenu> {
      * @return java.lang.Boolean
      **/
     Boolean removeRoleMenu(Long roleId);
+
+    /**
+     * @Author yongchen
+     * @Description 获取角色权限信息
+     * @Date 16:00 2021/7/27
+     * @param
+     * @return java.util.List<com.cloud.brave.dto.RolePremsDTO>
+     **/
+    List<RolePremsDTO> getRolePerms();
 }

@@ -1,6 +1,7 @@
 package com.cloud.gateway;
 
 import com.baomidou.mybatisplus.autoconfigure.IdentifierGeneratorAutoConfiguration;
+import com.cloud.core.SnowflakeId.IdGenerate;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;

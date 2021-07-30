@@ -1,6 +1,7 @@
 package com.cloud.brave.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cloud.brave.dto.RolePremsDTO;
 import com.cloud.brave.entity.SysRoleMenu;
 import com.cloud.brave.mapper.SysRoleMenuMapper;
 import com.cloud.brave.service.SysRoleMenuService;
@@ -44,5 +45,17 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
             return false;
         }
         throw new BraveException("角色id不能为空");
+    }
+
+    /**
+     * @Author yongchen
+     * @Description 获取角色权限信息
+     * @Date 16:01 2021/7/27
+     * @param
+     * @return java.util.List<com.cloud.brave.dto.RolePremsDTO>
+     **/
+    @Override
+    public List<RolePremsDTO> getRolePerms() {
+        return sysRoleMenuMapper.getRolePerms();
     }
 }

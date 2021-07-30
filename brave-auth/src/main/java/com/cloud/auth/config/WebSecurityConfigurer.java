@@ -22,11 +22,11 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/rsa/getPublicKey", "/oauth/*")
+                .antMatchers("/rsa/getPublicKey", "/oauth/token", "/oauth/captch", "/oauth/captchStream")
                 .permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/actuator/*","/webjars/**", "/doc.html", "/swagger-resources/**", "/v2/api-docs")
+                .antMatchers("/actuator/*", "/webjars/**", "/doc.html", "/swagger-resources/**", "/v2/api-docs")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

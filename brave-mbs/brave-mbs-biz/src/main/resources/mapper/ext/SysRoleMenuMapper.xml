@@ -2,4 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cloud.brave.mapper.SysRoleMenuMapper">
 
+    <resultMap id="rolePermsMap" type="com.cloud.brave.dto.RolePremsDTO">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="urlPerm" column="url_perm" jdbcType="VARCHAR"/>
+        <result property="btnPerm" column="btn_perm" jdbcType="VARCHAR"/>
+        <collection property="roles" ofType="String" javaType="List">
+            <result column="role_code"/>
+        </collection>
+    </resultMap>
+
+    <select id="getRolePerms" resultMap="rolePermsMap">
+        SELECT
+        sm.id,
+        sm.url_perm,
+        sm.btn_perm,
+        sr.role_code role_code
+        FROM
+        sys_menu sm
+        JOIN sys_role_menu srm on srm.menu_id = sm.id
+        JOIN sys_role sr on srm.role_id = sr.id
+    </select>
 </mapper>

@@ -3,8 +3,10 @@ package com.cloud.auth.rest;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.cloud.auth.entity.BraveLoginInfo;
+import com.cloud.auth.entity.BraveUser;
 import com.cloud.auth.entity.Oauth2AccessToken;
 import com.cloud.auth.utils.BraveCaptchaUtil;
+import com.cloud.auth.utils.JwtUtils;
 import com.cloud.core.constant.AuthConstants;
 import com.cloud.core.constant.CacheConstants;
 import com.cloud.core.constant.CommonConstants;
@@ -21,14 +23,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -103,13 +100,19 @@ public class AuthTokenController {
      **/
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
-    public Result logout(HttpServletRequest request) throws UnsupportedEncodingException {
-        String payload = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader(AuthConstants.JWT_PAYLOAD_KEY);
-        JSONObject payloadJSON = JSONUtil.parseObj(URLDecoder.decode(payload, "UTF-8"));
-        String jti = payloadJSON.getStr(AuthConstants.JWT_JTI);
-        Long expireTime = payloadJSON.getLong(AuthConstants.JWT_EXP);
-
-        return Result.success();
+    public Result logout() {
+        JSONObject payload = JwtUtils.getJwtPayload();
+        String jti = payload.getStr(AuthConstants.JWT_JTI);
+        Long expireTime = payload.getLong(AuthConstants.JWT_EXP);
+        if (expireTime != null) {
+            long currentTime = System.currentTimeMillis() / 1000;// 当前时间（单位：秒）
+            if (expireTime > currentTime) { // token未过期，添加至缓存作为黑名单限制访问，缓存时间为token过期剩余时间
+                redisTemplate.opsForValue().set(AuthConstants.TOKEN_BLACKLIST_PREFIX + jti, null, (expireTime - currentTime), TimeUnit.SECONDS);
+            }
+        } else { // token 永不过期则永久加入黑名单
+            redisTemplate.opsForValue().set(AuthConstants.TOKEN_BLACKLIST_PREFIX + jti, null);
+        }
+        return Result.success("退出成功");
     }
 
     /**

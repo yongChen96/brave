@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yongchen
- * @since 2021-07-22
+ * @since 2021-07-30
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -42,15 +42,11 @@ public class SysMenu extends BaseEntity {
     @TableField("path")
     private String path;
 
-    @ApiModelProperty(value = "组件路径")
-    @TableField("component")
-    private String component;
-
     @ApiModelProperty(value = "是否为外链（0：是，1：否）")
     @TableField("is_external_link")
     private String isExternalLink;
 
-    @ApiModelProperty(value = "菜单类型（0：目录，1：菜单，2：按钮）")
+    @ApiModelProperty(value = "菜单类型（M：目录，C：菜单，F：按钮）")
     @TableField("menu_type")
     private String menuType;
 
@@ -62,9 +58,13 @@ public class SysMenu extends BaseEntity {
     @TableField("status")
     private String status;
 
-    @ApiModelProperty(value = "权限标识")
-    @TableField("perms")
-    private String perms;
+    @ApiModelProperty(value = "接口权限标识")
+    @TableField("url_perm")
+    private String urlPerm;
+
+    @ApiModelProperty(value = "按钮权限标识")
+    @TableField("btn_perm")
+    private String btnPerm;
 
     @ApiModelProperty(value = "菜单图标")
     @TableField("icon")
