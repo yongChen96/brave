@@ -92,7 +92,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return java.util.List<com.cloud.brave.dto.MenuDTO>
      **/
     @Override
-    public List<MenuDTO> getRoleTree(String menuName, String isExternalLink, String menuType, String isDisplay, String status) {
+    public List<MenuDTO> getMenuTree(String menuName, String isExternalLink, String menuType, String isDisplay, String status) {
         List<MenuDTO> menuTree = new ArrayList<>();
         LambdaQueryWrapper<SysMenu> menuTreeWapper = new LambdaQueryWrapper<>();
         menuTreeWapper.eq(SysMenu::getDelState, CommonConstants.NOT_DELETED);

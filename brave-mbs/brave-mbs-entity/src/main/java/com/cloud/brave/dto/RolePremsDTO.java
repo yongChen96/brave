@@ -20,7 +20,16 @@ public class RolePremsDTO implements Serializable {
     private static final long serialVersionUID = -4799158585869715304L;
 
     private Long id;
+    /**
+     * 请求地址权限
+     **/
     private String urlPerm;
+    /**
+     * 按钮权限
+     **/
     private String btnPerm;
-    private List<String> roles;
+    /**
+     * 角色信息
+     **/
+    private List<Long> roles;
 }

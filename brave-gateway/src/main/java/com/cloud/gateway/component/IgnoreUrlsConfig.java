@@ -16,11 +16,10 @@ import java.util.List;
  * @Date: 2021/5/6 16:01
  **/
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Component
-@ConfigurationProperties(prefix="secure.ignore")
+@ConfigurationProperties(prefix="secure")
 public class IgnoreUrlsConfig {
 
-    private List<String> urls;
+    private List<String> ignores;
 
 }

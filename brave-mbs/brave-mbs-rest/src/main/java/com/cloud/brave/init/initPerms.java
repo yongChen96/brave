@@ -44,10 +44,10 @@ public class initPerms implements CommandLineRunner {
                     .filter(item -> StringUtils.isNotBlank(item.getUrlPerm()))
                     .collect(Collectors.toList());
             if (!CollectionUtils.isEmpty(urlPerms)) {
-                Map<String, List<String>> urlPermRoles = new HashMap<>();
+                Map<String, List<Long>> urlPermRoles = new HashMap<>();
                 urlPerms.stream().forEach(item -> {
                     String perms = item.getUrlPerm();
-                    List<String> roleCodes = item.getRoles();
+                    List<Long> roleCodes = item.getRoles();
                     urlPermRoles.put(perms, roleCodes);
                 });
                 redisTemplate.opsForHash().putAll(AuthConstants.URL_PERM_ROLES_KEY, urlPermRoles);

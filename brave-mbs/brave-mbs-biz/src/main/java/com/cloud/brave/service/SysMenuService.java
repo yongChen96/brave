@@ -54,5 +54,5 @@ public interface SysMenuService extends IService<SysMenu> {
      * @param status 资源状态
      * @return java.util.List<com.cloud.brave.dto.MenuDTO>
      **/
-    List<MenuDTO> getRoleTree(String menuName, String isExternalLink, String menuType, String isDisplay, String status);
+    List<MenuDTO> getMenuTree(String menuName, String isExternalLink, String menuType, String isDisplay, String status);
 }

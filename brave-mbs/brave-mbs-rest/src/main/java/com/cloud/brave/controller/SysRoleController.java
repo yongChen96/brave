@@ -83,7 +83,8 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "获取角色列表", notes = "获取角色列表")
     public Result<List<SysRole>> list() {
         LambdaQueryWrapper<SysRole> listWapper = new LambdaQueryWrapper<>();
-        listWapper.eq(SysRole::getDelState, CommonConstants.NOT_DELETED);
+        listWapper.eq(SysRole::getRoleStatus, CommonConstants.ENABLE)
+                    .eq(SysRole::getDelState, CommonConstants.NOT_DELETED);
         return success(roleService.list(listWapper));
     }
 

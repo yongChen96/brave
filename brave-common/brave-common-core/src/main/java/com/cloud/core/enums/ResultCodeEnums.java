@@ -18,7 +18,8 @@ public enum ResultCodeEnums {
     SUCCESS(0,"操作成功"),
     FAILED(-1,"操作失败"),
     UNAUTHORIZED(-2, "资源未授权"),
-    TOKENEXPIRED(-3, "token无效或者已过期");
+    TOKENEXPIRED(-3, "token无效或者已过期"),
+    TOKENCANTBENULL(-4, "token不能为空");
 
     private Integer code;
     private String msg;

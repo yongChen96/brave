@@ -22,6 +22,8 @@ import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
+
 
 /**
  * @ClassName: ResourceServerConfig
@@ -34,7 +36,9 @@ import reactor.core.publisher.Mono;
 @EnableWebFluxSecurity
 public class ResourceServerConfig {
 
+    @Resource
     private final ResourceServerManager resourceServerManager;
+    @Resource
     private final IgnoreUrlsConfig urlsConfig;
 
     @Bean
@@ -44,7 +48,7 @@ public class ResourceServerConfig {
                 .jwtAuthenticationConverter(jwtAuthenticationConverter());
         http.oauth2ResourceServer().authenticationEntryPoint(authenticationEntryPoint());
         http.authorizeExchange()
-                .pathMatchers(Convert.toStrArray(urlsConfig)).permitAll()
+                .pathMatchers(Convert.toStrArray(urlsConfig.getIgnores())).permitAll()
                 .anyExchange().access(resourceServerManager)
                 .and()
                 .exceptionHandling()

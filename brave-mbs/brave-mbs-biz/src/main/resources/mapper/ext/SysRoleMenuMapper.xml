@@ -16,7 +16,7 @@
         sm.id,
         sm.url_perm,
         sm.btn_perm,
-        sr.role_code role_code
+        sr.id role_code
         FROM
         sys_menu sm
         JOIN sys_role_menu srm on srm.menu_id = sm.id

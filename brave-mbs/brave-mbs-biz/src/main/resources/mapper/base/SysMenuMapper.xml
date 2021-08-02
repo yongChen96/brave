@@ -13,13 +13,13 @@
         <result column="parent_id" property="parentId" />
         <result column="sort" property="sort" />
         <result column="path" property="path" />
+        <result column="url_perm" property="urlPerm" />
+        <result column="btn_perm" property="btnPerm" />
+        <result column="icon" property="icon" />
         <result column="is_external_link" property="isExternalLink" />
         <result column="menu_type" property="menuType" />
         <result column="is_display" property="isDisplay" />
         <result column="status" property="status" />
-        <result column="url_perm" property="urlPerm" />
-        <result column="btn_perm" property="btnPerm" />
-        <result column="icon" property="icon" />
         <result column="del_state" property="delState" />
     </resultMap>
 
@@ -30,7 +30,7 @@
         create_time,
         update_user,
         update_time,
-        menu_name, parent_id, sort, path, is_external_link, menu_type, is_display, status, url_perm, btn_perm, icon, del_state
+        menu_name, parent_id, sort, path, url_perm, btn_perm, icon, is_external_link, menu_type, is_display, status, del_state
     </sql>
 
 </mapper>

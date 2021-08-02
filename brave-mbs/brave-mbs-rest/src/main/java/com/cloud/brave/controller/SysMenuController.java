@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.cloud.core.base.controller.BaseController;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -65,15 +67,15 @@ public class SysMenuController extends BaseController {
      * @param status 资源状态
      * @return com.cloud.core.result.Result<java.util.List<com.cloud.brave.dto.MenuDTO>>
      **/
-    @GetMapping("/getRoleTree")
+    @GetMapping("/getMenuTree")
     @BraveSysLog("获取菜单列表")
     @ApiOperation(value = "获取菜单列表", notes = "获取菜单列表")
-    public Result<List<MenuDTO>> getRoleTree(@RequestParam(value = "menuName", required = false) String menuName,
+    public Result<List<MenuDTO>> getMenuTree(@RequestParam(value = "menuName", required = false) String menuName,
                                              @RequestParam(value = "isExternalLink", required = false) String isExternalLink,
                                              @RequestParam(value = "menuType", required = false) String menuType,
                                              @RequestParam(value = "isDisplay", required = false) String isDisplay,
                                              @RequestParam(value = "status", required = false) String status) {
-        return success(sysMenuService.getRoleTree(menuName, isExternalLink, menuType, isDisplay, status));
+        return success(sysMenuService.getMenuTree(menuName, isExternalLink, menuType, isDisplay, status));
     }
 
     /**
@@ -89,7 +91,8 @@ public class SysMenuController extends BaseController {
         // TODO 获取当前登录用户id
         Long userId = 1L;
         List<MenuDTO> menus = sysMenuService.findMenusByUserId(userId);
-        return success(menus);
+        List<MenuDTO> collect = menus.stream().sorted(Comparator.comparing(MenuDTO::getSort)).collect(Collectors.toList());
+        return success(collect);
     }
 
     /**

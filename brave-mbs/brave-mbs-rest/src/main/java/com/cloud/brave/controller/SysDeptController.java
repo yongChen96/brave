@@ -213,55 +213,44 @@ public class SysDeptController extends BaseController {
      * @Description 禁用部门
      * @Date 15:09 2021/6/24
      **/
-    @GetMapping("/disableDept")
+    @GetMapping("/updateDeptStatus")
     @BraveSysLog(value = "禁用部门")
     @ApiOperation(value = "禁用部门", notes = "禁用部门")
-    public Result<Boolean> disableDept(@RequestParam Long id) {
-        //判断下级部门是否正常使用，下级部门正常使用则上级部门不能禁用
-        LambdaQueryWrapper<SysDept> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysDept::getParentId, id)
-                .eq(SysDept::getDeptStatus, CommonConstants.ENABLE)
-                .eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
-        if (sysDeptService.count(queryWrapper) > 0) {
-            throw new BraveException("该部门下存在使用中得部门，无法禁用");
-        }
-        LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysDept::getId, id)
-                .set(SysDept::getDeptStatus, CommonConstants.DISABLE);
-        if (sysDeptService.update(wrapper)) {
-            return success(true);
+    public Result<Boolean> disableDept(@RequestParam Long id, @RequestParam String deptStatus) {
+        if (StringUtils.equals(CommonConstants.DISABLE, deptStatus)) {
+            //判断下级部门是否正常使用，下级部门正常使用则上级部门不能禁用
+            LambdaQueryWrapper<SysDept> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(SysDept::getParentId, id)
+                    .eq(SysDept::getDeptStatus, CommonConstants.ENABLE)
+                    .eq(SysDept::getDelState, CommonConstants.NOT_DELETED);
+            if (sysDeptService.count(queryWrapper) > 0) {
+                throw new BraveException("该部门下存在使用中得部门，无法禁用");
+            }
+            LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
+            wrapper.eq(SysDept::getId, id)
+                    .set(SysDept::getDeptStatus, CommonConstants.DISABLE);
+            if (sysDeptService.update(wrapper)) {
+                return success(true);
+            }
+        } else {
+            //判断上级部门是否启用，上级部门未启用下级无法启用
+            SysDept dept = sysDeptService.getById(id);
+            LambdaQueryWrapper<SysDept> superDeptWapper = new LambdaQueryWrapper<>();
+            superDeptWapper.eq(SysDept::getId, dept.getParentId())
+                    .eq(SysDept::getDelState, CommonConstants.NOT_DELETED)
+                    .eq(SysDept::getDeptStatus, CommonConstants.DISABLE);
+            if (sysDeptService.count(superDeptWapper) > 0) {
+                throw new BraveException("上级部门已被禁用，请先启用上级部门");
+            }
+
+            LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
+            wrapper.eq(SysDept::getId, id)
+                    .set(SysDept::getDeptStatus, CommonConstants.ENABLE);
+            if (sysDeptService.update(wrapper)) {
+                return success(true);
+            }
         }
         return failed("禁用部门信息");
-    }
-
-    /**
-     * @param id 部门id
-     * @return com.cloud.core.result.Result<java.lang.Boolean>
-     * @Author yongchen
-     * @Description 启用部门
-     * @Date 15:26 2021/6/24
-     **/
-    @GetMapping("/enableDept")
-    @BraveSysLog(value = "启用部门")
-    @ApiOperation(value = "启用部门", notes = "启用部门")
-    public Result<Boolean> enableDept(@RequestParam Long id) {
-        //判断上级部门是否启用，上级部门未启用下级无法启用
-        SysDept dept = sysDeptService.getById(id);
-        LambdaQueryWrapper<SysDept> superDeptWapper = new LambdaQueryWrapper<>();
-        superDeptWapper.eq(SysDept::getId, dept.getParentId())
-                .eq(SysDept::getDelState, CommonConstants.NOT_DELETED)
-                .eq(SysDept::getDeptStatus, CommonConstants.DISABLE);
-        if (sysDeptService.count(superDeptWapper) > 0) {
-            throw new BraveException("上级部门已被禁用，请先启用上级部门");
-        }
-
-        LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysDept::getId, id)
-                .set(SysDept::getDeptStatus, CommonConstants.ENABLE);
-        if (sysDeptService.update(wrapper)) {
-            return success(true);
-        }
-        return failed("启用部门失败");
     }
 
     /**
