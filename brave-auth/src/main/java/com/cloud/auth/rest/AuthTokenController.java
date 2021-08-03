@@ -12,6 +12,7 @@ import com.cloud.core.constant.CacheConstants;
 import com.cloud.core.constant.CommonConstants;
 import com.cloud.core.exception.BraveException;
 import com.cloud.core.result.Result;
+import com.cloud.log.annotation.BraveLoginLog;
 import com.wf.captcha.ArithmeticCaptcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -55,7 +56,8 @@ public class AuthTokenController {
      * @return: com.cloud.core.result.Result<com.cloud.auth.entity.Oauth2AccessToken>
      **/
     @PostMapping("/token")
-    @ApiOperation(value = "OAuth2认证", notes = "login")
+    @BraveLoginLog(value = "登录")
+    @ApiOperation(value = "OAuth2认证", notes = "OAuth2认证")
     public Result<Oauth2AccessToken> postAccessToken(Principal principal, @RequestBody BraveLoginInfo braveLoginInfo) {
         try {
             //验证码校验

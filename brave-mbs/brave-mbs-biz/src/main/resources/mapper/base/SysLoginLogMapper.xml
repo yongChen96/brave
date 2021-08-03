@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cloud.brave.mapper.SysLoginLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cloud.brave.entity.SysLoginLog">
+        <result column="id" property="id" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_time" property="updateTime" />
+        <result column="user_name" property="userName" />
+        <result column="ip_addr" property="ipAddr" />
+        <result column="city_addr" property="cityAddr" />
+        <result column="status" property="status" />
+        <result column="msg" property="msg" />
+        <result column="device_type" property="deviceType" />
+        <result column="browser" property="browser" />
+        <result column="operate_system" property="operateSystem" />
+        <result column="create_name" property="createName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        create_user,
+        create_time,
+        update_user,
+        update_time,
+        user_name, ip_addr, city_addr, status, msg, device_type, browser, operate_system, create_name
+    </sql>
+
+</mapper>

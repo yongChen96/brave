@@ -68,4 +68,12 @@ public interface AuthConstants {
      * Basic认证前缀
      */
     String BASIC_PREFIX = "Basic ";
+    /**
+     * grant_type
+     */
+    String GRANT_TYPE_KEY = "grant_type";
+    /**
+     * refresh_token
+     */
+    String REFRESH_TOKEN = "refresh_token";
 }
