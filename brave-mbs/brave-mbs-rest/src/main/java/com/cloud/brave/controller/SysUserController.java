@@ -72,13 +72,12 @@ public class SysUserController extends BaseController {
 
     /**
      * @Author: yongchen
-     * @Description: 获取用户信息
+     * @Description: 获取用户信息(登录时获取用户信息)
      * @Date: 14:08 2021/6/4
      * @Param: [username]
      * @return: com.cloud.core.result.Result<UserInfoDTO>
      **/
     @GetMapping(value = "/getUserInfo")
-    @BraveSysLog(value = "获取用户信息")
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
     public Result<UserInfoDTO> getUserInfo(@RequestParam(value = "username") String username) {
         UserInfoDTO userInfo = sysUserService.getUserInfo(username);

@@ -8,6 +8,8 @@ import com.cloud.brave.entity.SysLog;
 import com.cloud.core.result.Result;
 import com.cloud.log.annotation.BraveSysLog;
 import com.cloud.log.event.BraveSysLogEvent;
+import com.cloud.log.utils.IPUtils;
+import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -108,6 +110,18 @@ public class SysLogAspect {
         String uri = request.getRequestURI();
         String requestUri = StrUtil.removeSuffix(uri, URLUtil.url(uri).getPath());
         sysLog.setRequestUri(requestUri);
+        //访问IP地址
+        String ipAddr = IPUtils.getIpAddr(request);
+        sysLog.setRequestIp(ipAddr);
+        sysLog.setRequestCity(IPUtils.getCityInfo(ipAddr));
+        //获取访问浏览器信息
+        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("user-agent"));
+        String clientType  = userAgent.getOperatingSystem().getDeviceType().toString();
+        sysLog.setDeviceType(clientType);
+        String os = userAgent.getOperatingSystem().getName();
+        sysLog.setOperateSystem(os);
+        String browser = userAgent.getBrowser().toString();
+        sysLog.setBrowser(browser);
         sysLog.setParams(getParameter(method, joinPoint.getArgs()));
         if (res != null) {
             Result convert = Convert.convert(Result.class, res);

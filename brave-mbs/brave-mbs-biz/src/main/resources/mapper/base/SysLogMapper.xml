@@ -11,9 +11,9 @@
         <result column="update_time" property="updateTime" />
         <result column="type" property="type" />
         <result column="description" property="description" />
-        <result column="service_id" property="serviceId" />
-        <result column="request_ip" property="requestIp" />
         <result column="request_uri" property="requestUri" />
+        <result column="request_ip" property="requestIp" />
+        <result column="request_city" property="requestCity" />
         <result column="http_method" property="httpMethod" />
         <result column="params" property="params" />
         <result column="result" property="result" />
@@ -21,7 +21,9 @@
         <result column="error_detail" property="errorDetail" />
         <result column="start_time" property="startTime" />
         <result column="finish_time" property="finishTime" />
+        <result column="device_type" property="deviceType" />
         <result column="browser" property="browser" />
+        <result column="operate_system" property="operateSystem" />
         <result column="create_name" property="createName" />
     </resultMap>
 
@@ -32,7 +34,7 @@
         create_time,
         update_user,
         update_time,
-        type, description, service_id, request_ip, request_uri, http_method, params, result, error_desc, error_detail, start_time, finish_time, browser, create_name
+        type, description, request_uri, request_ip, request_city, http_method, params, result, error_desc, error_detail, start_time, finish_time, device_type, browser, operate_system, create_name
     </sql>
 
 </mapper>
