@@ -1,9 +1,8 @@
 package com.cloud.gateway.config;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
-import com.cloud.core.constant.AuthConstants;
+import com.cloud.brave.core.constant.AuthConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;

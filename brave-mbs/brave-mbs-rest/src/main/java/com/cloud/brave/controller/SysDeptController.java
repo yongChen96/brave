@@ -9,23 +9,22 @@ import com.cloud.brave.dto.DeptTreeDTO;
 import com.cloud.brave.dto.SysDeptDTO;
 import com.cloud.brave.entity.SysDept;
 import com.cloud.brave.service.SysDeptService;
-import com.cloud.core.SnowflakeId.IdGenerate;
-import com.cloud.core.constant.CommonConstants;
-import com.cloud.core.exception.BraveException;
-import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
-import com.cloud.core.mybatisplus.page.PageParam;
-import com.cloud.core.result.Result;
-import com.cloud.log.annotation.BraveSysLog;
+import com.cloud.brave.core.SnowflakeId.IdGenerate;
+import com.cloud.brave.core.constant.CommonConstants;
+import com.cloud.brave.core.exception.BraveException;
+import com.cloud.brave.core.mybatisplus.entity.BaseSuperEntuty;
+import com.cloud.brave.core.mybatisplus.page.PageParam;
+import com.cloud.brave.core.result.Result;
+import com.cloud.brave.log.annotation.BraveSysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.cloud.core.base.controller.BaseController;
+import com.cloud.brave.core.base.controller.BaseController;
 
 import java.util.List;
 

@@ -1,8 +1,7 @@
 package com.cloud.brave;
 
-import com.cloud.api.fegin.SysLogFeignService;
-import com.cloud.swagger.annotation.EnableBraveSwagger2;
-import org.mybatis.spring.annotation.MapperScan;
+import com.cloud.brave.api.fegin.SysLogFeignService;
+import com.cloud.brave.swagger.annotation.EnableBraveSwagger2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 @EnableBraveSwagger2
 @EnableDiscoveryClient
-@ComponentScan(basePackages = {"com.cloud.*"})
 @EnableFeignClients(clients = {SysLogFeignService.class})
 @SpringBootApplication
 public class BraveMbsRestApplication {

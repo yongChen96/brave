@@ -6,19 +6,18 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cloud.brave.entity.SysDict;
 import com.cloud.brave.service.SysDictService;
-import com.cloud.core.constant.CommonConstants;
-import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
-import com.cloud.core.mybatisplus.page.PageParam;
-import com.cloud.core.result.Result;
-import com.cloud.log.annotation.BraveSysLog;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.cloud.brave.core.constant.CommonConstants;
+import com.cloud.brave.core.mybatisplus.entity.BaseSuperEntuty;
+import com.cloud.brave.core.mybatisplus.page.PageParam;
+import com.cloud.brave.core.result.Result;
+import com.cloud.brave.log.annotation.BraveSysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.cloud.core.base.controller.BaseController;
+import com.cloud.brave.core.base.controller.BaseController;
 
 import java.util.List;
 

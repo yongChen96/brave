@@ -6,10 +6,9 @@ import com.cloud.brave.entity.SysRoleMenu;
 import com.cloud.brave.mapper.SysRoleMenuMapper;
 import com.cloud.brave.service.SysRoleMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cloud.core.exception.BraveException;
+import com.cloud.brave.core.exception.BraveException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 

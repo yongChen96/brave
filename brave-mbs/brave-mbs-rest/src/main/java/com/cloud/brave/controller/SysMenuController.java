@@ -7,11 +7,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cloud.brave.dto.MenuDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.service.SysMenuService;
-import com.cloud.core.constant.CommonConstants;
-import com.cloud.core.exception.BraveException;
-import com.cloud.core.mybatisplus.page.PageParam;
-import com.cloud.core.result.Result;
-import com.cloud.log.annotation.BraveSysLog;
+import com.cloud.brave.core.constant.CommonConstants;
+import com.cloud.brave.core.exception.BraveException;
+import com.cloud.brave.core.mybatisplus.page.PageParam;
+import com.cloud.brave.core.result.Result;
+import com.cloud.brave.log.annotation.BraveSysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.cloud.core.base.controller.BaseController;
+import com.cloud.brave.core.base.controller.BaseController;
 
 import java.util.Comparator;
 import java.util.List;

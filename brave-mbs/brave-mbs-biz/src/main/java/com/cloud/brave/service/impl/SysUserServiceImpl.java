@@ -1,11 +1,9 @@
 package com.cloud.brave.service.impl;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserDetailsDTO;
 import com.cloud.brave.dto.UserInfoDTO;
@@ -13,10 +11,9 @@ import com.cloud.brave.entity.*;
 import com.cloud.brave.mapper.SysUserMapper;
 import com.cloud.brave.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cloud.core.SnowflakeId.IdGenerate;
-import com.cloud.core.constant.CommonConstants;
-import com.cloud.core.exception.BraveException;
-import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
+import com.cloud.brave.core.SnowflakeId.IdGenerate;
+import com.cloud.brave.core.constant.CommonConstants;
+import com.cloud.brave.core.exception.BraveException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -60,7 +57,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public UserInfoDTO getUserInfo(String username) {
         LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysUserLambdaQueryWrapper.eq(SysUser::getPhone, username)
-                .eq(SysUser::getIsLock, CommonConstants.IS_LOCK_NO)
                 .eq(SysUser::getDelState, CommonConstants.NOT_DELETED);
         SysUser sysUser = this.getOne(sysUserLambdaQueryWrapper);
         List<Long> roleIds = sysRoleService.findRolesByUserId(sysUser.getId()).stream().map(SysRole::getId)

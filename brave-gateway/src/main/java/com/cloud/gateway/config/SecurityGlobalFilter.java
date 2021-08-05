@@ -3,8 +3,8 @@ package com.cloud.gateway.config;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.cloud.core.constant.AuthConstants;
-import com.cloud.core.enums.ResultCodeEnums;
+import com.cloud.brave.core.constant.AuthConstants;
+import com.cloud.brave.core.enums.ResultCodeEnums;
 import com.cloud.gateway.component.ResponseUtils;
 import com.nimbusds.jose.JWSObject;
 import lombok.SneakyThrows;
@@ -41,10 +41,13 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
 
-        // 非JWT或者JWT为空不作处理
+        // 非JWT或者JWT为空
         String token = request.getHeaders().getFirst(AuthConstants.AUTHORIZATION_KEY);
-        if (StrUtil.isBlank(token) || !token.startsWith(AuthConstants.AUTHORIZATION_PREFIX)) {
-            return chain.filter(exchange);
+        if (StrUtil.isBlank(token)) {
+            return ResponseUtils.writeErrorInfo(response, ResultCodeEnums.TOKENCANTBENULL);
+        }
+        if (!token.startsWith(AuthConstants.AUTHORIZATION_PREFIX)){
+            return ResponseUtils.writeErrorInfo(response, ResultCodeEnums.TOKENEXPIRED);
         }
 
         // 解析JWT获取jti，以jti为key判断redis的黑名单列表是否存在，存在拦截响应token失效

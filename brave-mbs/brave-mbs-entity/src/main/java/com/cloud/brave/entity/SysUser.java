@@ -1,7 +1,7 @@
 package com.cloud.brave.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cloud.core.mybatisplus.entity.BaseEntity;
+import com.cloud.brave.core.mybatisplus.entity.BaseEntity;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;

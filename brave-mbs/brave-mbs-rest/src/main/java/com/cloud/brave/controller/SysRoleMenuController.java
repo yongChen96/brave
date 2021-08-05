@@ -4,7 +4,7 @@ package com.cloud.brave.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
-import com.cloud.core.base.controller.BaseController;
+import com.cloud.brave.core.base.controller.BaseController;
 
 /**
  * <p>

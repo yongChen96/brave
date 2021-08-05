@@ -6,7 +6,7 @@ import com.cloud.brave.entity.SysDept;
 import com.cloud.brave.mapper.SysDeptMapper;
 import com.cloud.brave.service.SysDeptService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cloud.core.constant.CommonConstants;
+import com.cloud.brave.core.constant.CommonConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

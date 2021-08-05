@@ -1,8 +1,8 @@
 package com.cloud.gateway.component;
 
 import cn.hutool.json.JSONUtil;
-import com.cloud.core.enums.ResultCodeEnums;
-import com.cloud.core.result.Result;
+import com.cloud.brave.core.enums.ResultCodeEnums;
+import com.cloud.brave.core.result.Result;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;

@@ -1,28 +1,32 @@
 package com.cloud.brave.controller;
 
 
-import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cloud.brave.core.inject.annotation.InjectUser;
+import com.cloud.brave.core.inject.entity.BraveUser;
+import com.cloud.brave.core.utils.JwtUtils;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserDetailsDTO;
 import com.cloud.brave.dto.UserInfoDTO;
 import com.cloud.brave.entity.SysUser;
 import com.cloud.brave.service.SysUserService;
-import com.cloud.core.constant.CommonConstants;
-import com.cloud.core.exception.BraveException;
-import com.cloud.core.mybatisplus.entity.BaseSuperEntuty;
-import com.cloud.core.mybatisplus.page.PageParam;
-import com.cloud.core.result.Result;
-import com.cloud.log.annotation.BraveSysLog;
+import com.cloud.brave.core.constant.CommonConstants;
+import com.cloud.brave.core.exception.BraveException;
+import com.cloud.brave.core.mybatisplus.entity.BaseSuperEntuty;
+import com.cloud.brave.core.mybatisplus.page.PageParam;
+import com.cloud.brave.core.result.Result;
+import com.cloud.brave.log.annotation.BraveSysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.cloud.core.base.controller.BaseController;
+import com.cloud.brave.core.base.controller.BaseController;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 /**
@@ -111,8 +115,8 @@ public class SysUserController extends BaseController {
     @GetMapping("/info")
     @BraveSysLog(value = "获取当前登录用户信息")
     @ApiOperation(value = "获取当前登录用户信息", notes = "获取当前登录用户信息")
-    public Result<UserInfoDTO> info() {
-        String phone = "18311540852";
+    public Result<UserInfoDTO> info(@ApiIgnore @InjectUser BraveUser braveUser) {
+        String phone = braveUser.getPhone();
         if (StringUtils.isNotBlank(phone)) {
             UserInfoDTO userInfo = sysUserService.getUserInfo(phone);
             if (null == userInfo) {

@@ -2,8 +2,8 @@ package com.cloud.gateway.config;
 
 
 import cn.hutool.core.convert.Convert;
-import com.cloud.core.constant.AuthConstants;
-import com.cloud.core.enums.ResultCodeEnums;
+import com.cloud.brave.core.constant.AuthConstants;
+import com.cloud.brave.core.enums.ResultCodeEnums;
 import com.cloud.gateway.component.IgnoreUrlsConfig;
 import com.cloud.gateway.component.ResponseUtils;
 import lombok.AllArgsConstructor;

@@ -1,10 +1,15 @@
 package com.cloud.brave.config;
 
-import com.cloud.core.config.BaseConfig;
+import com.cloud.brave.core.config.BaseConfig;
+import com.cloud.brave.core.inject.resolver.InjectUserResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * @ClassName: WebMvcConfiguration
@@ -25,5 +30,16 @@ public class WebMvcConfiguration extends BaseConfig implements WebMvcConfigurer 
     @Override
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
         return super.jacksonObjectMapper(builder);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(getInjectUserResolver());
+        WebMvcConfigurer.super.addArgumentResolvers(resolvers);
+    }
+
+    @Bean
+    public InjectUserResolver getInjectUserResolver(){
+        return new InjectUserResolver();
     }
 }

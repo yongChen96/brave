@@ -2,10 +2,8 @@ package com.cloud.brave.init;
 
 import com.cloud.brave.dto.RolePremsDTO;
 import com.cloud.brave.service.SysRoleMenuService;
-import com.cloud.core.constant.AuthConstants;
-import com.cloud.core.constant.CommonConstants;
+import com.cloud.brave.core.constant.AuthConstants;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.redis.core.RedisTemplate;
