@@ -1,4 +1,4 @@
-package com.cloud.brave.core.datasource;
+package com.cloud.brave.mybatisplus.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -8,15 +8,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @ClassName: DataSourceConfig
- * @Description: 数据源配置
- * @Author: yongchen
- * @Date: 2021/6/9 15:23
- **/
+ * @author admin
+ * @version 1.0
+ * @description: 分页配置
+ * @date 2021/8/5 16:03
+ */
 @Configuration
 @MapperScan(basePackages = {"com.cloud.brave.mapper"})
-public class DataSourceConfig {
-
+public class PageInterceptor {
     /**
      * 分页插件, 对于单一数据库类型来说,都建议配置该值,避免每次分页都去抓取数据库类型
      */

@@ -9,18 +9,6 @@ package com.cloud.brave.core.constant;
 public interface CommonConstants {
 
     /**
-     * token 头部
-     **/
-    String token_head = "Bearer ";
-    /**
-     * 加密密码前缀
-     **/
-    String PASSWORD_PREFIX = "{bcrypt}";
-    /**
-     * 用户初始密码
-     **/
-    String USER_INITIAL_PWD = "123456";
-    /**
      * 启用状态 0：正常 1：锁定
      **/
     String ENABLE = "0";
@@ -63,20 +51,60 @@ public interface CommonConstants {
      * https请求
      */
     String HTTPS = "https://";
-    /** 菜单类型（目录） */
+    /**
+     * 菜单类型（目录）
+     */
     String TYPE_DIR = "M";
-    /** 菜单类型（菜单） */
+    /**
+     * 菜单类型（菜单）
+     */
     String TYPE_MENU = "C";
-    /** 菜单类型（按钮） */
+    /**
+     * 菜单类型（按钮）
+     */
     String TYPE_BUTTON = "F";
-    /** 是否菜单外链（是） */
+    /**
+     * 是否菜单外链（是）
+     */
     String YES_FRAME = "0";
-    /** 是否菜单外链（否） */
+    /**
+     * 是否菜单外链（否）
+     */
     String NO_FRAME = "1";
-    /** Layout组件标识 */
+    /**
+     * Layout组件标识
+     */
     String LAYOUT = "Layout";
-    /** ParentView组件标识 */
+    /**
+     * ParentView组件标识
+     */
     String PARENT_VIEW = "ParentView";
-    /** InnerLink组件标识 */
+    /**
+     * InnerLink组件标识
+     */
     String INNER_LINK = "InnerLink";
+    /**
+     * request头
+     */
+    String USER_AGENT = "user-agent";
+    /**
+     * COMPUTER
+     */
+    String COMPUTER = "COMPUTER";
+    /**
+     * principal
+     */
+    String PRINCIPAL = "principal";
+    /**
+     * username
+     */
+    String USERNAME = "username";
+    /**
+     * phone
+     */
+    String PHONE = "phone";
+    /**
+     * CLIENT_ID
+     */
+    String CLIENT_ID = "brave";
 }

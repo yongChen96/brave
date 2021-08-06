@@ -3,13 +3,16 @@ package com.cloud.brave.log.aspect;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import com.alibaba.fastjson.JSON;
+import com.cloud.brave.core.constant.CommonConstants;
+import com.cloud.brave.core.utils.JwtUtils;
 import com.cloud.brave.entity.SysLog;
 import com.cloud.brave.core.result.Result;
 import com.cloud.brave.log.event.BraveSysLogEvent;
 import com.cloud.brave.log.utils.IPUtils;
 import com.cloud.brave.log.annotation.BraveSysLog;
-import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -114,22 +117,27 @@ public class SysLogAspect {
         sysLog.setRequestIp(ipAddr);
         sysLog.setRequestCity(IPUtils.getCityInfo(ipAddr));
         //获取访问浏览器信息
-        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("user-agent"));
-        String clientType  = userAgent.getOperatingSystem().getDeviceType().toString();
-        sysLog.setDeviceType(clientType);
-        String os = userAgent.getOperatingSystem().getName();
-        sysLog.setOperateSystem(os);
-        String browser = userAgent.getBrowser().toString();
-        sysLog.setBrowser(browser);
+        UserAgent userAgent = UserAgentUtil.parse(request.getHeader(CommonConstants.USER_AGENT));
+        if (userAgent.isMobile()) {
+            sysLog.setDeviceType(userAgent.getPlatform().getName());
+        } else {
+            sysLog.setDeviceType(CommonConstants.COMPUTER);
+        }
+        sysLog.setOperateSystem(userAgent.getOs().getName());
+        sysLog.setBrowser(String.format("%s %s", userAgent.getBrowser().toString(), userAgent.getVersion()));
         sysLog.setParams(getParameter(method, joinPoint.getArgs()));
         if (res != null) {
             Result convert = Convert.convert(Result.class, res);
             if (convert.getCode() == 0) {
                 sysLog.setType("0");
-            }else {
+            } else {
                 sysLog.setType("1");
             }
             String s = StringUtils.substring(convert.toString(), 0, 65535);
+            Long userId = JwtUtils.getUserId();
+            sysLog.setCreateUser(userId);
+            sysLog.setUpdateUser(userId);
+            sysLog.setCreateName(JwtUtils.getUsername());
             sysLog.setResult(s);
         }
         return sysLog;

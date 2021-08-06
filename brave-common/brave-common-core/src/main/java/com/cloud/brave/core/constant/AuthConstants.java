@@ -76,4 +76,12 @@ public interface AuthConstants {
      * refresh_token
      */
     String REFRESH_TOKEN = "refresh_token";
+    /**
+     * 加密密码前缀
+     **/
+    String PASSWORD_PREFIX = "{bcrypt}";
+    /**
+     * 用户初始密码
+     **/
+    String USER_INITIAL_PWD = "123456";
 }

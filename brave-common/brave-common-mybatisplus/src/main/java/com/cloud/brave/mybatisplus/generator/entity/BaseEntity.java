@@ -1,4 +1,4 @@
-package com.cloud.brave.core.mybatisplus.entity;
+package com.cloud.brave.mybatisplus.generator.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

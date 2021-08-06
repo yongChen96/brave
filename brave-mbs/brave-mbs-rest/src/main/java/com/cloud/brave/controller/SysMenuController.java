@@ -9,7 +9,7 @@ import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.service.SysMenuService;
 import com.cloud.brave.core.constant.CommonConstants;
 import com.cloud.brave.core.exception.BraveException;
-import com.cloud.brave.core.mybatisplus.page.PageParam;
+import com.cloud.brave.mybatisplus.page.PageParam;
 import com.cloud.brave.core.result.Result;
 import com.cloud.brave.log.annotation.BraveSysLog;
 import io.swagger.annotations.Api;

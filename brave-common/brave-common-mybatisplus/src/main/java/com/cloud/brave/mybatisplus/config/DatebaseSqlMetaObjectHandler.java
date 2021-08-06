@@ -1,9 +1,9 @@
-package com.cloud.brave.core.mybatisplus.config;
+package com.cloud.brave.mybatisplus.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.cloud.brave.core.SnowflakeId.IdGenerate;
-import com.cloud.brave.core.mybatisplus.entity.BaseEntity;
-import com.cloud.brave.core.mybatisplus.entity.BaseSuperEntuty;
+import com.cloud.brave.mybatisplus.generator.entity.BaseEntity;
+import com.cloud.brave.mybatisplus.generator.entity.BaseSuperEntuty;
 import com.cloud.brave.core.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

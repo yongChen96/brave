@@ -1,10 +1,8 @@
 package com.cloud.gateway;
 
-import com.baomidou.mybatisplus.autoconfigure.IdentifierGeneratorAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -14,7 +12,7 @@ import java.net.UnknownHostException;
 
 @Slf4j
 @EnableDiscoveryClient
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, IdentifierGeneratorAutoConfiguration.class})
+@SpringBootApplication
 public class BraveGatewayApplication {
 
     public static void main(String[] args) throws UnknownHostException {

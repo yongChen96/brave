@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.entity.SysLog;
 import com.cloud.brave.service.SysLogService;
-import com.cloud.brave.core.mybatisplus.page.PageParam;
+import com.cloud.brave.mybatisplus.page.PageParam;
 import com.cloud.brave.core.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

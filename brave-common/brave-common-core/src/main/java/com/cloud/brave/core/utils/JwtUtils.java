@@ -34,7 +34,7 @@ public class JwtUtils {
     @SneakyThrows
     public static JSONObject getJwtPayload() {
         String payload = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader(AuthConstants.JWT_PAYLOAD_KEY);
-        if (StringUtils.isNotBlank(payload)){
+        if (StringUtils.isNotBlank(payload)) {
             JSONObject jsonObject = JSONUtil.parseObj(URLDecoder.decode(payload, "UTF-8"));
             return jsonObject;
         }
@@ -48,10 +48,10 @@ public class JwtUtils {
      */
     public static Long getUserId() {
         Object object = getObject();
-        if (null == object){
+        if (null == object) {
             return null;
         }
-        Long id = (Long) JSONUtil.parseObj(object).get(USER_ID);
+        Long id = JSONUtil.parseObj(object).getLong(USER_ID);
         return id;
     }
 
@@ -62,10 +62,10 @@ public class JwtUtils {
      */
     public static String getUsername() {
         Object object = getObject();
-        if (null == object){
+        if (null == object) {
             return null;
         }
-        String username = (String) JSONUtil.parseObj(object).get(USER_NAME);
+        String username = JSONUtil.parseObj(object).getStr(USER_NAME);
         return username;
     }
 
@@ -76,7 +76,7 @@ public class JwtUtils {
      */
     public static Object getObject() {
         JSONObject jwtPayload = getJwtPayload();
-        if (null == jwtPayload){
+        if (null == jwtPayload) {
             return null;
         }
         return jwtPayload.get("user");

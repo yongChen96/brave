@@ -12,8 +12,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @Slf4j
 @EnableBraveSwagger2
 @EnableDiscoveryClient
-@SpringBootApplication
 @EnableFeignClients(clients = {SysUserFeignService.class, SysLoginLogFeignService.class})
+@SpringBootApplication
 public class BraveAuthApplication {
 
     public static void main(String[] args) {

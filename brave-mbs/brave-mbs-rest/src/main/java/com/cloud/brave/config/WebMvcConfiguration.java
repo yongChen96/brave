@@ -1,6 +1,6 @@
 package com.cloud.brave.config;
 
-import com.cloud.brave.core.config.BaseConfig;
+import com.cloud.brave.core.base.config.BaseConfig;
 import com.cloud.brave.core.inject.resolver.InjectUserResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.cloud.brave.core.mybatisplus.config;
+package com.cloud.brave.mybatisplus.generator.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

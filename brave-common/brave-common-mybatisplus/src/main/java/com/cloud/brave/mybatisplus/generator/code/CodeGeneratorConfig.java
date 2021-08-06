@@ -1,8 +1,8 @@
-package com.cloud.brave.core.mybatisplus.code;
+package com.cloud.brave.mybatisplus.generator.code;
 
-import com.cloud.brave.core.mybatisplus.config.DataSourceConfig;
-import com.cloud.brave.core.mybatisplus.config.EntityType;
-import com.cloud.brave.core.mybatisplus.config.FileCreateConfig;
+import com.cloud.brave.mybatisplus.generator.config.DataSourceConfig;
+import com.cloud.brave.mybatisplus.generator.config.EntityType;
+import com.cloud.brave.mybatisplus.generator.config.FileCreateConfig;
 import lombok.Data;
 
 /**

@@ -1,7 +1,8 @@
 package com.cloud.brave.auth.service;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.cloud.brave.api.fegin.SysLoginLogFeignService;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import com.cloud.brave.api.fegin.SysUserFeignService;
 import com.cloud.brave.auth.entity.BraveSysUser;
 import com.cloud.brave.dto.UserInfoDTO;
@@ -10,10 +11,11 @@ import com.cloud.brave.entity.SysUser;
 import com.cloud.brave.core.constant.CommonConstants;
 import com.cloud.brave.core.exception.BraveException;
 import com.cloud.brave.core.result.Result;
+import com.cloud.brave.log.event.BraveLoginLogEvent;
 import com.cloud.brave.log.utils.IPUtils;
-import eu.bitwalker.useragentutils.UserAgent;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +38,7 @@ import java.util.*;
 public class BraveUserDetailsServiceImpl implements UserDetailsService {
 
     private final SysUserFeignService sysUserFeignService;
-    private final SysLoginLogFeignService sysLoginLogFeignService;
+    private final ApplicationContext applicationContext;
 
     @Override
     public UserDetails loadUserByUsername(String s) {
@@ -64,7 +66,6 @@ public class BraveUserDetailsServiceImpl implements UserDetailsService {
         }
         Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(hashSet.toArray(new String[0]));
         SysUser sysUser = userInfo.getSysUser();
-        recordLoginLog(s, "0", "登录成功");
         return new BraveSysUser(sysUser.getId(),
                 sysUser.getPhone(),
                 sysUser.getUserName(),
@@ -100,13 +101,14 @@ public class BraveUserDetailsServiceImpl implements UserDetailsService {
         loginLog.setIpAddr(ipAddr);
         loginLog.setCityAddr(cityAddr);
         //获取访问设备、系统、浏览器信息
-        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("user-agent"));
-        String deviceType = userAgent.getOperatingSystem().getDeviceType().toString();
-        String oprateSystem = userAgent.getOperatingSystem().getName();
-        String browser = userAgent.getBrowser().toString();
-        loginLog.setDeviceType(deviceType);
-        loginLog.setOperateSystem(oprateSystem);
-        loginLog.setBrowser(browser);
-        sysLoginLogFeignService.saveLoginLog(loginLog);
+        UserAgent parse = UserAgentUtil.parse(request.getHeader(CommonConstants.USER_AGENT));
+        if (parse.isMobile()) {
+            loginLog.setDeviceType(parse.getPlatform().getName());
+        }else {
+            loginLog.setDeviceType(CommonConstants.COMPUTER);
+        }
+        loginLog.setOperateSystem(parse.getOs().toString());
+        loginLog.setBrowser(String.format("%s %s", parse.getBrowser().toString(), parse.getVersion()));
+        applicationContext.publishEvent(new BraveLoginLogEvent(loginLog));
     }
 }

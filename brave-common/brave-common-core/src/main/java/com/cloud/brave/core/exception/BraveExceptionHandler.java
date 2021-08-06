@@ -4,7 +4,6 @@ import com.cloud.brave.core.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -180,9 +179,9 @@ public class BraveExceptionHandler {
         } else if (throwable instanceof DataIntegrityViolationException) {
             // 数据库异常(更新（update或insert）数据库时，新的数据违反了完整性，例如主键重复)
             return Result.failed(BraveExceptionCodeEnum.SQL_ERROR.getCode(), BraveExceptionCodeEnum.SQL_ERROR.getMessage());
-        } else if (throwable instanceof PersistenceException) {
+       /* } else if (throwable instanceof PersistenceException) {
             // 数据库异常(字段类型转换错误)
-            return Result.failed(BraveExceptionCodeEnum.SQL_ERROR.getCode(), BraveExceptionCodeEnum.SQL_ERROR.getMessage());
+            return Result.failed(BraveExceptionCodeEnum.SQL_ERROR.getCode(), BraveExceptionCodeEnum.SQL_ERROR.getMessage());*/
         } else if (throwable instanceof HttpMediaTypeNotSupportedException) {
             // Http请求Content-Type类型异常
             HttpMediaTypeNotSupportedException httpMediaTypeNotSupportedException = (HttpMediaTypeNotSupportedException) throwable;

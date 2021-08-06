@@ -1,13 +1,15 @@
 package com.cloud.brave.log.aspect;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
+import com.cloud.brave.core.constant.CommonConstants;
 import com.cloud.brave.entity.SysLoginLog;
 import com.cloud.brave.core.constant.AuthConstants;
 import com.cloud.brave.core.result.Result;
 import com.cloud.brave.log.annotation.BraveLoginLog;
 import com.cloud.brave.log.event.BraveLoginLogEvent;
 import com.cloud.brave.log.utils.IPUtils;
-import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -63,13 +65,14 @@ public class LoginLogAspect {
         String region = IPUtils.getCityInfo(clientIP);
         sysLoginLog.setCityAddr(region);
         //获取访问浏览器信息
-        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("user-agent"));
-        String clientType = userAgent.getOperatingSystem().getDeviceType().toString();
-        sysLoginLog.setDeviceType(clientType);
-        String os = userAgent.getOperatingSystem().getName();
-        sysLoginLog.setOperateSystem(os);
-        String browser = userAgent.getBrowser().toString();
-        sysLoginLog.setBrowser(browser);
+        UserAgent parse = UserAgentUtil.parse(request.getHeader(CommonConstants.USER_AGENT));
+        if (parse.isMobile()){
+            sysLoginLog.setDeviceType(parse.getPlatform().getName());
+        }else {
+            sysLoginLog.setDeviceType(CommonConstants.COMPUTER);
+        }
+        sysLoginLog.setOperateSystem(parse.getOs().toString());
+        sysLoginLog.setBrowser(String.format("%s %s", parse.getBrowser().toString(), parse.getVersion()));
         if (null != res) {
             Result convert = Convert.convert(Result.class, res);
             if (convert.getCode() == 0) {
@@ -100,13 +103,14 @@ public class LoginLogAspect {
         String region = IPUtils.getCityInfo(clientIP);
         loginLog.setCityAddr(region);
         //获取访问浏览器信息
-        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("user-agent"));
-        String clientType = userAgent.getOperatingSystem().getDeviceType().toString();
-        loginLog.setDeviceType(clientType);
-        String os = userAgent.getOperatingSystem().getName();
-        loginLog.setOperateSystem(os);
-        String browser = userAgent.getBrowser().toString();
-        loginLog.setBrowser(browser);
+        UserAgent parse = UserAgentUtil.parse(request.getHeader(CommonConstants.USER_AGENT));
+        if (parse.isMobile()){
+            loginLog.setDeviceType(parse.getPlatform().getName());
+        }else {
+            loginLog.setDeviceType(CommonConstants.COMPUTER);
+        }
+        loginLog.setOperateSystem(parse.getOs().toString());
+        loginLog.setBrowser(String.format("%s %s", parse.getBrowser().toString(), parse.getVersion()));
         loginLog.setMsg(e.getMessage());
         applicationContext.publishEvent(new BraveLoginLogEvent(loginLog));
         return loginLog;

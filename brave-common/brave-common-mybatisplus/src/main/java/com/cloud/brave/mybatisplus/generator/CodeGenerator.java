@@ -1,4 +1,4 @@
-package com.cloud.brave.core.mybatisplus;
+package com.cloud.brave.mybatisplus.generator;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.cloud.brave.core.base.controller.BaseController;
-import com.cloud.brave.core.mybatisplus.code.CodeGeneratorConfig;
+import com.cloud.brave.mybatisplus.generator.code.CodeGeneratorConfig;
 
 import java.util.ArrayList;
 import java.util.List;

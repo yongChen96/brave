@@ -4,6 +4,7 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.cloud.brave.core.constant.AuthConstants;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserDetailsDTO;
 import com.cloud.brave.dto.UserInfoDTO;
@@ -88,7 +89,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setId(id);
         sysUser.setDelState(CommonConstants.NOT_DELETED);
         sysUser.setIsLock(CommonConstants.IS_LOCK_NO);
-        sysUser.setPassWord(String.format("%s%s",CommonConstants.PASSWORD_PREFIX,passwordEncoder.encode(CommonConstants.USER_INITIAL_PWD)));
+        sysUser.setPassWord(String.format("%s%s", AuthConstants.PASSWORD_PREFIX,passwordEncoder.encode(AuthConstants.USER_INITIAL_PWD)));
         sysUserMapper.insert(sysUser);
         // 添加角色关联信息
 //        List<SysUserRole> sysUserRoles = Convert.toList(Long.class, userDTO.getRoles()).stream().map(roleId -> {
@@ -189,7 +190,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 逻辑删除用户信息
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, id)
-                        .set(SysUser::getPassWord, passwordEncoder.encode(CommonConstants.USER_INITIAL_PWD));
+                        .set(SysUser::getPassWord, passwordEncoder.encode(AuthConstants.USER_INITIAL_PWD));
         if (this.update(updateWrapper)) {
             //物理删除用户角色中间信息
             LambdaUpdateWrapper<SysUserRole> userRoleWapper = new LambdaUpdateWrapper<>();

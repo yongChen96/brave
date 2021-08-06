@@ -77,7 +77,8 @@ public class AuthTokenController {
                     .token(oAuth2AccessToken.getValue())
                     .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
                     .expiresIn(oAuth2AccessToken.getExpiresIn())
-                    .tokenHead(CommonConstants.token_head).build();
+                    .tokenHead(AuthConstants.AUTHORIZATION_PREFIX)
+                    .build();
             return Result.success(accessToken);
         } catch (Exception e) {
             e.printStackTrace();

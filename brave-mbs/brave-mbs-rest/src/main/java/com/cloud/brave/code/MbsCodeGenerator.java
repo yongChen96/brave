@@ -1,11 +1,11 @@
 package com.cloud.brave.code;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.cloud.brave.core.mybatisplus.CodeGenerator;
-import com.cloud.brave.core.mybatisplus.code.CodeGeneratorConfig;
-import com.cloud.brave.core.mybatisplus.config.DataSourceConfig;
-import com.cloud.brave.core.mybatisplus.config.EntityType;
-import com.cloud.brave.core.mybatisplus.config.FileCreateConfig;
+import com.cloud.brave.mybatisplus.generator.CodeGenerator;
+import com.cloud.brave.mybatisplus.generator.code.CodeGeneratorConfig;
+import com.cloud.brave.mybatisplus.generator.config.DataSourceConfig;
+import com.cloud.brave.mybatisplus.generator.config.EntityType;
+import com.cloud.brave.mybatisplus.generator.config.FileCreateConfig;
 
 /**
  * @ClassName: MbsCodeGenerator

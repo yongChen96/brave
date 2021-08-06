@@ -9,6 +9,7 @@ import com.cloud.gateway.component.ResponseUtils;
 import com.nimbusds.jose.JWSObject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -40,7 +41,10 @@ public class SecurityGlobalFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
-
+        //获取验证码和登录不做校验
+        if (StrUtil.equalsAny(request.getURI().getPath(), "/auth/oauth/token", "/auth/oauth/captch")){
+            return chain.filter(exchange);
+        }
         // 非JWT或者JWT为空
         String token = request.getHeaders().getFirst(AuthConstants.AUTHORIZATION_KEY);
         if (StrUtil.isBlank(token)) {

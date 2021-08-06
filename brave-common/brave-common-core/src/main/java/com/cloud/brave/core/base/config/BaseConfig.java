@@ -1,4 +1,4 @@
-package com.cloud.brave.core.config;
+package com.cloud.brave.core.base.config;
 
 import com.cloud.brave.core.SnowflakeId.SnowflakeIDGenerate;
 import com.fasterxml.jackson.core.JsonParser;

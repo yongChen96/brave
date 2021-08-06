@@ -47,47 +47,11 @@ public class ResourceServerManager implements ReactiveAuthorizationManager<Autho
 
         // 2. token为空拒绝访问
         //获取验证码和登录允许token为为空
-        if (StrUtil.equalsAny(path, "/auth/oauth/token", "/auth/oauth/captchStream")){
+        /*if (StrUtil.equalsAny(path, "/auth/oauth/token", "/auth/oauth/captch")){
             return Mono.just(new AuthorizationDecision(true));
         }
         if (StrUtil.isBlank(token)) {
             return Mono.just(new AuthorizationDecision(false));
-        }
-
-        // 移动端请求无需鉴权，只需认证（即JWT的验签和是否过期判断）
-        /*if (pathMatcher.match(AuthConstants.APP_API_PATTERN, path)) {
-            // 如果token以"bearer "为前缀，到这一步说明是经过NimbusReactiveJwtDecoder#decode和JwtTimestampValidator#validate等解析和验证通过的，即已认证
-            if (StrUtil.isNotBlank(token) && token.startsWith(AuthConstants.AUTHORIZATION_PREFIX)) {
-                return Mono.just(new AuthorizationDecision(true));
-            } else {
-                return Mono.just(new AuthorizationDecision(false));
-            }
-        }*/
-
-        // Restful接口权限设计
-        //String restFulPath = request.getMethodValue() + ":" + path;
-        //log.info("请求方法:RESTFUL请求路径：{}", restFulPath);
-
-        // 缓存取【URL权限标识->角色集合】权限规则
-        //Map<String, Object> permRolesRules = redisTemplate.opsForHash().entries(AuthConstants.URL_PERM_ROLES_KEY);
-        // 根据 “请求路径” 和 权限规则中的“URL权限标识”进行Ant匹配，得出拥有权限的角色集合
-        // 【声明定义】有权限的角色集合
-        // Set<String> authorities = CollectionUtil.newHashSet();
-        // 【声明定义】是否需要被拦截检查的请求，如果缓存中权限规则中没有任何URL权限标识和此次请求的URL匹配，默认不需要被鉴权
-        // boolean needToCheck = false;
-        /*for (Map.Entry<String, Object> entry : permRolesRules.entrySet()) {
-            // 缓存权限规则的键：URL权限标识
-            String key = entry.getKey();
-            if (pathMatcher.match(key, restFulPath)){
-                // 缓存权限规则的值：有请求路径访问权限的角色集合
-                List<String> roles = Convert.toList(String.class, entry.getValue());
-                hasPermissionRoles.addAll(roles);
-                needToCheck = true;
-            }
-        }*/
-        // 没有设置权限规则放行；注：如果默认想拦截所有的请求请移除needToCheck变量逻辑即可，根据需求定制
-        /*if (needToCheck == false) {
-            return Mono.just(new AuthorizationDecision(true));
         }*/
 
         //3、缓存取资源权限角色关系列表
