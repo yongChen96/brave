@@ -22,7 +22,8 @@ public class JwtTokenEnhancer implements TokenEnhancer {
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
         BraveSysUser braveSysUser = (BraveSysUser) authentication.getPrincipal();
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("user", braveSysUser);
+        hashMap.put("id", braveSysUser.getId());
+        hashMap.put("username", braveSysUser.getUsername());
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(hashMap);
         return accessToken;
     }

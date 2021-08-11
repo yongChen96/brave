@@ -1,7 +1,7 @@
 package com.cloud.brave.api.fallback;
 
 import com.cloud.brave.dto.UserInfoDTO;
-import com.cloud.brave.api.fegin.SysUserFeignService;
+import com.cloud.brave.api.fegin.LoginUserDetailFeignService;
 import com.cloud.brave.core.result.Result;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  **/
 @Slf4j
 @Component
-public class SysUserFeignFallBack implements SysUserFeignService {
+public class LoginUserDetailFeignFallBack implements LoginUserDetailFeignService {
 
     @Setter
     private Throwable cause;

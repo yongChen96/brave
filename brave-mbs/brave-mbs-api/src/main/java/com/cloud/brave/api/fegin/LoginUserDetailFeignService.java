@@ -1,6 +1,6 @@
 package com.cloud.brave.api.fegin;
 
-import com.cloud.brave.api.factory.SysUserFeignFallBackFactory;
+import com.cloud.brave.api.factory.LoginUserDetailFeignFallBackFactory;
 import com.cloud.brave.dto.UserInfoDTO;
 import com.cloud.brave.core.result.Result;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @Author: yongchen
  * @Date: 2021/6/3 16:32
  **/
-@FeignClient(contextId = "sysUserFeginService", name = "brave-mbs-rest", fallbackFactory = SysUserFeignFallBackFactory.class)
-public interface SysUserFeignService {
+@FeignClient(contextId = "loginUserDetail", name = "brave-mbs-rest", fallbackFactory = LoginUserDetailFeignFallBackFactory.class)
+public interface LoginUserDetailFeignService {
 
     /**
      * @Author: yongchen
@@ -23,6 +23,6 @@ public interface SysUserFeignService {
      * @Param: [username]
      * @return: com.cloud.core.result.Result<com.cloud.brave.dto.UserInfoDTO>
      **/
-    @GetMapping(value = "/sysUser/getUserInfo")
+    @GetMapping(value = "/login/getUserDetail")
     Result<UserInfoDTO> getUserInfo(@RequestParam(value = "username") String username);
 }

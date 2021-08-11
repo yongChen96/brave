@@ -47,12 +47,11 @@ public class JwtUtils {
      * @return
      */
     public static Long getUserId() {
-        Object object = getObject();
+        JSONObject object = getJwtPayload();
         if (null == object) {
             return null;
         }
-        Long id = JSONUtil.parseObj(object).getLong(USER_ID);
-        return id;
+        return object.getLong(USER_ID);
     }
 
     /**
@@ -61,12 +60,11 @@ public class JwtUtils {
      * @return
      */
     public static String getUsername() {
-        Object object = getObject();
+        JSONObject object = getJwtPayload();
         if (null == object) {
             return null;
         }
-        String username = JSONUtil.parseObj(object).getStr(USER_NAME);
-        return username;
+        return object.getStr(USER_NAME);
     }
 
     /**

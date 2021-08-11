@@ -1,6 +1,7 @@
 package com.cloud.brave.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,12 +12,10 @@ import com.cloud.brave.core.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.cloud.brave.core.base.controller.BaseController;
 
 /**
@@ -45,9 +44,30 @@ public class SysLogController extends BaseController {
     @PostMapping("/page")
     @ApiOperation(value = "分页获取系统操作日志信息", notes = "分页获取系统操作日志信息")
     public Result<IPage<SysLog>> page(@RequestBody @Validated PageParam<SysLog> pp){
-        QueryWrapper<SysLog> queryWrapper = new QueryWrapper<>();
+        LambdaQueryWrapper<SysLog> queryWrapper = new LambdaQueryWrapper<>();
+        SysLog data = pp.getData();
+        if (StringUtils.isNotBlank(data.getCreateName())){
+            queryWrapper.eq(SysLog::getCreateName, data.getCreateName());
+        }
+        if (StringUtils.isNotBlank(data.getType())){
+            queryWrapper.eq(SysLog::getType, data.getType());
+        }
+        queryWrapper.orderByDesc(SysLog::getCreateTime);
         Page<SysLog> page = sysLogService.page(pp.getPage(), queryWrapper);
         return success(page);
+    }
+
+    /**
+     * @param id
+     * @return com.cloud.brave.core.result.Result<com.cloud.brave.entity.SysLog>
+     * @Author yongchen
+     * @Description 获取日志详情
+     * @Date 9:58 2021/8/9
+     **/
+    @GetMapping("/get")
+    @ApiOperation(value = "获取日志详情", notes = "获取日志详情")
+    public Result<SysLog> get(@RequestParam Long id) {
+        return success(sysLogService.getById(id));
     }
 
     /**

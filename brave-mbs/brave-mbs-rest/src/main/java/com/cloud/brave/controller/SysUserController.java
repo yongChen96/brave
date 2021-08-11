@@ -73,23 +73,6 @@ public class SysUserController extends BaseController {
     }
 
     /**
-     * @Author: yongchen
-     * @Description: 获取用户信息(登录时获取用户信息)
-     * @Date: 14:08 2021/6/4
-     * @Param: [username]
-     * @return: com.cloud.core.result.Result<UserInfoDTO>
-     **/
-    @GetMapping(value = "/getUserInfo")
-    @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
-    public Result<UserInfoDTO> getUserInfo(@RequestParam(value = "username") String username) {
-        UserInfoDTO userInfo = sysUserService.getUserInfo(username);
-        if (null == userInfo) {
-            throw new BraveException("获取用户信息失败");
-        }
-        return success(userInfo);
-    }
-
-    /**
      * @param id
      * @return com.cloud.core.result.Result<com.cloud.brave.entity.SysUser>
      * @Author yongchen
@@ -113,8 +96,9 @@ public class SysUserController extends BaseController {
     @GetMapping("/info")
     @BraveSysLog(value = "获取当前登录用户信息")
     @ApiOperation(value = "获取当前登录用户信息", notes = "获取当前登录用户信息")
-    public Result<UserInfoDTO> info(@ApiIgnore @InjectUser BraveUser braveUser) {
-        String phone = braveUser.getPhone();
+    public Result<UserInfoDTO> info() {
+//        String phone = braveUser.getPhone();
+        String phone = "18311540852";
         if (StringUtils.isNotBlank(phone)) {
             UserInfoDTO userInfo = sysUserService.getUserInfo(phone);
             if (null == userInfo) {

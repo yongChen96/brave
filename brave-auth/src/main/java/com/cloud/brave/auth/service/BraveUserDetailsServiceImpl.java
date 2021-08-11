@@ -3,7 +3,7 @@ package com.cloud.brave.auth.service;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
-import com.cloud.brave.api.fegin.SysUserFeignService;
+import com.cloud.brave.api.fegin.LoginUserDetailFeignService;
 import com.cloud.brave.auth.entity.BraveSysUser;
 import com.cloud.brave.dto.UserInfoDTO;
 import com.cloud.brave.entity.SysLoginLog;
@@ -37,7 +37,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class BraveUserDetailsServiceImpl implements UserDetailsService {
 
-    private final SysUserFeignService sysUserFeignService;
+    private final LoginUserDetailFeignService loginUserDetailFeignService;
     private final ApplicationContext applicationContext;
 
     @Override
@@ -46,7 +46,7 @@ public class BraveUserDetailsServiceImpl implements UserDetailsService {
             recordLoginLog(null, "1", "用户/密码必须填写");
             throw new BraveException("用户/密码必须填写");
         }
-        Result<UserInfoDTO> result = sysUserFeignService.getUserInfo(s);
+        Result<UserInfoDTO> result = loginUserDetailFeignService.getUserInfo(s);
         if (null == result || null == result.getData()) {
             recordLoginLog(s, "1", "登录用户不存在");
             throw new BraveException("登录用户不存在");

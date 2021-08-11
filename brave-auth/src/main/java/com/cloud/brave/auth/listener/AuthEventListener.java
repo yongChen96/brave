@@ -60,7 +60,7 @@ public class AuthEventListener {
             JSONObject jsonObject = JSONUtil.parseObj(source);
             Object principal = jsonObject.get(CommonConstants.PRINCIPAL);
             String name = (String) JSONUtil.parseObj(principal).get(CommonConstants.PHONE);
-            if (StringUtils.equals(CommonConstants.CLIENT_ID, name)){
+            if (StringUtils.isBlank(name) || StringUtils.equals(CommonConstants.CLIENT_ID, name)){
                 return;
             }
             SysLoginLog loginLog = new SysLoginLog();
