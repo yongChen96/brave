@@ -1,4 +1,4 @@
-package com.cloud.brave.minio.minio;
+package com.cloud.minio.utils;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
@@ -7,6 +7,7 @@ import io.minio.RemoveBucketArgs;
 import io.minio.messages.Bucket;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
  * @date 2021/6/28 13:37
  */
 @Slf4j
+@Component
 public class BucketUtils {
 
     @Resource

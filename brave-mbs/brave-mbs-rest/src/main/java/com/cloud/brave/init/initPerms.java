@@ -27,29 +27,10 @@ import java.util.stream.Collectors;
 public class initPerms implements CommandLineRunner {
 
     @Resource
-    private RedisTemplate redisTemplate;
-    @Resource
     private SysRoleMenuService sysRoleMenuService;
 
     @Override
-    public void run(String... args) throws Exception {
-        redisTemplate.delete(AuthConstants.URL_PERM_ROLES_KEY);
-        List<RolePremsDTO> rolePerms = sysRoleMenuService.getRolePerms();
-        if (!CollectionUtils.isEmpty(rolePerms)) {
-            //初始化角色-权限规则
-            List<RolePremsDTO> urlPerms = rolePerms
-                    .stream()
-                    .filter(item -> StringUtils.isNotBlank(item.getUrlPerm()))
-                    .collect(Collectors.toList());
-            if (!CollectionUtils.isEmpty(urlPerms)) {
-                Map<String, List<Long>> urlPermRoles = new HashMap<>();
-                urlPerms.stream().forEach(item -> {
-                    String perms = item.getUrlPerm();
-                    List<Long> roleCodes = item.getRoles();
-                    urlPermRoles.put(perms, roleCodes);
-                });
-                redisTemplate.opsForHash().putAll(AuthConstants.URL_PERM_ROLES_KEY, urlPermRoles);
-            }
-        }
+    public void run(String... args) {
+        sysRoleMenuService.getRolePerms();
     }
 }

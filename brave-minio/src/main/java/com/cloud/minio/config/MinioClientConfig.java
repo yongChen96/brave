@@ -1,4 +1,4 @@
-package com.cloud.brave.minio.config;
+package com.cloud.minio.config;
 
 import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;

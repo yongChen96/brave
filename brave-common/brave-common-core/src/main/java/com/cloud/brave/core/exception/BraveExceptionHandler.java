@@ -77,7 +77,7 @@ public class BraveExceptionHandler {
         List<Throwable> throwableList = ExceptionUtils.getThrowableList(throwable);
         for (Throwable thr : throwableList) {
             Result<Object> result = handler(thr);
-            if (null != null){
+            if (null != result){
                 return result;
             }
         }

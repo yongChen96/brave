@@ -1,6 +1,7 @@
 package com.cloud.brave.mapper;
 
 import com.cloud.brave.dto.RolePremsDTO;
+import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.entity.SysRoleMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
@@ -26,4 +27,13 @@ public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenu> {
      * @return java.util.List<com.cloud.brave.dto.RolePremsDTO>
      **/
     List<RolePremsDTO> getRolePerms();
+
+    /**
+     * @Author yongchen
+     * @Description 获取角色资源信息
+     * @Date 16:00 2021/7/27
+     * @param roleId
+     * @return java.util.List<com.cloud.brave.dto.RolePremsDTO>
+     **/
+    List<SysMenu> getMenuByRole(Long roleId);
 }

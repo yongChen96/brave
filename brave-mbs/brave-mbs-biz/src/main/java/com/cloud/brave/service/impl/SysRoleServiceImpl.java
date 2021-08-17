@@ -3,6 +3,7 @@ package com.cloud.brave.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cloud.brave.dto.SysRoleDetailsDTO;
+import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.entity.SysRole;
 import com.cloud.brave.entity.SysRoleMenu;
 import com.cloud.brave.mapper.SysRoleMapper;
@@ -63,10 +64,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         SysRoleDetailsDTO sysRoleDetailsDTO = BeanUtil.copyProperties(role, SysRoleDetailsDTO.class);
         // 获取角色权限
-        LambdaQueryWrapper<SysRoleMenu> roleMenuWapper = new LambdaQueryWrapper<>();
-        roleMenuWapper.eq(SysRoleMenu::getRoleId, id);
-        List<SysRoleMenu> list = sysRoleMenuService.list(roleMenuWapper);
-        sysRoleDetailsDTO.setPerms(list.stream().map(item -> item.getMenuId()).collect(Collectors.toList()));
+        List<SysMenu> menu = sysRoleMenuService.getMenuByRole(id);
+        sysRoleDetailsDTO.setPerms(menu.stream().map(SysMenu::getId).collect(Collectors.toList()));
         return sysRoleDetailsDTO;
     }
 

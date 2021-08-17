@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.cloud.brave.core.base.controller.BaseController;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 
@@ -194,5 +195,20 @@ public class SysUserController extends BaseController {
             return success(true);
         }
         return failed("重置用户密码失败");
+    }
+
+    @PostMapping("/uploadAvatar")
+    @BraveSysLog(value = "上传头像")
+    @ApiOperation(value = "上传头像", notes = "上传头像")
+    public Result<Boolean> uploadAvatar(@RequestBody MultipartFile file){
+
+        return success(true);
+    }
+
+    @PostMapping("/updatePassword")
+    @BraveSysLog(value = "密码修改")
+    @ApiOperation(value = "密码修改", notes = "密码修改")
+    public Result<Boolean> updatePassword(String oldPassword){
+        return success(true);
     }
 }

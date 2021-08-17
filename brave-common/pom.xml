@@ -18,7 +18,6 @@
         <module>brave-common-core</module>
         <module>brave-common-datasource</module>
         <module>brave-common-log</module>
-        <module>brave-common-minio</module>
         <module>brave-common-mybatisplus</module>
         <module>brave-common-swagger</module>
     </modules>

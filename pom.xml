@@ -16,6 +16,7 @@
         <module>brave-flowable</module>
         <module>brave-gateway</module>
         <module>brave-mbs</module>
+        <module>brave-minio</module>
         <module>brave-resource</module>
         <module>brave-visual</module>
     </modules>

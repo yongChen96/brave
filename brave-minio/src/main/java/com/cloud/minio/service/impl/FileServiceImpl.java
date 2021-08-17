@@ -1,9 +1,14 @@
-package com.cloud.brave.minio.minio;
+package com.cloud.minio.service.impl;
 
+import com.cloud.minio.service.FileService;
+import com.cloud.minio.utils.BucketUtils;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
@@ -11,18 +16,21 @@ import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author admin
- * @version 1.0
- * @description: 文件操作工具类
- * @date 2021/6/28 11:52
+ * @author yongchen
+ * @description: 附件服务
+ * @date 2021/8/13 17:43
  */
 @Slf4j
-public class FileUtils {
+@Service
+public class FileServiceImpl implements FileService {
 
     @Resource
     private MinioClient minioClient;
     @Resource
     private BucketUtils bucketUtils;
+
+    @Value("${minio.bucketName}")
+    private String defaultBucketName;
 
     /**
      * @Author: yongchen
@@ -31,8 +39,12 @@ public class FileUtils {
      * @Param: [bucketName, objectName]
      * @return: java.io.InputStream
      **/
+    @Override
     public InputStream getObject(String bucketName, String objectName) {
         try {
+            if (StringUtils.isBlank(bucketName)){
+                bucketName = defaultBucketName;
+            }
             if (bucketUtils.bucketExists(bucketName)) {
                 return minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
             }
@@ -47,17 +59,18 @@ public class FileUtils {
      * @Author: yongchen
      * @Description: 获取预览url
      * @Date: 14:40 2020/11/12
-     * @Param: [bucketName, objectName]
+     * @Param: [bucketName, objectName, duration]
      * @return: java.lang.String
      **/
-    public String getObjectUrl(String bucketName, String objectName) {
+    @Override
+    public String getObjectUrl(String bucketName, String objectName, int duration) {
         try {
             if (bucketUtils.bucketExists(bucketName)) {
                 return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                         .method(Method.GET)
                         .bucket(bucketName)
                         .object(objectName)
-                        .expiry(1, TimeUnit.DAYS)
+                        .expiry(duration, TimeUnit.DAYS)
                         .build());
             }
         } catch (Exception e) {
@@ -74,8 +87,12 @@ public class FileUtils {
      * @Param: [bucketName, objectName, iso, size]
      * @return: io.minio.ObjectWriteResponse
      **/
+    @Override
     public ObjectWriteResponse putObject(String bucketName, String objectName, InputStream iso, Long size, String contentType) {
         try {
+            if (StringUtils.isBlank(bucketName)){
+                bucketName = defaultBucketName;
+            }
             if (bucketUtils.bucketExists(bucketName)) {
                 return minioClient.putObject(PutObjectArgs.builder()
                         .bucket(bucketName)
@@ -98,6 +115,7 @@ public class FileUtils {
      * @Param: [bucketName, objectName, fileName]
      * @return: io.minio.ObjectWriteResponse
      **/
+    @Override
     public ObjectWriteResponse uploadObject(String bucketName, String objectName, String fileName) {
         try {
             if (bucketUtils.bucketExists(bucketName)) {
@@ -121,6 +139,7 @@ public class FileUtils {
      * @Param: [bucketName, objectName, fileName]
      * @return: void
      **/
+    @Override
     public void downloadObject(String bucketName, String objectName, String fileName) {
         try {
             if (bucketUtils.bucketExists(bucketName)) {
@@ -143,6 +162,7 @@ public class FileUtils {
      * @Param: [bucketName, objectName]
      * @return: void
      **/
+    @Override
     public void removeObject(String bucketName, String objectName) {
         try {
             if (bucketUtils.bucketExists(bucketName)) {
@@ -164,6 +184,7 @@ public class FileUtils {
      * @Param: [bucketName, objectName]
      * @return: io.minio.StatObjectResponse
      **/
+    @Override
     public StatObjectResponse statObject(String bucketName, String objectName) {
         try {
             if (bucketUtils.bucketExists(bucketName)) {
@@ -186,6 +207,7 @@ public class FileUtils {
      * @Param: [bucketName, objectName]
      * @return: java.lang.Boolean
      **/
+    @Override
     public Boolean doesFolderExist(String bucketName, String objectName) {
         Boolean flag = false;
         try {
@@ -211,12 +233,13 @@ public class FileUtils {
      * @Param: [bucketName, folderName]
      * @return: io.minio.ObjectWriteResponse
      **/
+    @Override
     public ObjectWriteResponse createFolder(String bucketName, String folderName) {
         try {
             if (bucketUtils.bucketExists(bucketName)) {
                 return minioClient.putObject(
                         PutObjectArgs.builder().bucket(bucketName).object(folderName).stream(
-                                new ByteArrayInputStream(new byte[]{}), 0, -1)
+                                        new ByteArrayInputStream(new byte[]{}), 0, -1)
                                 .build());
             }
         } catch (Exception e) {

@@ -22,4 +22,22 @@
         JOIN sys_role_menu srm on srm.menu_id = sm.id
         JOIN sys_role sr on srm.role_id = sr.id
     </select>
+
+    <select id="getMenuByRole" resultType="com.cloud.brave.entity.SysMenu">
+        SELECT
+            me.*
+        FROM
+            `sys_role_menu` rm
+                JOIN sys_menu me ON me.id = rm.menu_id
+        WHERE
+            rm.role_id = #{roleId}
+          AND me.id NOT IN (
+            SELECT
+                me.parent_id
+            FROM
+                `sys_role_menu` rm
+                    JOIN sys_menu me ON me.id = rm.menu_id
+            WHERE
+                rm.role_id = #{roleId})
+    </select>
 </mapper>
