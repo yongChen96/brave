@@ -1,6 +1,7 @@
 package com.cloud.brave.api.fegin;
 
 import com.cloud.brave.api.factory.LoginUserDetailFeignFallBackFactory;
+import com.cloud.brave.core.constant.ServiceNameConstants;
 import com.cloud.brave.dto.UserInfoDTO;
 import com.cloud.brave.core.result.Result;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @Author: yongchen
  * @Date: 2021/6/3 16:32
  **/
-@FeignClient(contextId = "loginUserDetail", name = "brave-mbs-rest", fallbackFactory = LoginUserDetailFeignFallBackFactory.class)
+@FeignClient(contextId = "loginUserDetail", name = ServiceNameConstants.REST, fallbackFactory = LoginUserDetailFeignFallBackFactory.class)
 public interface LoginUserDetailFeignService {
 
     /**

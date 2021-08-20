@@ -70,4 +70,15 @@ public interface SysUserService extends IService<SysUser> {
      * @return boolean
      **/
     boolean resetPassword(Long id);
+
+    /**
+     * @description: 修改密码
+     * @param userId
+     * @param oldPassword
+     * @param newPassword
+     * @return: java.lang.Boolean
+     * @author yongchen
+     * @date: 2021/8/19 10:07
+     */
+    Boolean updatePassword(Long userId, String oldPassword, String newPassword);
 }

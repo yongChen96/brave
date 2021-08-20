@@ -44,7 +44,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<MenuDTO> menuTree = new ArrayList<>();
         List<MenuDTO> userMenus = sysMenuMapper.findMenusByUserId(userId);
         for (MenuDTO userMenu : userMenus) {
-            if (CommonConstants.TOP_MENU == userMenu.getParentId()) {
+            if (CommonConstants.TOP_MENU.longValue() == userMenu.getParentId().longValue()) {
                 //递归获取子节点
                 recursionChildren(userMenu, userMenus);
                 menuTree.add(userMenu);

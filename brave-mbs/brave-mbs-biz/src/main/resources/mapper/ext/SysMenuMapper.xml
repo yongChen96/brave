@@ -47,6 +47,6 @@
         AND role.role_status = 0
         AND m.del_state = 0
         AND m.status = 0
-        <!--AND m.menu_type in ('M', 'C')-->
+        AND m.menu_type in ('M', 'C')
     </select>
 </mapper>

@@ -4,8 +4,10 @@ package com.cloud.brave.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cloud.brave.api.fegin.SysFileFeignService;
 import com.cloud.brave.core.inject.annotation.InjectUser;
 import com.cloud.brave.core.inject.entity.BraveUser;
+import com.cloud.brave.core.utils.JwtUtils;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserDetailsDTO;
 import com.cloud.brave.dto.UserInfoDTO;
@@ -64,7 +66,7 @@ public class SysUserController extends BaseController {
         if (StringUtils.isNotBlank(data.getPhone())) {
             pageWapper.eq(SysUser::getPhone, data.getPhone());
         }
-        if (StringUtils.isNotBlank(data.getIsLock())){
+        if (StringUtils.isNotBlank(data.getIsLock())) {
             pageWapper.eq(SysUser::getIsLock, data.getIsLock());
         }
         if (null != data.getDeptId()) {
@@ -98,8 +100,7 @@ public class SysUserController extends BaseController {
     @BraveSysLog(value = "获取当前登录用户信息")
     @ApiOperation(value = "获取当前登录用户信息", notes = "获取当前登录用户信息")
     public Result<UserInfoDTO> info() {
-//        String phone = braveUser.getPhone();
-        String phone = "18311540852";
+        String phone = JwtUtils.getUserPhone();
         if (StringUtils.isNotBlank(phone)) {
             UserInfoDTO userInfo = sysUserService.getUserInfo(phone);
             if (null == userInfo) {
@@ -126,18 +127,18 @@ public class SysUserController extends BaseController {
         }
         return failed("添加新用户信息失败");
     }
-    
+
     /**
+     * @param userDTO
+     * @return com.cloud.core.result.Result<java.lang.Boolean>
      * @Author yongchen
      * @Description 更新用户信息
      * @Date 9:27 2021/7/21
-     * @param userDTO
-     * @return com.cloud.core.result.Result<java.lang.Boolean>
      **/
     @PostMapping("/update")
     @BraveSysLog(value = "更新用户信息")
     @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
-    public Result<Boolean> update(@RequestBody @Validated(BaseSuperEntuty.Update.class) UserDTO userDTO){
+    public Result<Boolean> update(@RequestBody @Validated(BaseSuperEntuty.Update.class) UserDTO userDTO) {
         if (sysUserService.updateUser(userDTO)) {
             return success(true);
         }
@@ -197,18 +198,43 @@ public class SysUserController extends BaseController {
         return failed("重置用户密码失败");
     }
 
-    @PostMapping("/uploadAvatar")
+    /**
+     * @param file
+     * @description: 上传头像
+     * @return: com.cloud.brave.core.result.Result<java.lang.Boolean>
+     * @author yongchen
+     * @date: 2021/8/19 11:19
+     */
+    @GetMapping("/uploadAvatar")
     @BraveSysLog(value = "上传头像")
     @ApiOperation(value = "上传头像", notes = "上传头像")
-    public Result<Boolean> uploadAvatar(@RequestBody MultipartFile file){
-
-        return success(true);
+    public Result<Boolean> uploadAvatar(@RequestParam String avatarUrl) {
+        Long userId = JwtUtils.getUserId();
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, userId)
+                .set(SysUser::getAvatarUrl, avatarUrl);
+        if (sysUserService.update(updateWrapper)) {
+            return success(true);
+        }
+        return failed("头像上传失败");
     }
 
-    @PostMapping("/updatePassword")
+    /**
+     * @param oldPassword
+     * @param newPassword
+     * @description: 用户修改密码
+     * @return: com.cloud.brave.core.result.Result<java.lang.Boolean>
+     * @author yongchen
+     * @date: 2021/8/19 10:19
+     */
+    @GetMapping("/updatePassword")
     @BraveSysLog(value = "密码修改")
     @ApiOperation(value = "密码修改", notes = "密码修改")
-    public Result<Boolean> updatePassword(String oldPassword){
-        return success(true);
+    public Result<Boolean> updatePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        Long userId = JwtUtils.getUserId();
+        if (sysUserService.updatePassword(userId, oldPassword, newPassword)) {
+            return success(true);
+        }
+        return failed("修改密码失败");
     }
 }

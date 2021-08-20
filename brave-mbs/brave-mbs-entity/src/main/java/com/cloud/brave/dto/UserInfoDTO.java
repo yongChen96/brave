@@ -1,5 +1,6 @@
 package com.cloud.brave.dto;
 
+import com.cloud.brave.entity.SysDept;
 import com.cloud.brave.entity.SysUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,10 @@ public class UserInfoDTO  implements Serializable {
      * 用户基本信息
      */
     private SysUser sysUser;
+    /**
+     * 用户所属部门信息
+     */
+    private SysDept sysDept;
     /**
      * 权限标识集合
      */

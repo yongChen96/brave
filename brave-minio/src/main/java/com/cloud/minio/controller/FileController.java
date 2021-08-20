@@ -3,7 +3,6 @@ package com.cloud.minio.controller;
 import com.cloud.brave.core.base.controller.BaseController;
 import com.cloud.brave.core.result.Result;
 import com.cloud.minio.service.FileService;
-import io.minio.ObjectWriteResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

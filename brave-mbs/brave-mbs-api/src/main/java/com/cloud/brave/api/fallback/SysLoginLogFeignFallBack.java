@@ -16,14 +16,14 @@ import org.springframework.stereotype.Component;
  **/
 @Slf4j
 @Component
-public class SysSysLoginLogFeignFallBack implements SysLoginLogFeignService {
+public class SysLoginLogFeignFallBack implements SysLoginLogFeignService {
 
     @Setter
     private Throwable cause;
 
     @Override
     public Result<Boolean> saveLoginLog(SysLoginLog loginLog) {
-        log.error("feign 保存登录日志信息:{}失败原因:{}", loginLog, cause);
+        log.error("feign调用保存登录日志信息:{}失败原因:{}", loginLog, cause);
         return null;
     }
 }

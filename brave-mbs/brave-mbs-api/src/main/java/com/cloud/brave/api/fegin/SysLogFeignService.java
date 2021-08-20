@@ -1,6 +1,7 @@
 package com.cloud.brave.api.fegin;
 
-import com.cloud.brave.api.factory.SysLogFeignFallBackService;
+import com.cloud.brave.api.factory.SysLogFeignFallBackFactory;
+import com.cloud.brave.core.constant.ServiceNameConstants;
 import com.cloud.brave.entity.SysLog;
 import com.cloud.brave.core.result.Result;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @Author: yongchen
  * @Date: 2021/6/4 10:02
  **/
-@FeignClient(contextId = "sysLogFeginSerivce", name = "brave-mbs-rest", fallbackFactory = SysLogFeignFallBackService.class)
+@FeignClient(contextId = "sysLogFeginSerivce", name = ServiceNameConstants.REST, fallbackFactory = SysLogFeignFallBackFactory.class)
 public interface SysLogFeignService {
 
     /**

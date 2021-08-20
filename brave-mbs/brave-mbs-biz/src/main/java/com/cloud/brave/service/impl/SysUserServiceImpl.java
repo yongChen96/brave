@@ -16,6 +16,7 @@ import com.cloud.brave.core.SnowflakeId.IdGenerate;
 import com.cloud.brave.core.constant.CommonConstants;
 import com.cloud.brave.core.exception.BraveException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,8 +61,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUserLambdaQueryWrapper.eq(SysUser::getPhone, username)
                 .eq(SysUser::getDelState, CommonConstants.NOT_DELETED);
         SysUser sysUser = this.getOne(sysUserLambdaQueryWrapper);
+        if (null == sysUser) {
+            throw new BraveException("用户不存在");
+        }
+        //获取用户所属部门信息
+        SysDept dept = sysDeptService.getById(sysUser.getDeptId());
+        //获取用户角色信息
         List<Long> roleIds = sysRoleService.findRolesByUserId(sysUser.getId()).stream().map(SysRole::getId)
                 .collect(Collectors.toList());
+        //获取用户权限信息
         Set<String> permissions = new HashSet<>();
         roleIds.forEach(roleId -> {
             List<String> list = sysMenuService.findPermissionsByRoleId(roleId).stream()
@@ -70,7 +78,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     .collect(Collectors.toList());
             permissions.addAll(list);
         });
-        return new UserInfoDTO(sysUser, ArrayUtil.toArray(permissions, String.class), ArrayUtil.toArray(roleIds, Long.class));
+        return new UserInfoDTO(sysUser, dept, ArrayUtil.toArray(permissions, String.class), ArrayUtil.toArray(roleIds, Long.class));
     }
 
     /**
@@ -89,10 +97,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setId(id);
         sysUser.setDelState(CommonConstants.NOT_DELETED);
         sysUser.setIsLock(CommonConstants.IS_LOCK_NO);
-        sysUser.setPassWord(String.format("%s%s", AuthConstants.PASSWORD_PREFIX,passwordEncoder.encode(AuthConstants.USER_INITIAL_PWD)));
+        sysUser.setPassWord(passwordEncoder.encode(AuthConstants.USER_INITIAL_PWD));
         sysUserMapper.insert(sysUser);
         // 添加角色关联信息
-//        List<SysUserRole> sysUserRoles = Convert.toList(Long.class, userDTO.getRoles()).stream().map(roleId -> {
         List<SysUserRole> sysUserRoles = userDTO.getRoles().stream().map(roleId -> {
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setUserId(sysUser.getId());
@@ -103,11 +110,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
+     * @param userDTO
+     * @return java.lang.Boolean
      * @Author yongchen
      * @Description 更新用户信息
      * @Date 9:11 2021/7/21
-     * @param userDTO
-     * @return java.lang.Boolean
      **/
     @Override
     public Boolean updateUser(UserDTO userDTO) {
@@ -117,13 +124,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             // 角色信息更新
             LambdaQueryWrapper<SysUserRole> userRoleWpper = new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userDTO.getId());
             List<SysUserRole> list = sysUserRoleService.list(userRoleWpper);
-            if (!CollectionUtils.isEmpty(list)){
+            if (!CollectionUtils.isEmpty(list)) {
                 List<Long> ids = list.stream().map(item -> item.getId()).collect(Collectors.toList());
                 sysUserRoleService.removeByIds(ids);
             }
 
             List<Long> roles = userDTO.getRoles();
-            if (!CollectionUtils.isEmpty(roles)){
+            if (!CollectionUtils.isEmpty(roles)) {
                 for (Long role : roles) {
                     SysUserRole sysUserRole = new SysUserRole();
                     sysUserRole.setUserId(userDTO.getId());
@@ -179,18 +186,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
+     * @param id
+     * @return boolean
      * @Author yongchen
      * @Description 重置用户密码
      * @Date 10:03 2021/7/19
-     * @param id
-     * @return boolean
      **/
     @Override
     public boolean resetPassword(Long id) {
         // 逻辑删除用户信息
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, id)
-                        .set(SysUser::getPassWord, passwordEncoder.encode(AuthConstants.USER_INITIAL_PWD));
+                .set(SysUser::getPassWord, passwordEncoder.encode(AuthConstants.USER_INITIAL_PWD));
         if (this.update(updateWrapper)) {
             //物理删除用户角色中间信息
             LambdaUpdateWrapper<SysUserRole> userRoleWapper = new LambdaUpdateWrapper<>();
@@ -198,5 +205,32 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return sysUserRoleService.remove(userRoleWapper);
         }
         return false;
+    }
+
+    /**
+     * @param userId
+     * @param oldPassword
+     * @param newPassword
+     * @description: 修改密码
+     * @return: java.lang.Boolean
+     * @author yongchen
+     * @date: 2021/8/19 10:08
+     */
+    @Override
+    public Boolean updatePassword(Long userId, String oldPassword, String newPassword) {
+        SysUser sysUser = this.getById(userId);
+        if (sysUser == null) {
+            throw new BraveException("用户不存在");
+        }
+        if (!passwordEncoder.matches(oldPassword, sysUser.getPassWord())) {
+            throw new BraveException("修改密码失败，旧密码错误");
+        }
+        if (passwordEncoder.matches(newPassword, sysUser.getPassWord())) {
+            throw new BraveException("修改密码失败，新密码不能与旧密码相同");
+        }
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, sysUser.getId())
+                .set(SysUser::getPassWord, passwordEncoder.encode(newPassword));
+        return this.update(updateWrapper);
     }
 }

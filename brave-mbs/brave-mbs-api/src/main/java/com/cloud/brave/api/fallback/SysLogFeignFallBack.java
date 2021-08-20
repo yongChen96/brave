@@ -23,7 +23,7 @@ public class SysLogFeignFallBack implements SysLogFeignService {
 
     @Override
     public Result<Boolean> saveSysLog(SysLog sysLog) {
-        log.error("feign 保存操作日志信息:{}失败原因:{}", sysLog, cause);
+        log.error("feign调用保存操作日志信息:{}失败原因:{}", sysLog, cause);
         return null;
     }
 }

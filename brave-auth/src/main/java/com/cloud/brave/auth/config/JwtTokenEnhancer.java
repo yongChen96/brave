@@ -24,6 +24,7 @@ public class JwtTokenEnhancer implements TokenEnhancer {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("id", braveSysUser.getId());
         hashMap.put("username", braveSysUser.getUsername());
+        hashMap.put("userphone", braveSysUser.getPhone());
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(hashMap);
         return accessToken;
     }

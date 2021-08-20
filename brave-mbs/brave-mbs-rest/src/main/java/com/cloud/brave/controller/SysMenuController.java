@@ -4,6 +4,7 @@ package com.cloud.brave.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cloud.brave.core.utils.JwtUtils;
 import com.cloud.brave.dto.MenuDTO;
 import com.cloud.brave.entity.SysMenu;
 import com.cloud.brave.service.SysMenuService;
@@ -88,8 +89,7 @@ public class SysMenuController extends BaseController {
     @GetMapping("/getRouters")
     @ApiOperation(value = "获取当前用户菜单路由信息", notes = "获取当前用户菜单路由信息")
     public Result<List<MenuDTO>> getRouters() {
-        // TODO 获取当前登录用户id
-        Long userId = 1L;
+        Long userId = JwtUtils.getUserId();
         List<MenuDTO> menus = sysMenuService.findMenusByUserId(userId);
         List<MenuDTO> collect = menus.stream().sorted(Comparator.comparing(MenuDTO::getSort)).collect(Collectors.toList());
         return success(collect);

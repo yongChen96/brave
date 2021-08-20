@@ -29,7 +29,7 @@ public class LoginUserDetailFeignFallBack implements LoginUserDetailFeignService
      **/
     @Override
     public Result<UserInfoDTO> getUserInfo(String username) {
-        log.error("feign 查询用户{}信息失败:{}", username, cause);
+        log.error("feign调用查询用户{},信息失败:{}", username, cause);
         return null;
     }
 }

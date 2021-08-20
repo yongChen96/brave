@@ -29,6 +29,7 @@ public class JwtUtils {
 
     private static final String USER_ID = "id";
     private static final String USER_NAME = "username";
+    private static final String USER_PHONE = "userphone";
 
 
     @SneakyThrows
@@ -65,6 +66,19 @@ public class JwtUtils {
             return null;
         }
         return object.getStr(USER_NAME);
+    }
+
+    /**
+     * 解析JWT获取获取登录账号
+     *
+     * @return
+     */
+    public static String getUserPhone() {
+        JSONObject object = getJwtPayload();
+        if (null == object) {
+            return null;
+        }
+        return object.getStr(USER_PHONE);
     }
 
     /**

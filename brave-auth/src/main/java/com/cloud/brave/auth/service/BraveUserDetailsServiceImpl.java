@@ -5,6 +5,7 @@ import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.cloud.brave.api.fegin.LoginUserDetailFeignService;
 import com.cloud.brave.auth.entity.BraveSysUser;
+import com.cloud.brave.core.constant.AuthConstants;
 import com.cloud.brave.dto.UserInfoDTO;
 import com.cloud.brave.entity.SysLoginLog;
 import com.cloud.brave.entity.SysUser;
@@ -52,7 +53,7 @@ public class BraveUserDetailsServiceImpl implements UserDetailsService {
             throw new BraveException("登录用户不存在");
         }
         UserInfoDTO userInfo = result.getData();
-        if (StringUtils.equals(CommonConstants.IS_LOCK_YES, userInfo.getSysUser().getIsLock())){
+        if (StringUtils.equals(CommonConstants.IS_LOCK_YES, userInfo.getSysUser().getIsLock())) {
             recordLoginLog(s, "1", "登录用户被锁定");
             throw new BraveException("登录用户被锁定");
         }
@@ -69,7 +70,7 @@ public class BraveUserDetailsServiceImpl implements UserDetailsService {
         return new BraveSysUser(sysUser.getId(),
                 sysUser.getPhone(),
                 sysUser.getUserName(),
-                sysUser.getPassWord(),
+                (AuthConstants.PASSWORD_PREFIX + sysUser.getPassWord()),
                 sysUser.getDeptId(),
                 roles,
                 StringUtils.equals(CommonConstants.IS_LOCK_NO, sysUser.getIsLock()),
@@ -104,7 +105,7 @@ public class BraveUserDetailsServiceImpl implements UserDetailsService {
         UserAgent parse = UserAgentUtil.parse(request.getHeader(CommonConstants.USER_AGENT));
         if (parse.isMobile()) {
             loginLog.setDeviceType(parse.getPlatform().getName());
-        }else {
+        } else {
             loginLog.setDeviceType(CommonConstants.COMPUTER);
         }
         loginLog.setOperateSystem(parse.getOs().toString());

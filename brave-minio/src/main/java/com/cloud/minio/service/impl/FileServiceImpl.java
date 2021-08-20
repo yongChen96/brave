@@ -42,7 +42,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public InputStream getObject(String bucketName, String objectName) {
         try {
-            if (StringUtils.isBlank(bucketName)){
+            if (StringUtils.isBlank(bucketName)) {
                 bucketName = defaultBucketName;
             }
             if (bucketUtils.bucketExists(bucketName)) {
@@ -65,12 +65,15 @@ public class FileServiceImpl implements FileService {
     @Override
     public String getObjectUrl(String bucketName, String objectName, int duration) {
         try {
+            if (StringUtils.isBlank(bucketName)) {
+                bucketName = defaultBucketName;
+            }
             if (bucketUtils.bucketExists(bucketName)) {
                 return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                         .method(Method.GET)
                         .bucket(bucketName)
                         .object(objectName)
-                        .expiry(duration, TimeUnit.DAYS)
+                        .expiry(duration == 0 ? (int) TimeUnit.SECONDS.toDays(GetPresignedObjectUrlArgs.DEFAULT_EXPIRY_TIME) : duration, TimeUnit.DAYS)
                         .build());
             }
         } catch (Exception e) {
@@ -90,7 +93,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public ObjectWriteResponse putObject(String bucketName, String objectName, InputStream iso, Long size, String contentType) {
         try {
-            if (StringUtils.isBlank(bucketName)){
+            if (StringUtils.isBlank(bucketName)) {
                 bucketName = defaultBucketName;
             }
             if (bucketUtils.bucketExists(bucketName)) {

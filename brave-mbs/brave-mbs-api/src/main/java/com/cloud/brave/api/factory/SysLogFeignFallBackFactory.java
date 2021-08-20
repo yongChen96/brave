@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2021/6/4 10:22
  **/
 @Component
-public class SysLogFeignFallBackService implements FallbackFactory<SysLogFeignService> {
+public class SysLogFeignFallBackFactory implements FallbackFactory<SysLogFeignService> {
 
     @Override
     public SysLogFeignService create(Throwable cause) {
