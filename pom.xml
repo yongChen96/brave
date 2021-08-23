@@ -17,8 +17,8 @@
         <module>brave-gateway</module>
         <module>brave-mbs</module>
         <module>brave-minio</module>
-        <module>brave-resource</module>
         <module>brave-visual</module>
+        <module>brave-msg</module>
     </modules>
 
     <properties>
