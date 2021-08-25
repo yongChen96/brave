@@ -14,6 +14,7 @@
 
     <modules>
         <module>brave-msg-mq</module>
+        <module>brave-msg-email</module>
     </modules>
 
 </project>

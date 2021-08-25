@@ -196,6 +196,9 @@
                     <include>**/*.yml</include>
                     <include>**/*.xml</include>
                     <include>**/*.txt</include>
+                    <include>**/*.html</include>
+                    <include>**/*.png</include>
+                    <include>**/*.jpg</include>
                 </includes>
             </resource>
             <resource>
