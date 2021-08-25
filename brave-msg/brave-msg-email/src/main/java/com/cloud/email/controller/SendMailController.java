@@ -4,7 +4,6 @@ import com.cloud.brave.core.base.controller.BaseController;
 import com.cloud.brave.core.result.Result;
 import com.cloud.email.entity.Mail;
 import com.cloud.email.service.SendMailService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

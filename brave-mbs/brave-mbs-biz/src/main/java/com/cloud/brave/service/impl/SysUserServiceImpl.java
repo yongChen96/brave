@@ -90,6 +90,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      **/
     @Override
     public Boolean saveNewUser(UserDTO userDTO) {
+        // 一个手机只能注册一个用户
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getPhone, userDTO.getPhone()).eq(SysUser::getDelState, CommonConstants.NOT_DELETED);
+        if (count(queryWrapper) > 0) {
+            throw new BraveException("手机号已注册使用，无法再次注册");
+        }
+
         // 添加用户信息
         SysUser sysUser = new SysUser();
         Long id = idGenerate.idGenerate();
