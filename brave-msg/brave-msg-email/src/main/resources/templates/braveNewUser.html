@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8"/>
-        <title>邮箱验证</title>
+        <title>添加新用户</title>
     </head>
     <body>
         <div style="text-align: center;">
@@ -18,32 +18,22 @@
             </span>
             <br>
             <span style="font-size: 14px; font-family: 'Courier New', Courier; color: #464646; line-height: 200%;">
-                最近有人在验证电子邮件地址时输入了该电子邮件地址。
+                您已是Brave尊贵的成员，以下是您的初始登录信息：
             </span>
-            <br>
+            <div style="width: 10%; margin: auto; text-align: left;border: 10px red;">
+                <span style="font-size: 14px; font-family: 'Courier New', Courier; color: #464646; line-height: 200%;">
+                    账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：<span th:text="${phone}"></span>
+                </span>
+                <br>
+                <span style="font-size: 14px; font-family: 'Courier New', Courier; color: #464646; line-height: 200%;">
+                    (初始)密码：<span th:text="${password}"></span>
+                </span>
+            </div>
             <span style="font-size: 14px; font-family: 'Courier New', Courier; color: #464646; line-height: 200%;">
-                您可以使用此验证码来验证您是该电子邮件地址的所有者。您的Brave验证码为：
-            </span>
-            <br>
-            <br>
-            <span style="font-size: 25px; font-family: 'Courier New', Courier; color: #464646; line-height: 200%; text-align: center;">
-                <strong><span th:text="${code}"></span></strong>
-            </span>
-            <br>
-            <br>
-            <span style="font-size: 14px; font-family: 'Courier New', Courier; color: #464646; line-height: 200%;">
-                如果您并未请求此验证码，则可能是他人正在尝试访问您的帐号：<strong>请勿将此验证码转发给或提供给任何人。</strong>
-            </span>
-            <br>
-            <span style="font-size: 14px; font-family: 'Courier New', Courier; color: #464646; line-height: 200%;">
-                此致
-            </span>
-            <br>
-            <span style="font-size: 14px; font-family: 'Courier New', Courier; color: #464646; line-height: 200%;">
-                Brave team
+                请尽快登陆系统修改密码，如无法尽快修改密码请不要想他人透露您得初始密码。
             </span>
         </div>
-        <div style="text-align: center; width: 50%; margin: auto; background-color: rgb(60, 60, 61);">
+        <div style="width: 40%; margin: auto; text-align: center; background-color: rgb(60, 60, 61);">
             <span style="font-size: 20px; font-family: 'Courier New', Courier; color: #ffffff; line-height: 150%;">
                 @Brave is an excellent and efficient management system!
             </span>
@@ -52,10 +42,10 @@
                 — Brave, Good helper at work.
             </span>
         </div>
-        <div style="text-align: center; font-size: 14px; font-family: 'Courier New', Courier; color: #464646;">
+        <div style="text-align: center;">
             <span>此电子邮件地址无法接收回复。如需更多信息，请访问<a href=""> Brave 帐号帮助中心</a>。</span>
             <br>
 			<span>© Brave Inc., 1600 Amphitheatre Parkway, Mountain View, CA 94043, ZN_CH</span>
         </div>
     </body>
-</html>
+</html> 

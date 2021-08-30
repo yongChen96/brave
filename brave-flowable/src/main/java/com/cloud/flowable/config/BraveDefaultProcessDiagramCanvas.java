@@ -221,6 +221,7 @@ public class BraveDefaultProcessDiagramCanvas extends DefaultProcessDiagramCanva
      * @param height
      * @return void
      **/
+    @Override
     public void drawHighLight(int x, int y, int width, int height) {
         Paint originalPaint = g.getPaint();
         Stroke originalStroke = g.getStroke();
@@ -268,6 +269,7 @@ public class BraveDefaultProcessDiagramCanvas extends DefaultProcessDiagramCanva
      * @param scaleFactor
      * @return void
      **/
+    @Override
     protected void drawTask(String name, GraphicInfo graphicInfo, boolean thickBorder, double scaleFactor) {
         Paint originalPaint = g.getPaint();
         int x = (int) graphicInfo.getX();
@@ -317,6 +319,7 @@ public class BraveDefaultProcessDiagramCanvas extends DefaultProcessDiagramCanva
      * @param scaleFactor
      * @return void
      **/
+    @Override
     public void drawStartEvent(GraphicInfo graphicInfo, BufferedImage image, double scaleFactor) {
         Paint originalPaint = g.getPaint();
         g.setPaint(EVENT_COLOR);
@@ -343,6 +346,7 @@ public class BraveDefaultProcessDiagramCanvas extends DefaultProcessDiagramCanva
      * @param scaleFactor
      * @return void
      **/
+    @Override
     public void drawNoneEndEvent(GraphicInfo graphicInfo, double scaleFactor) {
         Paint originalPaint = g.getPaint();
         Stroke originalStroke = g.getStroke();

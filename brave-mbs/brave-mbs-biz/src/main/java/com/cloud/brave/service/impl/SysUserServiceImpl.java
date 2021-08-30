@@ -18,6 +18,7 @@ import com.cloud.brave.core.exception.BraveException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private final SysUserRoleService sysUserRoleService;
     private final SysMenuService sysMenuService;
     private final IdGenerate<Long> idGenerate;
+    private final RedisTemplate redisTemplate;
 
     /**
      * @Author: yongchen
@@ -90,11 +92,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      **/
     @Override
     public Boolean saveNewUser(UserDTO userDTO) {
-        // 一个手机只能注册一个用户
+        // 一个手机/邮箱只能注册一个用户
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getPhone, userDTO.getPhone()).eq(SysUser::getDelState, CommonConstants.NOT_DELETED);
+        queryWrapper.eq(SysUser::getPhone, userDTO.getPhone())
+                .or().eq(SysUser::getEmail, userDTO.getEmail())
+                .eq(SysUser::getDelState, CommonConstants.NOT_DELETED);
         if (count(queryWrapper) > 0) {
-            throw new BraveException("手机号已注册使用，无法再次注册");
+            throw new BraveException("手机号/邮箱已使用");
         }
 
         // 添加用户信息
@@ -218,13 +222,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @param userId
      * @param oldPassword
      * @param newPassword
+     * @param captcha
      * @description: 修改密码
      * @return: java.lang.Boolean
      * @author yongchen
      * @date: 2021/8/19 10:08
      */
     @Override
-    public Boolean updatePassword(Long userId, String oldPassword, String newPassword) {
+    public Boolean updatePassword(Long userId, String oldPassword, String newPassword, String captcha) {
+        //验证码验证
+        String code = (String) redisTemplate.opsForValue().get(userId);
+        if (StringUtils.isBlank(code) || StringUtils.equals(code, captcha)) {
+            throw new BraveException("验证码为空或者验证码输入错误");
+        }
+        //用户信息校验
         SysUser sysUser = this.getById(userId);
         if (sysUser == null) {
             throw new BraveException("用户不存在");

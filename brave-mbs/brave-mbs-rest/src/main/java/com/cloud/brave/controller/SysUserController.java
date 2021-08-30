@@ -199,7 +199,7 @@ public class SysUserController extends BaseController {
     }
 
     /**
-     * @param file
+     * @param avatarUrl
      * @description: 上传头像
      * @return: com.cloud.brave.core.result.Result<java.lang.Boolean>
      * @author yongchen
@@ -230,9 +230,9 @@ public class SysUserController extends BaseController {
     @GetMapping("/updatePassword")
     @BraveSysLog(value = "密码修改")
     @ApiOperation(value = "密码修改", notes = "密码修改")
-    public Result<Boolean> updatePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+    public Result<Boolean> updatePassword(@RequestParam String oldPassword, @RequestParam String newPassword, @RequestParam String captcha) {
         Long userId = JwtUtils.getUserId();
-        if (sysUserService.updatePassword(userId, oldPassword, newPassword)) {
+        if (sysUserService.updatePassword(userId, oldPassword, newPassword, captcha)) {
             return success(true);
         }
         return failed("修改密码失败");

@@ -76,9 +76,10 @@ public interface SysUserService extends IService<SysUser> {
      * @param userId
      * @param oldPassword
      * @param newPassword
+     * @param captcha
      * @return: java.lang.Boolean
      * @author yongchen
      * @date: 2021/8/19 10:07
      */
-    Boolean updatePassword(Long userId, String oldPassword, String newPassword);
+    Boolean updatePassword(Long userId, String oldPassword, String newPassword, String captcha);
 }
