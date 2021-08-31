@@ -1,4 +1,4 @@
-package com.cloud.mq.config;
+package com.cloud.brave.mq.config;
 
 import com.cloud.brave.core.constant.AmqpConstants;
 import org.springframework.amqp.core.Binding;

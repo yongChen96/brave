@@ -1,9 +1,9 @@
-package com.cloud.email.controller;
+package com.cloud.brave.email.controller;
 
 import com.cloud.brave.core.base.controller.BaseController;
 import com.cloud.brave.core.result.Result;
-import com.cloud.email.entity.Mail;
-import com.cloud.email.service.SendMailService;
+import com.cloud.brave.email.entity.Mail;
+import com.cloud.brave.email.service.SendMailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

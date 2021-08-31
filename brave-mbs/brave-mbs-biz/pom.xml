@@ -23,5 +23,15 @@
             <artifactId>brave-common-core</artifactId>
             <version>brave-1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.cloud</groupId>
+            <artifactId>brave-msg-email</artifactId>
+            <version>brave-1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cloud</groupId>
+            <artifactId>brave-msg-mq</artifactId>
+            <version>brave-1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

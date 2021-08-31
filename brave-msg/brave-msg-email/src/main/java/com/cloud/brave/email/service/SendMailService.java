@@ -1,6 +1,6 @@
-package com.cloud.email.service;
+package com.cloud.brave.email.service;
 
-import com.cloud.email.entity.Mail;
+import com.cloud.brave.email.entity.Mail;
 
 /**
  * @author yongchen

@@ -1,6 +1,5 @@
 package com.cloud.brave.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserDetailsDTO;
 import com.cloud.brave.dto.UserInfoDTO;
@@ -82,4 +81,13 @@ public interface SysUserService extends IService<SysUser> {
      * @date: 2021/8/19 10:07
      */
     Boolean updatePassword(Long userId, String oldPassword, String newPassword, String captcha);
+
+    /**
+     * @description: 发送验证码至邮箱
+     * @param email
+     * @return: java.lang.Boolean
+     * @author yongchen
+     * @date: 2021/8/31 11:48
+     */
+    Boolean sendCaptcha(String email);
 }

@@ -4,9 +4,6 @@ package com.cloud.brave.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cloud.brave.api.fegin.SysFileFeignService;
-import com.cloud.brave.core.inject.annotation.InjectUser;
-import com.cloud.brave.core.inject.entity.BraveUser;
 import com.cloud.brave.core.utils.JwtUtils;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserDetailsDTO;
@@ -26,8 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.cloud.brave.core.base.controller.BaseController;
-import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.annotations.ApiIgnore;
 
 
 /**
@@ -236,5 +231,19 @@ public class SysUserController extends BaseController {
             return success(true);
         }
         return failed("修改密码失败");
+    }
+
+    /**
+     * @description: 发送验证码至邮箱
+     * @param email
+     * @return: com.cloud.brave.core.result.Result<java.lang.Boolean>
+     * @author yongchen
+     * @date: 2021/8/31 11:09
+     */
+    @GetMapping("/sendCaptcha")
+    @BraveSysLog(value = "发送验证码至邮箱")
+    @ApiOperation(value = "发送验证码至邮箱", notes = "发送验证码至邮箱")
+    public Result<Boolean> sendCaptcha(@RequestParam String email){
+        return success(sysUserService.sendCaptcha(email));
     }
 }

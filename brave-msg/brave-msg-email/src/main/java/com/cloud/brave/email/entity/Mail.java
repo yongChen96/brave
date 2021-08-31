@@ -1,4 +1,4 @@
-package com.cloud.email.entity;
+package com.cloud.brave.email.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

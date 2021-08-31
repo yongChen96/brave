@@ -1,8 +1,8 @@
-package com.cloud.email.service.impl;
+package com.cloud.brave.email.service.impl;
 
 import com.cloud.brave.core.exception.BraveException;
-import com.cloud.email.entity.Mail;
-import com.cloud.email.service.SendMailService;
+import com.cloud.brave.email.entity.Mail;
+import com.cloud.brave.email.service.SendMailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

@@ -1,9 +1,9 @@
-package com.cloud.mq.controller;
+package com.cloud.brave.mq.controller;
 
 import com.cloud.brave.core.base.controller.BaseController;
 import com.cloud.brave.core.constant.AmqpConstants;
 import com.cloud.brave.core.result.Result;
-import com.cloud.mq.service.MqSendMsgService;
+import com.cloud.brave.mq.service.MqSendMsgService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

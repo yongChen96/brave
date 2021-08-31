@@ -1,4 +1,4 @@
-package com.cloud.mq.service;
+package com.cloud.brave.mq.service;
 
 /**
  * @author yongchen

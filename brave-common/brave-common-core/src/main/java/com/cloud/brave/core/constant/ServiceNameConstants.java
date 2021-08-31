@@ -19,5 +19,9 @@ public class ServiceNameConstants {
      * 附件服务
      */
     public static final String MINIO = "brave-minio";
+    /**
+     * 邮件服务
+     */
+    public static final String MAIL = "brave-msg-email";
 
 }

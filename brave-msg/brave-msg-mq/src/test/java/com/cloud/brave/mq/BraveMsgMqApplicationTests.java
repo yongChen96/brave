@@ -1,4 +1,4 @@
-package com.cloud.mq;
+package com.cloud.brave.mq;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

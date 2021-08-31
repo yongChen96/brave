@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.cloud.brave.core.constant.AuthConstants;
+import com.cloud.brave.core.utils.JwtUtils;
 import com.cloud.brave.dto.UserDTO;
 import com.cloud.brave.dto.UserDetailsDTO;
 import com.cloud.brave.dto.UserInfoDTO;
@@ -15,6 +16,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cloud.brave.core.SnowflakeId.IdGenerate;
 import com.cloud.brave.core.constant.CommonConstants;
 import com.cloud.brave.core.exception.BraveException;
+import com.cloud.brave.email.entity.Mail;
+import com.cloud.brave.email.service.SendMailService;
+import com.wf.captcha.SpecCaptcha;
+import com.wf.captcha.base.Captcha;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +32,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +55,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private final SysMenuService sysMenuService;
     private final IdGenerate<Long> idGenerate;
     private final RedisTemplate redisTemplate;
+    private final SendMailService sendMailService;
 
     /**
      * @Author: yongchen
@@ -231,7 +238,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Boolean updatePassword(Long userId, String oldPassword, String newPassword, String captcha) {
         //验证码验证
-        String code = (String) redisTemplate.opsForValue().get(userId);
+        String code = (String) redisTemplate.opsForValue().get(userId.toString());
         if (StringUtils.isBlank(code) || StringUtils.equals(code, captcha)) {
             throw new BraveException("验证码为空或者验证码输入错误");
         }
@@ -250,5 +257,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         updateWrapper.eq(SysUser::getId, sysUser.getId())
                 .set(SysUser::getPassWord, passwordEncoder.encode(newPassword));
         return this.update(updateWrapper);
+    }
+
+    /**
+     * @description: 发送验证码至邮箱
+     * @param email
+     * @return: java.lang.Boolean
+     * @author yongchen
+     * @date: 2021/8/31 11:48
+     */
+    @Override
+    public Boolean sendCaptcha(String email) {
+        Long userId = JwtUtils.getUserId();
+        String username = JwtUtils.getUsername();
+        //获取验证码
+        SpecCaptcha specCaptcha = new SpecCaptcha(100, 40, 6);
+        specCaptcha.setCharType(Captcha.TYPE_DEFAULT);
+        String text = specCaptcha.text();
+        String captcha = text.toUpperCase();
+        redisTemplate.opsForValue().set(userId.toString(), captcha, 2, TimeUnit.HOURS);
+        //封装邮件信息
+        Mail mail = new Mail();
+        mail.setRecipient(email);
+        mail.setRecipientName(username);
+        mail.setContent(captcha);
+        mail.setSubject("校验验证码");
+        return sendMailService.sendMailVerify(mail);
     }
 }

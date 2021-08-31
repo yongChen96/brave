@@ -16,6 +16,8 @@ spring:
         shared-configs:
           - brave-mbs-rest-dev.yml
           - brave-bruid.yml
+          - brave-msg-mq.yml
+          - brave-msg-mail.yml
   profiles:
     active: @profiles.active@
 swagger:

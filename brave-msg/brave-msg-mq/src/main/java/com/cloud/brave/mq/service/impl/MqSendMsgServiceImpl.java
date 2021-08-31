@@ -1,7 +1,7 @@
-package com.cloud.mq.service.impl;
+package com.cloud.brave.mq.service.impl;
 
 import com.cloud.brave.core.exception.BraveException;
-import com.cloud.mq.service.MqSendMsgService;
+import com.cloud.brave.mq.service.MqSendMsgService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
