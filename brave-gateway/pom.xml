@@ -24,6 +24,14 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-web</artifactId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>easypoi-spring-boot-starter</artifactId>
+                    <groupId>cn.afterturn</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.datatype</groupId>
+                    <artifactId>jackson-datatype-jsr310</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>

@@ -2,9 +2,9 @@ package com.cloud.brave.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cloud.brave.core.excel.BraveExcel;
 import com.cloud.brave.entity.SysLog;
 import com.cloud.brave.service.SysLogService;
 import com.cloud.brave.mybatisplus.page.PageParam;
@@ -17,6 +17,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.cloud.brave.core.base.controller.BaseController;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * <p>
@@ -39,17 +42,17 @@ public class SysLogController extends BaseController {
      * @Description: 分页获取系统操作日志信息
      * @Date: 10:50 2021/6/7
      * @Param: [pp]
-     * @return: com.cloud.core.result.Result<com.baomidou.mybatisplus.core.metadata.IPage<com.cloud.brave.entity.SysLog>>
+     * @return: com.cloud.core.result.Result<com.baomidou.mybatisplus.core.metadata.IPage < com.cloud.brave.entity.SysLog>>
      **/
     @PostMapping("/page")
     @ApiOperation(value = "分页获取系统操作日志信息", notes = "分页获取系统操作日志信息")
-    public Result<IPage<SysLog>> page(@RequestBody @Validated PageParam<SysLog> pp){
+    public Result<IPage<SysLog>> page(@RequestBody @Validated PageParam<SysLog> pp) {
         LambdaQueryWrapper<SysLog> queryWrapper = new LambdaQueryWrapper<>();
         SysLog data = pp.getData();
-        if (StringUtils.isNotBlank(data.getCreateName())){
+        if (StringUtils.isNotBlank(data.getCreateName())) {
             queryWrapper.eq(SysLog::getCreateName, data.getCreateName());
         }
-        if (StringUtils.isNotBlank(data.getType())){
+        if (StringUtils.isNotBlank(data.getType())) {
             queryWrapper.eq(SysLog::getType, data.getType());
         }
         queryWrapper.orderByDesc(SysLog::getCreateTime);
@@ -78,12 +81,35 @@ public class SysLogController extends BaseController {
      * @return: com.cloud.core.result.Result<java.lang.Boolean>
      **/
     @PostMapping("/save")
-    @ApiOperation(value = "保存系统操作日志信息",notes = "保存系统操作日志信息")
-    public Result<Boolean> save(@RequestBody SysLog sysLog){
+    @ApiOperation(value = "保存系统操作日志信息", notes = "保存系统操作日志信息")
+    public Result<Boolean> save(@RequestBody SysLog sysLog) {
         boolean save = sysLogService.save(sysLog);
-        if (save){
+        if (save) {
             return success(null);
         }
         return failed("系统日志信息保存失败");
+    }
+
+    /**
+     * @param sysLog   导出参数
+     * @param response
+     * @description: 日志导出
+     * @return: void
+     * @author yongchen
+     * @date: 2021/9/2 10:01
+     */
+    @PostMapping("/export")
+    @ApiOperation(value = "日志导出", notes = "日志导出")
+    public void export(@RequestBody SysLog sysLog, HttpServletResponse response) {
+        LambdaQueryWrapper<SysLog> exportWapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotBlank(sysLog.getCreateName())) {
+            exportWapper.eq(SysLog::getCreateName, sysLog.getCreateName());
+        }
+        if (StringUtils.isNotBlank(sysLog.getType())) {
+            exportWapper.eq(SysLog::getType, sysLog.getType());
+        }
+        exportWapper.orderByDesc(SysLog::getCreateTime);
+        List<SysLog> list = sysLogService.list();
+        BraveExcel.exportExcel(list, null, "操作日志", SysLog.class, "操作日志", false, response);
     }
 }
