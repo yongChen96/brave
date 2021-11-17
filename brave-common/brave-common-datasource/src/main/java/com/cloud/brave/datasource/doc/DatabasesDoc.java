@@ -19,7 +19,7 @@ public class DatabasesDoc {
 
     private static final String FILE_OUTPUT_DIR = "";
     private static final String DOC_VERSION = "V1.0.0";
-    private static final String DOC_DESCRIPTION = "数据库表设计文档说明书";
+    private static final String DOC_DESCRIPTION = "数据库表设计文档规格说明书";
     
     /**
      * @description: 生产数据库设计文档说明书
