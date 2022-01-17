@@ -31,13 +31,29 @@ public class RabbitTemplateConfig {
 
         // 消息发送成功回调
         rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
+            /**
+             * @description: 生产者消息确认回调 Confirm
+             * @param correlationData 对象内部只有一个 id 属性，用来表示当前消息的唯一性
+             * @param ack 消息投递到broker的状态，true表示成功，false表示失败
+             * @param cause 投递失败的原因
+             * @return: void
+             * @author yongchen
+             * @date: 2022/1/17 10:38
+             */
             @Override
-            public void confirm(CorrelationData correlationData, boolean b, String s) {
-                log.info("MQ消息发送成功，消息主体：{}，确认状态：{}，造成原因：{}", correlationData, b, s);
+            public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+                log.info("MQ消息发送成功，消息主体：{}，确认状态：{}，造成原因：{}", correlationData, ack, cause);
             }
         });
         //消息发送失败回调
         rabbitTemplate.setReturnsCallback(new RabbitTemplate.ReturnsCallback() {
+            /**
+             * @description: 队列消息确认回退机制
+             * @param returnedMessage （内有五个参数，message：消息体，replyCode：响应code，replyText：响应内用，exchange：交换机，routingkey：队列路由）
+             * @return: void 
+             * @author yongchen
+             * @date: 2022/1/17 10:42
+             */
             @Override
             public void returnedMessage(ReturnedMessage returnedMessage) {
                 log.info("MQ消息发送失败，消息主体：{}，响应编码：{}，响应文本：{}，交换机：{}，路由键：{}",

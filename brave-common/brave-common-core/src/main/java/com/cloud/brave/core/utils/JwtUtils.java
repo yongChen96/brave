@@ -1,11 +1,9 @@
 package com.cloud.brave.core.utils;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.cloud.brave.core.constant.AuthConstants;
-import com.cloud.brave.core.inject.entity.BraveUser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +11,6 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import sun.misc.BASE64Decoder;
-
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.util.List;
