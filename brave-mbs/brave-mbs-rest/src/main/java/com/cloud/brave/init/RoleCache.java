@@ -1,20 +1,10 @@
 package com.cloud.brave.init;
 
-import com.cloud.brave.dto.RolePremsDTO;
 import com.cloud.brave.service.SysRoleMenuService;
-import com.cloud.brave.core.constant.AuthConstants;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author admin
@@ -24,7 +14,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @AllArgsConstructor
-public class initPerms implements CommandLineRunner {
+public class RoleCache implements CommandLineRunner {
 
     @Resource
     private SysRoleMenuService sysRoleMenuService;
