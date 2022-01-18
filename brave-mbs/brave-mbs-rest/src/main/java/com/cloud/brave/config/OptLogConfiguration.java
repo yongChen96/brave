@@ -17,6 +17,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Configuration
 public class OptLogConfiguration {
 
+    /**
+     * @description: 日志收集
+     * @param service
+     * @return: com.cloud.brave.log.event.BraveSysLogListener 
+     * @author yongchen
+     * @date: 2022/1/18 14:22
+     */
     @Bean
     public BraveSysLogListener braveSysLogListener(SysLogService service){
         return new BraveSysLogListener((log) -> {
